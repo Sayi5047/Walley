@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1055557239870",
+    "firebase_url": "https://walley-9befe.firebaseio.com",
+    "project_id": "walley-9befe",
+    "storage_bucket": "walley-9befe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055557239870:android:c19024ea1e207ccf",
+        "android_client_info": {
+          "package_name": "io.hustler.wallzy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055557239870-kok8kd1tdub01g7ajau2h80b5p0s9905.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.hustler.wallzy",
+            "certificate_hash": "94b5ddf5b90ee9bfcfba7a93e55b945b2af000c1"
+          }
+        },
+        {
+          "client_id": "1055557239870-ue8iqi0qucq6ho6onttnthc7k0pqhqka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqeVJ0Yq_Ev6NJMLzIgOMc6PB56hQEPkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055557239870-ue8iqi0qucq6ho6onttnthc7k0pqhqka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
