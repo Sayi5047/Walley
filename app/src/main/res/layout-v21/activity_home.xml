@@ -51,7 +51,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:animateLayoutChanges="true">
-
         <View
             android:id="@+id/jelly_view"
             android:layout_width="0dp"
@@ -59,7 +58,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_16"
             android:background="@drawable/rounded_rect_blue"
-            android:layout_marginLeft="@dimen/margin_16" />
+            />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/jelly_tabLayout"

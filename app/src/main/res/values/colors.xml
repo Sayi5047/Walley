@@ -8,4 +8,8 @@
     <color name="white">#ffffff</color>
     <color name="bt_color">#3498DB</color>
 
+
+    <color name="tab_selected_color">#ffffff</color>
+    <color name="tab_unselected_color">#454545</color>
+
 </resources>

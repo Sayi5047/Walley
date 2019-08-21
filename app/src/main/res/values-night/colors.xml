@@ -7,6 +7,10 @@
     <color name="bg">#313131</color>
     <color name="white">#ffffff</color>
     <color name="bt_color">#24292E</color>
+    <color name="fab_tint">@color/colorAccent</color>
 
+
+    <color name="tab_selected_color">#ec625f</color>
+    <color name="tab_unselected_color">#fefefe</color>
 
 </resources>

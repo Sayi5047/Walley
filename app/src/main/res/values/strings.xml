@@ -61,4 +61,7 @@
     <string name="ok">Ok</string>
     <string name="logout">Logout</string>
     <string name="NightMode">Night Mode</string>
+    <string name="file_provider_authority">io.hustler.wallzy.fileprovider</string>
+    <string name="notication_channel_desc">Wallpaper Download Channel</string>
+    <string name="storage_permission_rejected_message">Storage Permission is required for downloading Walpapers</string>
 </resources>
