@@ -34,13 +34,13 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Latest";
             case 1:
-                return "Categories";
+                return "Category";
             case 2:
                 return "Explore";
             case 3:
-                return "Collections";
+                return "Curated";
             case 4:
-                return "Fav";
+                return "Liked";
             default:
                 return "Explore";
         }

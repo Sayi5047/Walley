@@ -18,11 +18,18 @@
     <dimen name="text_28">28sp</dimen>
     <dimen name="text_32">32sp</dimen>
     <dimen name="text_18">17sp</dimen>
+
+    <dimen name="corner_rad_4">4dp</dimen>
+    <dimen name="corner_rad_8">8dp</dimen>
+    <dimen name="corner_rad_16">16dp</dimen>
+
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="jelly_tab_height">48dp</dimen>
     <dimen name="jelly_tab_width">96dp</dimen>
     <dimen name="margin_32">32dp</dimen>
+    <dimen name="rv_cat_ver_item_height">180dp</dimen>
 
 </resources>

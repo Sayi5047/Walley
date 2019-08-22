@@ -62,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        TextUtils.findText_and_applyTypeface(root,HomeActivity.this);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());

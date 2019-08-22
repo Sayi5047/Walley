@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Objects;
 
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.Constants;
@@ -36,36 +37,6 @@ public class FileUtils {
             uri = Uri.fromFile(imageFile);
         }
         return uri;
-//        try {
-//            String filePath = imageFile.getAbsolutePath();
-//
-//            Cursor cursor = context.getContentResolver().query(
-//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                    new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ", new String[]{filePath}, null);
-//
-//            if (cursor != null && cursor.moveToFirst()) {
-//                int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-//                Uri baseUri = Uri.parse("content://media/external/images/media");
-//                return Uri.withAppendedPath(baseUri, "" + id);
-//            } else {
-//                if (imageFile.exists()) {
-//                    ContentValues values = new ContentValues();
-//                    values.put(MediaStore.Images.Media.DATA, filePath);
-//                    return context.getContentResolver().insert(
-//                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//                } else {
-//                    return null;
-//                }
-//            }
-//        } catch (Exception ie) {
-//            if (ie instanceof SecurityException) {
-//                Toast_Snack_Dialog_Utils.show_ShortToast((Activity) context, context.getString(R.string.permission_comulsory));
-//            } else {
-//                Toast_Snack_Dialog_Utils.show_ShortToast((Activity) context, context.getString(R.string.operation_failed));
-//
-//            }
-//            return null;
-//        }
 
     }
 
@@ -75,7 +46,7 @@ public class FileUtils {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 intent = new Intent(WallpaperManager.getInstance(activity).getCropAndSetWallpaperIntent(FileUtils.getImageContentUri(activity, new File(imagepath))));
             }
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Objects.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,6 +54,7 @@ public class FileUtils {
         }
 
     }
+
 
     public static File downloadImageToSd_Card(String param, String download_image_name, @NonNull Context applicationContext) {
 

@@ -49,7 +49,7 @@ import io.hustler.wallzy.utils.PermissionUtils;
 
 public class TodayImagesFragment extends Fragment {
     @BindView(R.id.item_list)
-    HorizntalRecyclerView itemList;
+    HorizntalRecyclerView horizntalRecyclerView;
     @BindView(R.id.blur_image)
     ImageView blurImage;
     @BindView(R.id.fab_download_image)
@@ -89,37 +89,40 @@ public class TodayImagesFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        itemList = view.findViewById(R.id.item_list);
         blurImage = view.findViewById(R.id.blur_image);
-        HorizantalImagesAdapter horizantalImagesAdapter = new HorizantalImagesAdapter(getActivity());
-        itemList.intialize(horizantalImagesAdapter);
+
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("LatestImages");
+        DatabaseReference databaseReference = firebaseDatabase.getReference(getActivity().getString(R.string.DB_LATEST_IMAGE_NODE));
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HorizantalImagesAdapter horizantalImagesAdapter = new HorizantalImagesAdapter(getActivity());
+                horizntalRecyclerView = view.findViewById(R.id.item_list);
+                horizntalRecyclerView.intialize(horizantalImagesAdapter,false);
+
                 images = new ArrayList<>();
                 for (DataSnapshot snapshot : Objects.requireNonNull(dataSnapshot.getChildren())) {
                     progressDialog.cancel();
                     images.add(snapshot.getValue(String.class));
-                    horizantalImagesAdapter.setData(images);
                 }
+                horizantalImagesAdapter.setData(images);
+
                 currentDisplayingImage = images.get(0);
-                itemList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                horizntalRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                            currentDisplayingImage = images.get(((LinearLayoutManager) Objects.requireNonNull(itemList.getLayoutManager())).findFirstVisibleItemPosition());
+                            currentDisplayingImage = images.get(((LinearLayoutManager) Objects.requireNonNull(horizntalRecyclerView.getLayoutManager())).findFirstVisibleItemPosition());
                         }
                     }
                 });
-//                itemList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                horizntalRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //                    @Override
 //                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
 //                        super.onScrollStateChanged(recyclerView, newState);
 //                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                            String currentDisplayingImage = images.get(((LinearLayoutManager) Objects.requireNonNull(itemList.getLayoutManager())).findFirstVisibleItemPosition());
+//                            String currentDisplayingImage = images.get(((LinearLayoutManager) Objects.requireNonNull(horizntalRecyclerView.getLayoutManager())).findFirstVisibleItemPosition());
 ////            Glide.with(Objects.requireNonNull(getActivity()))
 ////                    .load()
 ////                    .centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(blurImage);

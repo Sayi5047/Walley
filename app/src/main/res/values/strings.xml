@@ -64,4 +64,7 @@
     <string name="file_provider_authority">io.hustler.wallzy.fileprovider</string>
     <string name="notication_channel_desc">Wallpaper Download Channel</string>
     <string name="storage_permission_rejected_message">Storage Permission is required for downloading Walpapers</string>
+    <string name="DB_CAT_NODE">Categories</string>
+    <string name="DB_LATEST_IMAGE_NODE">LatestImages</string>
+    <string name="dummy_category">Dummy Category</string>
 </resources>

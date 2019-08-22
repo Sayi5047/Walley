@@ -3,15 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
+
+    <io.hustler.wallzy.customviews.VerticalRecyclerView
+        android:id="@+id/verticalRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="@dimen/padding_16"
-        android:text="@string/dummy_text"
-        android:textAlignment="center"
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/text_32"
-        android:textStyle="bold"
-       />
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_gravity="center"
+        android:overScrollMode="never"/>
 </LinearLayout>
