@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg"
+    android:clipChildren="false"
     tools:context=".activity.HomeActivity">
 
 
@@ -13,14 +14,16 @@
         android:id="@+id/night_mode_btn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_below="@id/jelly_frame"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/margin_8"
         android:background="@color/bt_color"
+        android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_night_mode_24dp"
         android:text="@string/NightMode"
         android:textSize="@dimen/text_18"
+
         android:textStyle="bold"
         android:tint="@color/text_color" />
 
@@ -28,11 +31,12 @@
         android:id="@+id/signout_btn"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_below="@id/jelly_frame"
         android:layout_margin="@dimen/margin_8"
         android:layout_toStartOf="@id/night_mode_btn"
         android:layout_toLeftOf="@id/night_mode_btn"
         android:background="@color/bt_color"
+        android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_signout_24dp"
         android:text="@string/logout"
         android:textColor="@color/text_color"
@@ -43,15 +47,13 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/signout_btn"
-        />
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:id="@+id/jelly_frame"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:animateLayoutChanges="true"
         android:background="@color/colorPrimary">
 
@@ -61,8 +63,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/margin_16"
-            android:background="@drawable/rounded_rect_white"
-            android:layout_marginLeft="@dimen/margin_16" />
+            android:layout_marginLeft="@dimen/margin_16"
+            android:background="@drawable/rounded_rect_white" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/jelly_tabLayout"
@@ -73,6 +75,7 @@
             app:tabIndicatorHeight="0dp"
             app:tabMode="fixed"
             app:tabRippleColor="@null"
+
             app:tabSelectedTextColor="@color/tab_selected_color"
             app:tabTextAppearance="@style/TabTextAppearance" />
 

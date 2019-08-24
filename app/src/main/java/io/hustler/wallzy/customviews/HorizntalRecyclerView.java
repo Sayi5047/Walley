@@ -4,12 +4,16 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import io.hustler.wallzy.R;
 
 public class HorizntalRecyclerView extends RecyclerView {
     LayoutManager layoutManager;
@@ -37,11 +41,14 @@ public class HorizntalRecyclerView extends RecyclerView {
             setPadding(0, 16, 0, 16);
 
         } else {
-            setPadding(16, 0, 16, 0);
+            setPadding(16, 16, 16, 16);
 
         }
         scrollToPosition(0);
         onScrollSchanged(is_Vertical);
+        int resId = R.anim.layout_anim_fall_down;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
+        setLayoutAnimation(animation);
 //        adapter.registerAdapterDataObserver(new AdapterDataObserver() {
 //            @Override
 //            public void onChanged() {

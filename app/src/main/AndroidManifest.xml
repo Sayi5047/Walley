@@ -21,11 +21,15 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="o">
         <activity
+            android:name=".activity.ImagesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,6 +51,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
         <service
             android:name=".Services.DownloadImageJobService"
             android:exported="false" />

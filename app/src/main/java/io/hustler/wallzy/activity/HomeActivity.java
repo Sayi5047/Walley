@@ -5,9 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -61,8 +59,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         ButterKnife.bind(this);
-        TextUtils.findText_and_applyTypeface(root,HomeActivity.this);
+        TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());

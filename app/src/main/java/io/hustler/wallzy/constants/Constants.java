@@ -7,6 +7,8 @@ import java.text.MessageFormat;
 
 public class Constants {
 
+    public static final String INTENT_CAT_NAME = "INTENT_CAT_NAME";
+    public static final String INTENT_CAT_IMAGE = "INTENT_CAT_IMAGE";
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
 

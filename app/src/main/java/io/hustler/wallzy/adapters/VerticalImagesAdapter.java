@@ -31,7 +31,7 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
 
 
     public interface OnChildClickListener {
-        void onCLick(CategoryImagesDTO.Category category);
+        void onCLick(CategoryImagesDTO.Category category, ImageView imageView);
     }
 
     @NonNull
@@ -50,7 +50,7 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
             @Override
             public void onClick(View view) {
                 if (onChildClickListener != null) {
-                    onChildClickListener.onCLick(category);
+                    onChildClickListener.onCLick(category, holder.categoryImage);
                 }
             }
         });

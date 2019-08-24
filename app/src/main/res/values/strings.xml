@@ -67,4 +67,5 @@
     <string name="DB_CAT_NODE">Categories</string>
     <string name="DB_LATEST_IMAGE_NODE">LatestImages</string>
     <string name="dummy_category">Dummy Category</string>
+    <string name="transistion_blur_image">tran_blur_image</string>
 </resources>

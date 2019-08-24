@@ -34,7 +34,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Latest";
             case 1:
-                return "Category";
+                return "CategoryTable";
             case 2:
                 return "Explore";
             case 3:
