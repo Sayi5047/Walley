@@ -14,12 +14,12 @@ import io.hustler.wallzy.Room.Domains.UserTable;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
-public interface UserDao {
+public interface DaoUser {
     @Query("SELECT * FROM Mstr_User")
     LiveData<List<UserTable>> getAllImages();
 
     @Insert(onConflict = REPLACE)
-    void insertimage(UserTable mUser);
+    void insertuser(UserTable mUser);
 
     @Insert
     void insertAllImages(UserTable... mUsersList);
@@ -31,7 +31,7 @@ public interface UserDao {
     void updateImage(UserTable mUser);
 
     @Query("SELECT * FROM Mstr_User WHERE id = :uId")
-    UserTable getimagesbyId(int uId);
+    UserTable getUserById(int uId);
 
 
 }

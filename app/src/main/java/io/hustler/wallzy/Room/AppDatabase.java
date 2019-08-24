@@ -6,6 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import io.hustler.wallzy.Room.Dao.DaoAllImages;
+import io.hustler.wallzy.Room.Dao.DaoCategory;
+import io.hustler.wallzy.Room.Dao.DaoCollections;
+import io.hustler.wallzy.Room.Dao.DaoUser;
 import io.hustler.wallzy.Room.Domains.AssnCategoryCollectionImagesTable;
 import io.hustler.wallzy.Room.Domains.CategoryTable;
 import io.hustler.wallzy.Room.Domains.CollectionsTable;
@@ -22,35 +26,13 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final Object LOCK = new Object();
     private static final String WALLZY_DATABASE = "Wallzy_Database";
 
-    public abstract class DaoUser {
-    }
+    public abstract DaoUser userDao();
 
-    ;
+    public abstract DaoCategory categoryDao();
 
-    public abstract class DaoCategory {
-    }
+    public abstract DaoCollections collectionsDao();
 
-    ;
-
-    public abstract class DaoCollections {
-    }
-
-    ;
-
-    public abstract class DaoFavourites {
-    }
-
-    ;
-
-    public abstract class DaoAssncatColl {
-    }
-
-    ;
-
-    public abstract class DaoAllImages {
-    }
-
-    ;
+    public abstract DaoAllImages allImagesDao();
 
     public static AppDatabase getmAppDatabaseinstance(Context context) {
         if (null != mAppDatabaseinstance) {
