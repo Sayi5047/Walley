@@ -35,7 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DaoAllImages allImagesDao();
 
     public static AppDatabase getmAppDatabaseinstance(Context context) {
-        if (null != mAppDatabaseinstance) {
+        if (null == mAppDatabaseinstance) {
             synchronized (LOCK) {
                 mAppDatabaseinstance = Room.databaseBuilder(context, AppDatabase.class, WALLZY_DATABASE).build();
             }

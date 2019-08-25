@@ -15,15 +15,16 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.Room.Domains.CategoryTable;
 import io.hustler.wallzy.model.CategoryImagesDTO;
 
 public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAdapter.VerticalViewHolder> {
 
-    private ArrayList<CategoryImagesDTO.Category> categoryArrayList = new ArrayList<>();
+    private ArrayList<CategoryTable> categoryArrayList = new ArrayList<>();
     private Activity activity;
     private OnChildClickListener onChildClickListener;
 
-    public VerticalImagesAdapter(ArrayList<CategoryImagesDTO.Category> categoryArrayList, Activity activity, OnChildClickListener onChildClickListener) {
+    public VerticalImagesAdapter(ArrayList<CategoryTable> categoryArrayList, Activity activity, OnChildClickListener onChildClickListener) {
         this.categoryArrayList = categoryArrayList;
         this.activity = activity;
         this.onChildClickListener = onChildClickListener;
@@ -31,7 +32,7 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
 
 
     public interface OnChildClickListener {
-        void onCLick(CategoryImagesDTO.Category category, ImageView imageView);
+        void onCLick(CategoryTable category, ImageView imageView);
     }
 
     @NonNull
@@ -43,8 +44,8 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
 
     @Override
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
-        CategoryImagesDTO.Category category = categoryArrayList.get(position);
-        holder.categoryName.setText(category.getName());
+        CategoryTable category = categoryArrayList.get(position);
+        holder.categoryName.setText(category.getCollectionname());
         Glide.with(activity).load(category.getCoverImage()).centerCrop().into(holder.categoryImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

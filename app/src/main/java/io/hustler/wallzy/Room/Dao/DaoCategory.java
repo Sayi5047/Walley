@@ -16,8 +16,11 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface DaoCategory {
 
+    @Query(value = "SELECT * FROM Mstr_Category where isActive= :val")
+    LiveData<List<CategoryTable>> getAllLiveCategories(boolean val);
+
     @Query(value = "SELECT * FROM Mstr_Category")
-    LiveData<List<CategoryTable>> getAllCategories();
+    List<CategoryTable> getAllCategories();
 
     @Insert(onConflict = REPLACE)
     void insertCategroy(CategoryTable categoryTable);
@@ -36,4 +39,7 @@ public interface DaoCategory {
 
     @Query(value = "SELECT * FROM Mstr_Category WHERE isActive = :val")
     LiveData<List<CategoryTable>> getFavImagesFromCategory(boolean val);
+
+    @Query(value = "SELECT id FROM Mstr_Category ORDER BY id DESC LIMIT 1 ")
+    int getLastid();
 }

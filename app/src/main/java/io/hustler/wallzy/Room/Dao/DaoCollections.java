@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public interface DaoCollections {
     LiveData<List<CollectionsTable>> getAllCollections();
 
     @Insert(onConflict = REPLACE)
+    @Transaction
     void insertCollection(CollectionsTable collectionsTable);
 
     @Insert
@@ -28,12 +30,15 @@ public interface DaoCollections {
     void delete(CollectionsTable collectionsTable);
 
     @Update
+    @Transaction
     void updateCollection(CollectionsTable collectionsTable);
 
     @Query(value = "SELECT * FROM MSTR_COLLECTIONS WHERE id = :id")
+    @Transaction
     CollectionsTable getCollectionById(int id);
 
     @Query(value = "SELECT * FROM MSTR_COLLECTIONS WHERE isActive = :val")
+    @Transaction
     LiveData<List<CollectionsTable>> getFavImagesFromCollections(boolean val);
 
 }

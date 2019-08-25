@@ -5,12 +5,12 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
 
 import io.hustler.wallzy.Room.Domains.AssnCategoryCollectionImagesTable;
-import io.hustler.wallzy.Room.Domains.CollectionsTable;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -21,9 +21,11 @@ public interface DaoAllImages {
     LiveData<List<AssnCategoryCollectionImagesTable>> getAllImages();
 
     @Insert(onConflict = REPLACE)
+    @Transaction
     void insertimage(AssnCategoryCollectionImagesTable collectionsTable);
 
     @Insert
+    @Transaction
     void insertAllimage(AssnCategoryCollectionImagesTable... collectionsTables);
 
     @Delete
@@ -33,9 +35,11 @@ public interface DaoAllImages {
     void updateImage(AssnCategoryCollectionImagesTable collectionsTable);
 
     @Query(value = "SELECT * FROM Assn_Image_collcat WHERE id = :id")
-    CollectionsTable getCollectionById(int id);
+    @Transaction
+    AssnCategoryCollectionImagesTable getCollectionById(int id);
 
     @Query(value = "SELECT * FROM Assn_Image_collcat WHERE isLiked = :val")
-    LiveData<List<CollectionsTable>> getFavImagesFromCollections(boolean val);
+    @Transaction
+    LiveData<List<AssnCategoryCollectionImagesTable>> getFavImagesFromCollections(boolean val);
 
 }

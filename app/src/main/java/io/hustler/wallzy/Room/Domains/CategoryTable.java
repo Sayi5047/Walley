@@ -1,30 +1,38 @@
 package io.hustler.wallzy.Room.Domains;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Dao;
+import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.Query;
 import androidx.room.Relation;
 
 import java.util.List;
 
-@Entity(tableName = "Mstr_Category")
+@Entity(tableName = "Mstr_Category", indices = {@Index(value = {"categoryName", "coverImage", "fb_id"}, unique = true)})
 public class CategoryTable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
 
+    @ColumnInfo(name = "fb_id")
+    public int firebaseId;
+
     @ColumnInfo(name = "categoryName")
+
     private String collectionname;
+
+    @ColumnInfo(name = "coverImage")
+    private String coverImage;
 
     @ColumnInfo(name = "createdDate")
     private long createdDate;
 
     @ColumnInfo(name = "isActive")
     private boolean isActive;
-
-    @Relation(parentColumn = "id", entityColumn = "categoryId", entity = AssnCategoryCollectionImagesTable.class)
-    private List<AssnCategoryCollectionImagesTable> categoryImagesList;
 
 
     public int getId() {
@@ -59,11 +67,34 @@ public class CategoryTable {
         isActive = active;
     }
 
-    public List<AssnCategoryCollectionImagesTable> getCategoryImagesList() {
-        return categoryImagesList;
+    public int getFirebaseId() {
+        return firebaseId;
     }
 
-    public void setCategoryImagesList(List<AssnCategoryCollectionImagesTable> categoryImagesList) {
-        this.categoryImagesList = categoryImagesList;
+    public void setFirebaseId(int firebaseId) {
+        this.firebaseId = firebaseId;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
+
+    public class Assn_Category_Image {
+        @Embedded
+        CategoryTable categoryTable;
+        @Relation(parentColumn = "id", entityColumn = "categoryId", entity = AssnCategoryCollectionImagesTable.class)
+        private List<AssnCategoryCollectionImagesTable> categoryImagesList;
+
+    }
+
+    @Dao
+    public interface UserPetDao {
+        @Query("SELECT * from mstr_category")
+        public List<Assn_Category_Image> loadCategroyImages();
     }
 }

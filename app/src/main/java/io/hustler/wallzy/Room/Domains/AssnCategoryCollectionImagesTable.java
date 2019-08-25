@@ -3,9 +3,11 @@ package io.hustler.wallzy.Room.Domains;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Assn_Image_collcat",
+        indices = {@Index("collectionId"), @Index("categoryId")},
         foreignKeys = {
                 @ForeignKey(entity = CollectionsTable.class,
                         parentColumns = "id",

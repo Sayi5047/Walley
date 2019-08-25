@@ -30,6 +30,6 @@
     <dimen name="jelly_tab_height">48dp</dimen>
     <dimen name="jelly_tab_width">96dp</dimen>
     <dimen name="margin_32">32dp</dimen>
-    <dimen name="rv_cat_ver_item_height">180dp</dimen>
+    <dimen name="rv_cat_ver_item_height">120dp</dimen>
 
 </resources>
