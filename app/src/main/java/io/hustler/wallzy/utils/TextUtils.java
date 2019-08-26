@@ -16,7 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class TextUtils {
-    public static final String FONT_CIRCULAR = "fonts/ft_dm_serif.ttf";
+    public static final String FONT_SERIF = "fonts/ft_dm_serif.ttf";
+    public static final String FONT_RALEWAY = "fonts/Raleway.ttf";
 
     public static void setFont(@Nullable final Activity activity, @NonNull final TextView tv, final String fontname) {
         assert activity != null;
@@ -60,13 +61,13 @@ public class TextUtils {
                     if (view instanceof ViewGroup) {
                         findText_and_applyTypeface((ViewGroup) view, activity);
                     } else if (view instanceof TextView) {
-                        setFont(activity, ((TextView) view), FONT_CIRCULAR);
+                        setFont(activity, ((TextView) view), FONT_RALEWAY);
                     } else if (view instanceof EditText) {
-                        setEdit_Font(activity, ((EditText) view), FONT_CIRCULAR);
+                        setEdit_Font(activity, ((EditText) view), FONT_RALEWAY);
                     } else if (view instanceof Button) {
-                        setFont(activity, ((TextView) view), FONT_CIRCULAR);
+                        setFont(activity, ((TextView) view), FONT_RALEWAY);
                     } else if (view instanceof RadioButton) {
-                        set_Radio_font(activity, ((RadioButton) view), FONT_CIRCULAR);
+                        set_Radio_font(activity, ((RadioButton) view), FONT_RALEWAY);
                     }
                 }
             }

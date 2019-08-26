@@ -17,16 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="48dp"
         android:layout_marginTop="48dp"
-        android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
         android:enabled="true"
+
         android:text="@string/Welcome_to_wallzy"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_24"
+        android:textSize="@dimen/text_32"
         android:textStyle="bold"
+        android:layoutAnimation="@anim/layout_anim_fall_down"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +41,8 @@
         android:background="@drawable/rounded_rect_white"
         android:clipChildren="false"
         android:translationY="64dp"
+        android:layoutAnimation="@anim/layout_anim_fall_down"
+
         tools:ignore="MissingConstraints">
 
         <EditText

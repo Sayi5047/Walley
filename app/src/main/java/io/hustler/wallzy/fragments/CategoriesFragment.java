@@ -38,6 +38,7 @@ public class CategoriesFragment extends Fragment {
     private AppExecutor mAppExecutor;
     private CategoryViewModel categoryViewModel;
     private AppDatabase mAppDatabase;
+    private VerticalImagesAdapter verticalImagesAdapter;
 
     public static CategoriesFragment getInstance() {
         return new CategoriesFragment();
@@ -52,34 +53,59 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         verticalRv = view.findViewById(R.id.verticalRv);
+        return view;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mAppExecutor = AppExecutor.getInstance();
         categoryViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
         mAppDatabase = AppDatabase.getmAppDatabaseinstance(getContext());
-//        mAppDatabase.categoryDao().getAllLiveCategories()
+        setDatToRv(new ArrayList<CategoryTable>());
         categoryViewModel.getLiveCategoryData().observe(getActivity(), new Observer<List<CategoryTable>>() {
+            @Override
+            public void onChanged(List<CategoryTable> categoryTables) {
+                Log.d(TAG, "ONCHANGE CALLED");
+                mAppExecutor.getMainThreadExecutor().execute(new Runnable() {
                     @Override
-                    public void onChanged(List<CategoryTable> categoryTables) {
-                        Log.d(TAG, "ONCHANGE CALLED");
-                        mAppExecutor.getMainThreadExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                setDatToRv((ArrayList<CategoryTable>) categoryTables);
-                            }
-                        });
-
+                    public void run() {
+                        verticalImagesAdapter.setData((ArrayList<CategoryTable>) categoryTables);
+                        CategoriesFragment.this.runLayoutAnimation(verticalRv);
                     }
                 });
-        mAppExecutor.getDiskExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                final List<CategoryTable> nonLiveCategoryData;
-                nonLiveCategoryData = AppDatabase.getmAppDatabaseinstance(getContext()).categoryDao().getAllCategories();
-
 
             }
         });
+    }
 
+    private void setDatToRv(ArrayList<CategoryTable> categoryTables) {
+        verticalImagesAdapter = new VerticalImagesAdapter(categoryTables,
+                CategoriesFragment.this.getActivity(),
+                (category, imageView) -> {
+                    Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
+                    intent.putExtra(Constants.INTENT_CAT_NAME, category.getCollectionname());
+                    intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCoverImage());
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(CategoriesFragment.this.getActivity())
+                            , imageView, CategoriesFragment.this.getString(R.string.transistion_blur_image));
+                    CategoriesFragment.this.startActivity(intent, optionsCompat.toBundle());
+                    MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getCollectionname());
+                });
+        verticalRv.intiate(verticalImagesAdapter);
+        CategoriesFragment.this.runLayoutAnimation(verticalRv);
+    }
 
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
+    }
+}
 //        final Observer<List<CategoryTable>> categoryDataObserver = new Observer<List<CategoryTable>>() {
 //            @Override
 //            public void onChanged(List<CategoryTable> categoryTables) {
@@ -118,32 +144,3 @@ public class CategoriesFragment extends Fragment {
 //
 //            }
 //        });
-        return view;
-    }
-
-    private void setDatToRv(ArrayList<CategoryTable> categoryTables) {
-        VerticalImagesAdapter verticalImagesAdapter = new VerticalImagesAdapter(categoryTables,
-                CategoriesFragment.this.getActivity(),
-                (category, imageView) -> {
-                    Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
-                    intent.putExtra(Constants.INTENT_CAT_NAME, category.getCollectionname());
-                    intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCoverImage());
-                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(CategoriesFragment.this.getActivity())
-                            , imageView, CategoriesFragment.this.getString(R.string.transistion_blur_image));
-                    CategoriesFragment.this.startActivity(intent, optionsCompat.toBundle());
-                    MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getCollectionname());
-                });
-        verticalRv.intiate(verticalImagesAdapter);
-        CategoriesFragment.this.runLayoutAnimation(verticalRv);
-    }
-
-    private void runLayoutAnimation(final RecyclerView recyclerView) {
-        final Context context = recyclerView.getContext();
-        final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down);
-
-        recyclerView.setLayoutAnimation(controller);
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-    }
-}

@@ -1,14 +1,20 @@
 package io.hustler.wallzy.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -26,6 +32,7 @@ import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.Constants;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
+import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
@@ -54,12 +61,39 @@ public class HomeActivity extends AppCompatActivity {
     FrameLayout jellyFrame;
 
     int jellyViewDynamicWidth;
+    @BindView(R.id.menu_icon)
+    ImageView menuIcon;
+    @BindView(R.id.app_name)
+    TextView appName;
+    @BindView(R.id.search_icon)
+    ImageView searchIcon;
+    @BindView(R.id.footer)
+    LinearLayout footer;
+    @BindView(R.id.imageView)
+    ImageView imageView;
+    @BindView(R.id.toggle_theme_textView)
+    TextView toggleThemeTextView;
+    @BindView(R.id.themeLayout)
+    RelativeLayout themeLayout;
+    @BindView(R.id.CreditsimageView)
+    ImageView CreditsimageView;
+    @BindView(R.id.Credits_textView)
+    TextView CreditsTextView;
+    @BindView(R.id.creditsLayout)
+    RelativeLayout creditsLayout;
+    @BindView(R.id.signOutIV)
+    ImageView signOutIV;
+    @BindView(R.id.Signout_textView)
+    TextView SignoutTextView;
+    @BindView(R.id.Signout_layout)
+    RelativeLayout SignoutLayout;
+    @BindView(R.id.bottom_layout)
+    RelativeLayout bottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         ButterKnife.bind(this);
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -79,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0, true);
 
         setWidth();
-
+        hideBottom();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -171,14 +205,29 @@ public class HomeActivity extends AppCompatActivity {
 
     /*NIGHT MODE FEATURE*/
 
-    @OnClick({R.id.night_mode_btn, R.id.signout_btn})
+    @OnClick({R.id.night_mode_btn, R.id.signout_btn, R.id.menu_icon, R.id.search_icon, R.id.themeLayout, R.id.creditsLayout, R.id.Signout_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.night_mode_btn:
+
+
+            case R.id.menu_icon:
+                if (bottomLayout.getHeight() == (int) convertDptoPixels(180, getResources())) {
+                    hideBottom();
+                } else {
+                    showBottom();
+                }
+                break;
+            case R.id.search_icon:
+                MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
+                break;
+            case R.id.themeLayout:
                 int currentNightMode = getCurrentNightMode();
                 changeBetweenDayandNightMode(currentNightMode);
                 break;
-            case R.id.signout_btn:
+            case R.id.creditsLayout:
+                MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
+                break;
+            case R.id.Signout_layout:
                 FirebaseAuth.getInstance().signOut();
                 new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
                 saveNightModeToPreferences(getCurrentNightMode());
@@ -213,4 +262,39 @@ public class HomeActivity extends AppCompatActivity {
         mSharedPrefs.putInt(Constants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY, newNightMode);
     }
 
+    private void hideBottom() {
+
+        float alpha = 100f;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(180, getResources()), (int) convertDptoPixels(0, getResources()));
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+                layoutParams.height = ((Integer) valueAnimator.getAnimatedValue());
+                bottomLayout.requestLayout();
+            }
+        });
+        valueAnimator.setDuration(300).start();
+
+    }
+
+    private void showBottom() {
+
+        float alpha = 100f;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), (int) convertDptoPixels(180, getResources()));
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+                layoutParams.height = ((Integer) valueAnimator.getAnimatedValue());
+                bottomLayout.requestLayout();
+            }
+        });
+        valueAnimator.setDuration(300).start();
+
+    }
+
+    public static float convertDptoPixels(float dp, Resources resources) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
+    }
 }

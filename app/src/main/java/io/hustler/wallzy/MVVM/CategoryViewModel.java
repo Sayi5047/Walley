@@ -34,7 +34,7 @@ public class CategoryViewModel extends AndroidViewModel {
     private DatabaseReference mDatabaseReference;
     private AppExecutor mAppExecutor;
 
-
+    /*THIS MODEL CRAETES PROBLWM WHEN NODE IS DELETED FROM THE FIREBASE*/
     public CategoryViewModel(@NonNull Application application) {
         super(application);
         mAppExecutor = AppExecutor.getInstance();
@@ -52,7 +52,6 @@ public class CategoryViewModel extends AndroidViewModel {
                             @Override
                             public void run() {
                                 final int lastIdInLocalDB;
-
                                 lastIdInLocalDB = mAppDatabase.categoryDao().getLastid();
                                 int idFromFireBase = (Integer.parseInt(Objects.requireNonNull(dataSnapshot.getKey())));
                                 if (0 == lastIdInLocalDB) {
@@ -63,14 +62,11 @@ public class CategoryViewModel extends AndroidViewModel {
                                     /*NEW DATA AVAILABLE*/
                                     getLatestDataAndSave(lastIdInLocalDB, idFromFireBase);
                                     Log.i(TAG, "NEW DATA AVAILABLE");
-
                                 } else {
                                     Log.i(TAG, "DATA IS IN SYNC");
-
                                 }
                             }
                         });
-
                     }
 
                     @Override
@@ -134,17 +130,6 @@ public class CategoryViewModel extends AndroidViewModel {
         liveCategoryData = mAppDatabase.categoryDao().getAllLiveCategories(true);
         Log.i(TAG, String.valueOf(liveCategoryData));
 
-    }
-
-    private void getLatestIdFromDb(int[] lastIdInLocalDB) {
-        mAppExecutor.getDiskExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                lastIdInLocalDB[0] = mAppDatabase.categoryDao().getLastid();
-                Log.i(TAG, "LATEST ID FROM DB IS " + lastIdInLocalDB[0]);
-
-            }
-        });
     }
 
 
@@ -234,9 +219,15 @@ public class CategoryViewModel extends AndroidViewModel {
     }
 
 
-    public List<String> getTestData() {
-        return testString;
-    }
+    private void getLatestIdFromDb(int[] lastIdInLocalDB) {
+        mAppExecutor.getDiskExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                lastIdInLocalDB[0] = mAppDatabase.categoryDao().getLastid();
+                Log.i(TAG, "LATEST ID FROM DB IS " + lastIdInLocalDB[0]);
 
+            }
+        });
+    }
 
 }

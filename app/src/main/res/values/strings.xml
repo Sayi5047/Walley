@@ -68,4 +68,7 @@
     <string name="DB_LATEST_IMAGE_NODE">LatestImages</string>
     <string name="dummy_category">Dummy Category</string>
     <string name="transistion_blur_image">tran_blur_image</string>
+    <string name="toggle_theme">Toggle Theme</string>
+    <string name="About">About</string>
+    <string name="Signout">SignOut</string>
 </resources>

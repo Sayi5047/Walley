@@ -5,10 +5,15 @@
     <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_48">48dp</dimen>
 
     <dimen name="padding_4">4dp</dimen>
     <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
+    <dimen name="padding_32">32dp</dimen>
 
     <dimen name="text_12">12sp</dimen>
     <dimen name="text_16">16sp</dimen>
@@ -29,7 +34,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="jelly_tab_height">48dp</dimen>
     <dimen name="jelly_tab_width">96dp</dimen>
-    <dimen name="margin_32">32dp</dimen>
     <dimen name="rv_cat_ver_item_height">120dp</dimen>
+    <dimen name="paddin_12">12dp</dimen>
 
 </resources>

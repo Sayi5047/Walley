@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.Room.Domains.CategoryTable;
-import io.hustler.wallzy.model.CategoryImagesDTO;
 
 public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAdapter.VerticalViewHolder> {
 
@@ -40,6 +39,15 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
     public VerticalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new VerticalViewHolder
                 (LayoutInflater.from(activity).inflate(R.layout.rv_category_vertical_item, parent, false));
+    }
+
+    public void setData(ArrayList<CategoryTable> newData) {
+        for (CategoryTable newCategory : newData) {
+            if (!this.categoryArrayList.contains(newCategory)) {
+                this.categoryArrayList.add(newCategory);
+            }
+            notifyDataSetChanged();
+        }
     }
 
     @Override

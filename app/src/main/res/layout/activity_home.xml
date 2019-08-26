@@ -5,27 +5,43 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:animateLayoutChanges="true"
+    android:background="@android:color/black"
     android:clipChildren="false"
     tools:context=".activity.HomeActivity">
 
 
-    <ImageView
-        android:id="@+id/night_mode_btn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/margin_8"
-        android:background="@color/bt_color"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_night_mode_24dp"
-        android:text="@string/NightMode"
-        android:textSize="@dimen/text_18"
+    <FrameLayout
+        android:id="@+id/jelly_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
+        android:background="@color/bg">
 
-        android:textStyle="bold"
-        android:tint="@color/text_color" />
+        <View
+            android:id="@+id/jelly_view"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginLeft="@dimen/margin_16"
+            android:background="@drawable/rounded_rect_blue" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/jelly_tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="fixed"
+            app:tabRippleColor="@null"
+            app:tabSelectedTextColor="@color/tab_selected_color"
+            app:tabTextAppearance="@style/TabTextAppearance" />
+
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/signout_btn"
@@ -42,44 +58,223 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/text_18"
         android:textStyle="bold"
-        android:tint="@color/text_color" />
+        android:tint="@color/text_color"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/night_mode_btn"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_8"
+        android:background="@color/bt_color"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_night_mode_24dp"
+        android:text="@string/NightMode"
+        android:textSize="@dimen/text_18"
+        android:textStyle="bold"
+        android:tint="@color/text_color"
+        android:visibility="gone" />
+
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/menu_icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/paddin_12"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:tint="@android:color/white" />
+
+
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_18"
+            android:tint="@android:color/white" />
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/paddin_12"
+            android:src="@drawable/ic_search_black_24dp"
+            android:tint="@android:color/white" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_above="@id/footer"
+        android:background="@android:color/black"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/themeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_16"
+                android:layout_marginRight="@dimen/margin_16"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_night_mode_24dp" />
+
+            <TextView
+                android:id="@+id/toggle_theme_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_toStartOf="@id/imageView"
+                android:layout_toLeftOf="@id/imageView"
+                android:gravity="end"
+                android:padding="@dimen/padding_20"
+                android:text="@string/toggle_theme"
+
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/toggle_theme_textView"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_48"
+                android:layout_marginRight="@dimen/margin_32"
+                android:alpha="0.5"
+                android:background="@android:color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/creditsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/themeLayout">
+
+            <ImageView
+                android:id="@+id/CreditsimageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_16"
+
+                android:layout_marginRight="@dimen/margin_16"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_info_black_24dp" />
+
+            <TextView
+                android:id="@+id/Credits_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_toStartOf="@id/CreditsimageView"
+                android:layout_toLeftOf="@id/CreditsimageView"
+                android:gravity="end"
+                android:padding="@dimen/padding_16"
+                android:text="@string/About"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/Credits_textView"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_48"
+                android:layout_marginRight="@dimen/margin_48"
+                android:alpha="0.5"
+                android:background="@android:color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/Signout_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/creditsLayout">
+
+            <ImageView
+                android:id="@+id/signOutIV"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_16"
+
+                android:layout_marginRight="@dimen/margin_16"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_exit_to_app_black_24dp" />
+
+            <TextView
+                android:id="@+id/Signout_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_toStartOf="@id/signOutIV"
+                android:layout_toLeftOf="@id/signOutIV"
+                android:gravity="end"
+                android:padding="@dimen/padding_16"
+                android:text="@string/Signout"
+                android:textAlignment="viewEnd"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@id/Signout_textView"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_48"
+                android:layout_marginRight="@dimen/margin_48"
+                android:alpha="0.5"
+                android:background="@android:color/white" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <FrameLayout
-        android:id="@+id/jelly_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_layout"
+        android:layout_below="@id/jelly_frame"
         android:animateLayoutChanges="true"
-        android:background="@color/colorPrimary">
-
-        <View
-            android:id="@+id/jelly_view"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginLeft="@dimen/margin_16"
-            android:background="@drawable/rounded_rect_white" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/jelly_tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            app:tabIndicatorHeight="0dp"
-            app:tabMode="fixed"
-            app:tabRippleColor="@null"
-
-            app:tabSelectedTextColor="@color/tab_selected_color"
-            app:tabTextAppearance="@style/TabTextAppearance" />
-
-
-    </FrameLayout>
+        android:background="@drawable/home_screen_half_rounded_bg" />
 
 </RelativeLayout>

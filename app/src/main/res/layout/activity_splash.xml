@@ -4,7 +4,6 @@
     android:id="@+id/root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/bg"
     android:orientation="vertical"
     tools:context=".activity.SplashActivity">
 
@@ -13,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@color/bg"
         android:padding="44dp"
         android:src="@drawable/ic_wallpaper" />
 

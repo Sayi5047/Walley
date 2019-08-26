@@ -10,7 +10,6 @@ import io.hustler.wallzy.fragments.CategoriesFragment;
 import io.hustler.wallzy.fragments.CollectionsFragment;
 import io.hustler.wallzy.fragments.ExploreFragment;
 import io.hustler.wallzy.fragments.FavsFragment;
-import io.hustler.wallzy.fragments.TodayImagesFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
     public MainPagerAdapter(@NonNull FragmentManager fm) {
@@ -23,7 +22,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
 
@@ -32,15 +31,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Latest";
+                return "Category";
             case 1:
-                return "CategoryTable";
-            case 2:
                 return "Explore";
-            case 3:
+            case 2:
                 return "Curated";
-            case 4:
+            case 3:
                 return "Liked";
+//            case 4:
+//                return "";
             default:
                 return "Explore";
         }
@@ -51,15 +50,15 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return TodayImagesFragment.getInstance();
-            case 1:
                 return CategoriesFragment.getInstance();
-            case 2:
+            case 1:
                 return ExploreFragment.getInstance();
-            case 3:
+            case 2:
                 return CollectionsFragment.getInstance();
-            case 4:
+            case 3:
                 return FavsFragment.getInstance();
+//            case 4:
+//                return FavsFragment.getInstance();
             default:
                 return ExploreFragment.getInstance();
         }

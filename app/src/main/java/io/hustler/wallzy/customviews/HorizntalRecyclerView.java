@@ -35,7 +35,11 @@ public class HorizntalRecyclerView extends RecyclerView {
     public void intialize(RecyclerView.Adapter adapter, boolean is_Vertical) {
         layoutManager = new LinearLayoutManager(getContext(), is_Vertical ? VERTICAL : HORIZONTAL, false);
         setLayoutManager(layoutManager);
-        new PagerSnapHelper().attachToRecyclerView(this);
+
+        if (this.getOnFlingListener() == null) {
+            PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+            pagerSnapHelper.attachToRecyclerView(this);
+        }
 //        int sidePadding = (getWidth() / 4) - getChildAt(0).getWidth() / 4;
         if (is_Vertical) {
             setPadding(0, 16, 0, 16);
