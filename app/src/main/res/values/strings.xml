@@ -71,4 +71,13 @@
     <string name="toggle_theme">Toggle Theme</string>
     <string name="About">About</string>
     <string name="Signout">SignOut</string>
+    <string name="NO_CONNECTION_ERROR">Connection unavailable</string>
+    <string name="TIMEOUT_ERROR">Took too long to respond</string>
+    <string name="AUTH_FAILURE_ERROR">Authorisation failed</string>
+    <string name="SERVER_ERROR">Unexpected Error  At Server</string>
+    <string name="NETWORK_ERROR">Network is\'nt working properly</string>
+    <string name="PARSE_ERROR">Invalid data parse error</string>
+
+    <string name="sBn5vOoKKETgIohac44eRiB0B5YeODdTeeqP5FEhJutMCYtx8hXGxkXkds5zQGw">83EEF617F362C9D9037115E933E81F225D9B5626D5873D572E6DE6614DAC9B3D</string>
+    <string name="server_client_id">1055557239870-ue8iqi0qucq6ho6onttnthc7k0pqhqka.apps.googleusercontent.com</string>
 </resources>

@@ -38,7 +38,13 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7'
+    runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
+        exclude group: 'org.json', module: 'json' //provided by Android natively
+    }
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.firebase:firebase-database:18.0.1'
@@ -70,16 +76,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'com.google.code.gson:gson:2.8.5'
-
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
-
-
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'com.google.firebase:firebase-crash:16.2.1'
     implementation 'androidx.room:room-runtime:2.1.0'
     annotationProcessor 'androidx.room:room-compiler:2.1.0'
     implementation 'android.arch.lifecycle:livedata:1.1.1'
-
+    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    implementation 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
 
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'

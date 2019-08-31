@@ -13,8 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.text.MessageFormat;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,23 +47,10 @@ public class SplashActivity extends AppCompatActivity {
         bayaditoImage.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this,
                 R.anim.slideup));
         mAuth = FirebaseAuth.getInstance();
-        Handler handler = new Handler();
         mSharedPrefs = new SharedPrefsUtils(getApplicationContext());
         initNightMode();
-        handler.postDelayed(() -> {
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            if (null != firebaseUser) {
-                Toast.makeText(getApplicationContext(), "User already signed in " + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-
-            } else {
-                Toast.makeText(getApplicationContext(), "User Not signed in", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-
-
-            }
-        }, 2000);
     }
+
 
     private void initNightMode() {
         int nightMode = retrieveNightModeFromPreferences();
@@ -72,7 +64,40 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+    }
 
+    private void updateUI(GoogleSignInAccount account) {
+        if (account == null) {
+            /*USER NOT SIGNED IN*/
+            Toast.makeText(getApplicationContext(), "User Not signed in", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+
+        } else {
+            /*USER SIGNED IN*/
+            Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Logged In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+
+        }
+    }
+
+    private void firebaseLoginCheck(Handler handler) {
+        handler.postDelayed(() -> {
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            if (null != firebaseUser) {
+                Toast.makeText(getApplicationContext(), "User already signed in " + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+
+            } else {
+                Toast.makeText(getApplicationContext(), "User Not signed in", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+
+
+            }
+        }, 2000);
     }
 
 }

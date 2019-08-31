@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -37,6 +44,7 @@ import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
 public class HomeActivity extends AppCompatActivity {
+    private final String TAG = this.getClass().getSimpleName();
     public SharedPrefsUtils mSharedPrefs;
 
 
@@ -89,6 +97,8 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout SignoutLayout;
     @BindView(R.id.bottom_layout)
     RelativeLayout bottomLayout;
+    private GoogleSignInClient mGoogleSigninClient;
+    private GoogleSignInOptions gso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,39 +112,23 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setAdapter(mainPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
 
-//        setTabIcon(tabLayout, 0, R.drawable.ic_today_images_24dp);
-//        setTabIcon(tabLayout, 1, R.drawable.ic_categories_24dp);
-//        setTabIcon(tabLayout, 2, R.drawable.ic_explore_24dp);
-//        setTabIcon(tabLayout, 3, R.drawable.ic_collection_24dp);
-//        setTabIcon(tabLayout, 4, R.drawable.ic_favorite_black_24dp);
-//        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getApplicationContext(), R.color.tab_selected_color));
         tabLayout.setSelected(true);
         viewPager.setCurrentItem(0, true);
+        MessageUtils.showShortToast(HomeActivity.this, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
+        Log.i(TAG, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
 
         setWidth();
         hideBottom();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
                 float transalationOffset = (positionOffset + position) * jellyViewDynamicWidth;
                 layoutParams.leftMargin = (int) transalationOffset;
                 jellyView.setLayoutParams(layoutParams);
-//
-//                float multplicationOffset = positionOffset * 10;
-//                if (multplicationOffset <= 7 && multplicationOffset != 0.000) {
-//                    layoutParams.width = (int) transalationOffset;
-//                    jellyView.setLayoutParams(layoutParams);
-//
-//                } else {
-//                    setWidth();
-//                    jellyView.setLayoutParams(layoutParams);
-//
-//                }
-
 
             }
 
@@ -228,10 +222,16 @@ public class HomeActivity extends AppCompatActivity {
                 MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
                 break;
             case R.id.Signout_layout:
-                FirebaseAuth.getInstance().signOut();
-                new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
-                saveNightModeToPreferences(getCurrentNightMode());
-                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                mGoogleSigninClient.signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
+                                saveNightModeToPreferences(getCurrentNightMode());
+                                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                            }
+                        });
+
                 break;
         }
     }
