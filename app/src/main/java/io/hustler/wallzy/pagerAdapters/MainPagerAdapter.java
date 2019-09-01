@@ -1,5 +1,9 @@
 package io.hustler.wallzy.pagerAdapters;
 
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,18 +35,20 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Category";
-            case 1:
-                return "Explore";
+                return getSpannableString("Category");
             case 2:
-                return "Curated";
+                return getSpannableString("Curated");
             case 3:
-                return "Liked";
-//            case 4:
-//                return "";
+                return getSpannableString("Liked");
             default:
-                return "Explore";
+                return getSpannableString("Explore");
         }
+    }
+
+   public SpannableString getSpannableString(String val) {
+        SpannableString spannableString = new SpannableString(val);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, val.length(), 0);
+        return spannableString;
     }
 
     @NonNull

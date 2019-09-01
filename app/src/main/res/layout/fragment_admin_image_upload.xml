@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upload_cat_coll_images_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_16"
+    android:gravity="center"
+    android:visibility="visible"
+    tools:context=".fragments.AdminImageUploadFragment">
+
+
+    <Button
+        android:id="@+id/upload_imagescatcollbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imagesrvLayout"
+        android:layout_margin="@dimen/margin_16"
+        android:background="@drawable/rounded_rect_blue"
+        android:text="@string/upload"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/imagesrvLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cat_coll_items_rv"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upload_images_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_bbg" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rd_upload_Images_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_8"
+        android:background="@drawable/rounded_rect_blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_16">
+
+        <RadioButton
+            android:id="@+id/upload_cat_btn_rd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:buttonTint="@color/white"
+            android:gravity="center"
+            android:text="@string/category"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/upload_col_btn_rd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/white"
+            android:gravity="center"
+            android:text="@string/collection"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cat_coll_items_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rd_upload_Images_group"
+        android:layout_margin="@dimen/margin_16"
+        android:background="@drawable/rounded_rect_bbg"
+        android:padding="@dimen/padding_16" />
+
+
+</RelativeLayout>
+
+

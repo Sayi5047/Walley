@@ -29,3 +29,5 @@
 -keepclassmembers class com.yourcompany.models.** {
   *;
 }
+
+-keep class org.apache.commons.** { *; }

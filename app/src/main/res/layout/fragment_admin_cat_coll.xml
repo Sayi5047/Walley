@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upload_cat_coll_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_16"
+    android:gravity="center"
+    android:visibility="visible"
+    tools:context=".fragments.AdminCatCollFragment">
+
+
+    <Button
+        android:id="@+id/uploadcatcollbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imagesLayout"
+        android:layout_margin="@dimen/margin_16"
+        android:background="@drawable/rounded_rect_blue"
+        android:text="@string/upload"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/imagesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_input_layout"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_margin="@dimen/margin_16"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_bbg" />
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_margin="@dimen/margin_16"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_bbg" />
+
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_margin="@dimen/margin_16"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_rect_bbg" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rd_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_8"
+        android:background="@drawable/rounded_rect_blue"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_16">
+
+        <RadioButton
+            android:id="@+id/cat_btn_rd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:buttonTint="@color/white"
+            android:gravity="center"
+            android:text="@string/category"
+            android:textColor="@android:color/white" />
+
+        <RadioButton
+            android:id="@+id/col_btn_rd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/white"
+            android:gravity="center"
+            android:text="@string/collection"
+            android:textColor="@android:color/white" />
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rd_group"
+        android:layout_margin="@dimen/margin_16"
+        android:background="@drawable/rounded_rect_bbg"
+        android:padding="@dimen/padding_16">
+
+        <EditText
+            android:id="@+id/name_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</RelativeLayout>

@@ -103,7 +103,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+        }
         setContentView(R.layout.activity_home);
+
         ButterKnife.bind(this);
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -116,6 +120,7 @@ public class HomeActivity extends AppCompatActivity {
         mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
 
         tabLayout.setSelected(true);
+
         viewPager.setCurrentItem(0, true);
         MessageUtils.showShortToast(HomeActivity.this, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
         Log.i(TAG, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
@@ -140,6 +145,15 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        appName.setLongClickable(true);
+        appName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                startActivity(new Intent(HomeActivity.this,AdminActivity.class));
+                return false;
             }
         });
 

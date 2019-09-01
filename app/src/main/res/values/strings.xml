@@ -1,4 +1,8 @@
 <resources>
+
+    <string name="imagekitpublickey">C7OjVdkwf9vZKg4FktMTWuF+WRo=</string>
+
+
     <string name="app_name">Wallzy</string>
     <string name="NODE_PRODUCTS">products</string>
     <string name="add">Add</string>
@@ -80,4 +84,9 @@
 
     <string name="sBn5vOoKKETgIohac44eRiB0B5YeODdTeeqP5FEhJutMCYtx8hXGxkXkds5zQGw">83EEF617F362C9D9037115E933E81F225D9B5626D5873D572E6DE6614DAC9B3D</string>
     <string name="server_client_id">1055557239870-ue8iqi0qucq6ho6onttnthc7k0pqhqka.apps.googleusercontent.com</string>
+    <string name="category">Category</string>
+    <string name="collection">Collection</string>
+    <string name="name">Name</string>
+    <string name="upload">Upload</string>
+
 </resources>

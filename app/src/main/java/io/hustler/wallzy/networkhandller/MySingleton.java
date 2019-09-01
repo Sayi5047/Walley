@@ -1,17 +1,15 @@
 package io.hustler.wallzy.networkhandller;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.LruCache;
 
 import androidx.annotation.NonNull;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.request.JsonArrayRequest;
+import com.android.volley.request.JsonObjectRequest;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -43,22 +41,7 @@ public class MySingleton {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
-        mImageLoader = new ImageLoader(mRequestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
 
-                    @Override
-                    public Bitmap getBitmap(@NonNull String url) {
-                        return cache.get(url);
-
-                    }
-
-                    @Override
-                    public void putBitmap(@NonNull String url, @NonNull Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
     }
 
     public static synchronized MySingleton getInstance(Context context) {

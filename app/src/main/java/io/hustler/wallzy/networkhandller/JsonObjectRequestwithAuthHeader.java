@@ -4,9 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.error.AuthFailureError;
+import com.android.volley.request.JsonObjectRequest;
 
 import org.json.JSONObject;
 

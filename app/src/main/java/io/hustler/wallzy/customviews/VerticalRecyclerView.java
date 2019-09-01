@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import io.hustler.wallzy.R;
 
@@ -32,7 +33,7 @@ public class VerticalRecyclerView extends RecyclerView {
 
     public void intiate(RecyclerView.Adapter adapter) {
 
-        verticalLayoutManager = new GridLayoutManager(getContext(), 2);
+        verticalLayoutManager = new StaggeredGridLayoutManager( 2,VERTICAL);
         setLayoutManager(verticalLayoutManager);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

@@ -41,6 +41,9 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api 'io.jsonwebtoken:jjwt-api:0.10.7'
+    implementation 'com.android.support:appcompat-v7:29.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:support-v4:29.+'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.10.7'
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.7') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
@@ -83,8 +86,8 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.1.0'
     implementation 'android.arch.lifecycle:livedata:1.1.1'
     implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
-    implementation 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
-
+    implementation 'commons-codec:commons-codec:1.10'
+    implementation 'dev.dworks.libs:volleyplus:+'
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
