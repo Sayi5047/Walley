@@ -1,8 +1,10 @@
 package io.hustler.wallzy.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -62,8 +63,7 @@ public class AdminImageUploadFragment extends Fragment {
     Button uploadImagescatcollbtn;
     @BindView(R.id.upload_images_rv)
     RecyclerView uploadImagesRv;
-    @BindView(R.id.imagesrvLayout)
-    LinearLayout imagesrvLayout;
+
     @BindView(R.id.upload_cat_btn_rd)
     RadioButton uploadCatBtnRd;
     @BindView(R.id.upload_col_btn_rd)
@@ -113,12 +113,15 @@ public class AdminImageUploadFragment extends Fragment {
         restUtilities = new RestUtilities();
 
         uploadCatBtnRd.setChecked(true);
+        isCat = true;
         appExecutor = AppExecutor.getInstance();
 
         linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
         linearLayoutManager2 = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
         catCollItemsRv.setLayoutManager(linearLayoutManager);
         uploadImagesRv.setLayoutManager(linearLayoutManager2);
+        uploadCatBtnRd.setChecked(true);
+        uploadCatBtnRd.performClick();
 
 
         return view;
@@ -144,35 +147,26 @@ public class AdminImageUploadFragment extends Fragment {
                 if (id == 0) {
                     MessageUtils.showShortToast(getActivity(), "Please select a category or collection");
                 } else {
-                    ProgressDialog progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setTitle("Step 1 : Uploading");
-                    progressDialog.setMessage("Uploading  images  to cdn");
-                    progressDialog.setCancelable(false);
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.setIcon(getResources().getDrawable(R.drawable.ic_today_images_24dp));
-                    progressDialog.show();
-                    uploadedImagesUrl = new ArrayList<ReqUploadImages.Image>();
-                    appExecutor.getNetworkExecutor().execute(new Runnable() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Attention");
+                    String val = isCat ? "Category" : "Collection";
+                    builder.setMessage("Upload " + selectedImagesArrayList.size() + " images to" + header.getText().toString() + " " + val);
+                    builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                         @Override
-                        public void run() {
-                            new TaskCollector()
-                                    .putTaskCount(selectedImagesArrayList.size())
-                                    .callBack(new Callback() {
-                                        @Override
-                                        public void onComplete() {
-                                            uploadImagestoDatabase(restUtilities);
-                                            appExecutor.getMainThreadExecutor().execute(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    progressDialog.cancel();
-                                                    MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
-
-                                                }
-                                            });
-                                        }
-                                    }).sendToTaskManager().execute();
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startWorkerThreads();
+                            dialogInterface.dismiss();
                         }
                     });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.show();
+                    builder.setCancelable(false);
+                    startWorkerThreads();
 
 
                 }
@@ -188,6 +182,39 @@ public class AdminImageUploadFragment extends Fragment {
             case R.id.rd_upload_Images_group:
                 break;
         }
+    }
+
+    private void startWorkerThreads() {
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Step 1 : Uploading");
+        progressDialog.setMessage("Uploading  images  to cdn");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setIcon(getResources().getDrawable(R.drawable.ic_today_images_24dp));
+        progressDialog.show();
+
+        uploadedImagesUrl = new ArrayList<ReqUploadImages.Image>();
+        appExecutor.getNetworkExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new TaskCollector()
+                        .putTaskCount(selectedImagesArrayList.size())
+                        .callBack(new Callback() {
+                            @Override
+                            public void onComplete() {
+                                uploadImagestoDatabase(restUtilities);
+                                appExecutor.getMainThreadExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressDialog.cancel();
+                                        MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
+
+                                    }
+                                });
+                            }
+                        }).sendToTaskManager().execute();
+            }
+        });
     }
 
     private void getCategoriesData() {
@@ -213,12 +240,12 @@ public class AdminImageUploadFragment extends Fragment {
                                 table.setCoverImage(baseCategoryClass.getCover());
                                 data.add(table);
                             }
-                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), new VerticalImagesAdapter.OnChildClickListener() {
-                                @Override
-                                public void onCLick(CategoryTable category, ImageView imageView) {
-                                    MessageUtils.showShortToast(getActivity(), category.getCollectionname());
-                                    id = category.getId();
-                                }
+                            id = 0;
+                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), (category, imageView) -> {
+                                id = category.getId();
+                                header.setText(category.getCollectionname());
+                                MessageUtils.showShortToast(getActivity(), category.getCollectionname() + " " + id);
+
                             });
                             catCollItemsRv.setAdapter(catcollAdapter);
                         }
@@ -252,15 +279,15 @@ public class AdminImageUploadFragment extends Fragment {
                                 CategoryTable table = new CategoryTable();
                                 table.setCollectionname(baseCategoryClass.getName());
                                 table.setId((int) baseCategoryClass.getId());
-                                table.setCoverImage(baseCategoryClass.getCovers().get(0));
+                                table.setCoverImage(baseCategoryClass.getCovers().get(1));
                                 data.add(table);
                             }
-                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), new VerticalImagesAdapter.OnChildClickListener() {
-                                @Override
-                                public void onCLick(CategoryTable category, ImageView imageView) {
-                                    MessageUtils.showShortToast(getActivity(), category.getCollectionname());
-                                    id = category.getId();
-                                }
+                            id = 0;
+                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), (category, imageView) -> {
+                                id = category.getId();
+                                header.setText(category.getCollectionname());
+                                MessageUtils.showShortToast(getActivity(), category.getCollectionname() + " " + id);
+
                             });
                             catCollItemsRv.setAdapter(catcollAdapter);
                         }

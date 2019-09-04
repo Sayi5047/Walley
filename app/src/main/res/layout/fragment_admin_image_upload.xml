@@ -26,31 +26,12 @@
             android:id="@+id/gallery_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imagesrvLayout"
+            android:layout_below="@+id/upload_images_rv"
             android:layout_margin="@dimen/margin_16"
             android:background="@drawable/rounded_rect_blue"
             android:text="@string/Gallery"
             android:textColor="@android:color/white" />
 
-        <LinearLayout
-            android:id="@+id/imagesrvLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cat_coll_items_rv"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/upload_images_rv"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:padding="@dimen/margin_16"
-                android:layout_margin="@dimen/margin_16"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_rect_bbg" />
-
-        </LinearLayout>
 
         <RadioGroup
             android:id="@+id/rd_upload_Images_group"
@@ -60,7 +41,6 @@
             android:layout_margin="@dimen/margin_8"
             android:background="@drawable/rounded_rect_blue"
             android:gravity="center"
-
             android:orientation="horizontal"
             android:padding="@dimen/padding_16">
 
@@ -82,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:buttonTint="@color/white"
+                android:checked="false"
                 android:gravity="center"
                 android:text="@string/collection"
                 android:textColor="@android:color/white" />
@@ -103,12 +84,21 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upload_images_rv"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_below="@id/cat_coll_items_rv"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/margin_16"
+            android:padding="@dimen/margin_16" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cat_coll_items_rv"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/rd_upload_Images_group"
             android:layout_margin="@dimen/margin_16"
-            android:background="@drawable/rounded_rect_bbg"
             android:padding="@dimen/padding_16" />
     </RelativeLayout>
 
