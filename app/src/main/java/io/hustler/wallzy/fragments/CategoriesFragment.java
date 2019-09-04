@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import io.hustler.wallzy.Executors.AppExecutor;
+import io.hustler.wallzy.MVVM.CategoryOldViewModel;
 import io.hustler.wallzy.MVVM.CategoryViewModel;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.Room.AppDatabase;
@@ -36,7 +37,7 @@ public class CategoriesFragment extends Fragment {
     private static final String TAG = "CategoriesFragment";
     private VerticalRecyclerView verticalRv;
     private AppExecutor mAppExecutor;
-    private CategoryViewModel categoryViewModel;
+    private CategoryViewModel categoryOldViewModel;
     private AppDatabase mAppDatabase;
     private VerticalImagesAdapter verticalImagesAdapter;
 
@@ -61,22 +62,17 @@ public class CategoriesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAppExecutor = AppExecutor.getInstance();
-        categoryViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
+        categoryOldViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
         mAppDatabase = AppDatabase.getmAppDatabaseinstance(getContext());
-        setDatToRv(new ArrayList<CategoryTable>());
-        categoryViewModel.getLiveCategoryData().observe(getActivity(), new Observer<List<CategoryTable>>() {
-            @Override
-            public void onChanged(List<CategoryTable> categoryTables) {
-                Log.d(TAG, "ONCHANGE CALLED");
-                mAppExecutor.getMainThreadExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        verticalImagesAdapter.setData((ArrayList<CategoryTable>) categoryTables);
-                        CategoriesFragment.this.runLayoutAnimation(verticalRv);
-                    }
-                });
+        setDatToRv(new ArrayList<>());
 
-            }
+        categoryOldViewModel.getLiveCategoryData().observe(getActivity(), categoryTables -> {
+            Log.d(TAG, "ONCHANGE CALLED");
+            mAppExecutor.getMainThreadExecutor().execute(() -> {
+                verticalImagesAdapter.setData((ArrayList<CategoryTable>) categoryTables);
+                CategoriesFragment.this.runLayoutAnimation(verticalRv);
+            });
+
         });
     }
 

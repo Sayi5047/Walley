@@ -22,6 +22,9 @@ public interface DaoCategory {
     @Query(value = "SELECT * FROM Mstr_Category")
     List<CategoryTable> getAllCategories();
 
+    @Query(value = "SELECT COUNT(*) FROM Mstr_Category where isActive= :val")
+    Integer getAllCategoriesCount(boolean val);
+
     @Insert(onConflict = REPLACE)
     void insertCategroy(CategoryTable categoryTable);
 

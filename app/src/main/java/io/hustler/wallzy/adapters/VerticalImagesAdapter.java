@@ -42,10 +42,10 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
     }
 
     public void setData(ArrayList<CategoryTable> newData) {
+        categoryArrayList.clear();
+        notifyDataSetChanged();
         for (CategoryTable newCategory : newData) {
-            if (!this.categoryArrayList.contains(newCategory)) {
-                this.categoryArrayList.add(newCategory);
-            }
+            this.categoryArrayList.add(newCategory);
             notifyDataSetChanged();
         }
     }

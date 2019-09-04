@@ -43,7 +43,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.5:8080/private";
+    private final String ROOT_IP = "http://192.168.1.8:8080/private";
 
     /**
      * AUTH API PATHS
@@ -60,6 +60,9 @@ public class RestUtilities {
     private final String ADD_CATEGORY = CATGORY + "/addCategory";
     private final String GET_CATEGORY = CATGORY + "/getCategories";
     private final String GET_CATEGORY_IMAGES = CATGORY + "/getCategoryImages";
+    private final String GET_CAT_COUNT = CATGORY + "/getCatCount";
+    private final String GET_LATEST_CATS = CATGORY + "/getLatestCats";
+
 
     /**
      * COLLECTION API PATHS
@@ -193,6 +196,15 @@ public class RestUtilities {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqGetCategoryImages), GET_CATEGORY_IMAGES);
     }
 
+    public void getCategoryCount(Context context, OnSuccessListener onSuccessListener) {
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_CAT_COUNT);
+    }
+
+    public void getLatestCats(Context context, OnSuccessListener onSuccessListener, long id) {
+        id += 1;
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_LATEST_CATS + "/" +id);
+    }
+
     /**
      * IMAGE METHODS
      */
@@ -257,6 +269,8 @@ public class RestUtilities {
     private void getJsonObjectWithAuthHeaderApi(Context context,
                                                 OnSuccessListener onSuccessListener,
                                                 String url) {
+
+        Log.e(TAG, "getJsonObjectWithAuthHeaderApi: " + url);
         JsonObjectRequest jsonObjectRequest
                 =
                 new JsonObjectRequestwithAuthHeader(Request.Method.GET,
@@ -271,6 +285,7 @@ public class RestUtilities {
                         error ->
                                 onSuccessListener.onError(getRelevantVolleyErrorMessage(context, error)), context);
 
+        jsonObjectRequest.setShouldCache(false);
         MySingleton.addJsonObjRequest(context, jsonObjectRequest);
     }
 
