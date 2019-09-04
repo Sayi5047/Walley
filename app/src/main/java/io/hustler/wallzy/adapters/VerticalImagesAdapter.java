@@ -50,6 +50,13 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
         }
     }
 
+    public void clearAdapter() {
+        if (null != categoryArrayList) {
+            categoryArrayList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
         CategoryTable category = categoryArrayList.get(position);

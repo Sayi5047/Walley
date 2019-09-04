@@ -35,9 +35,9 @@ import io.hustler.wallzy.utils.SharedPrefsUtils;
 public class JsonObjectRequestwithAuthHeader extends JsonObjectRequest {
     Context mContext;
 
-    public JsonObjectRequestwithAuthHeader(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener,
+    public JsonObjectRequestwithAuthHeader(int method, String url, JSONObject jsonObject, Response.Listener<JSONObject> listener,
                                            Response.ErrorListener errorListener, Context mContext) {
-        super(method, url, jsonRequest, listener, errorListener);
+        super(method, url, jsonObject, listener, errorListener);
         this.mContext = mContext;
     }
 

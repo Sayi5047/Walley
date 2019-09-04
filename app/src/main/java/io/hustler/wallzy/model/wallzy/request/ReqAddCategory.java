@@ -1,19 +1,19 @@
 package io.hustler.wallzy.model.wallzy.request;
 
-import io.hustler.wallzy.model.wallzy.response.ResCategoryClass;
+import io.hustler.wallzy.model.wallzy.response.BaseCategoryClass;
 
 import java.util.ArrayList;
 
 public class ReqAddCategory {
 
-    ArrayList<ResCategoryClass> categories = new ArrayList<>();
+    ArrayList<BaseCategoryClass> categories = new ArrayList<>();
     private String uploadedBy;
 
-    public ArrayList<ResCategoryClass> getCategories() {
+    public ArrayList<BaseCategoryClass> getCategories() {
         return categories;
     }
 
-    public void setCategories(ArrayList<ResCategoryClass> categories) {
+    public void setCategories(ArrayList<BaseCategoryClass> categories) {
         this.categories = categories;
     }
 

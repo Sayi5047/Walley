@@ -88,5 +88,7 @@
     <string name="collection">Collection</string>
     <string name="name">Name</string>
     <string name="upload">Upload</string>
+    <string name="Gallery">Launch Gallery</string>
+    <string name="Images">Upload Images</string>
 
 </resources>

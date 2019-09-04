@@ -7,13 +7,13 @@ import io.hustler.wallzy.model.base.BaseResponse;
 
 public class ResGetAllCategories extends BaseResponse {
 
-    private ArrayList<ResCategoryClass> collections = new ArrayList<>();
+    private ArrayList<BaseCategoryClass> collections = new ArrayList<>();
 
-    public ArrayList<ResCategoryClass> getCollections() {
+    public ArrayList<BaseCategoryClass> getCollections() {
         return collections;
     }
 
-    public void setCollections(ArrayList<ResCategoryClass> collections) {
+    public void setCollections(ArrayList<BaseCategoryClass> collections) {
         this.collections = collections;
     }
 }

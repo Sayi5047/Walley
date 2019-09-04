@@ -1,6 +1,5 @@
 package io.hustler.wallzy.networkhandller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -22,11 +21,9 @@ import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.apache.commons.codec.binary.Hex;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Formatter;
 import java.util.UUID;
@@ -36,19 +33,52 @@ import javax.crypto.spec.SecretKeySpec;
 
 import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.model.base.BaseResponse;
+import io.hustler.wallzy.model.wallzy.request.ReqAddCategory;
+import io.hustler.wallzy.model.wallzy.request.ReqAddCollection;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailSignup;
+import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
-import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.9:8080/private";
+    private final String ROOT_IP = "http://192.168.1.5:8080/private";
+
+    /**
+     * AUTH API PATHS
+     */
     private final String AUTH = ROOT_IP + "/onBoard/v0/";
     private final String EMAIL_LOGIN = AUTH + "signUpUser";
     private final String GMAIL_LOGIN = AUTH + "googleAuth";
     private final String EMAIL_SIGNUP = AUTH + "signUpUser";
+
+    /**
+     * CATEGORY API PATHS
+     */
+    private final String CATGORY = ROOT_IP + "/category";
+    private final String ADD_CATEGORY = CATGORY + "/addCategory";
+    private final String GET_CATEGORY = CATGORY + "/getCategories";
+    private final String GET_CATEGORY_IMAGES = CATGORY + "/getCategoryImages";
+
+    /**
+     * COLLECTION API PATHS
+     */
+    private final String COLLECTION = ROOT_IP + "/Collections";
+    private final String ADD_COLLECTION = COLLECTION + "/addCollection";
+    private final String GET_COLLECTION = COLLECTION + "/getCollections";
+    private final String GET_COLLECTION_IMAGES = COLLECTION + "/getCollectionImages";
+
+    /**
+     * IMAGE APIS
+     */
+    private final String IMAGEPATH = ROOT_IP + "/image";
+    private final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
+    private final String GET_IMAGES = IMAGEPATH + "/getAllImages ";
+
+    /**
+     * IMAGE KIT APIS
+     */
     private final String PRIVATE_API_KEY = "nUACXVe0hJCl6ozDToEOur6lxPw=";
     private final String PUBLIC_API_KEY = "C7OjVdkwf9vZKg4FktMTWuF+WRo=";
     private final String IMAGEKIT_UPLOAD_IMAGE = "https://api.imagekit.io/v1/files/upload";
@@ -66,7 +96,7 @@ public class RestUtilities {
     /**
      * Image kit apis
      */
-    public BaseResponse uploadImageToIK(String filepath, String fileName, Activity context, OnSuccessListener onSuccessListener) {
+    public void uploadImageToIK(String filepath, String fileName, Context context, OnSuccessListener onSuccessListener) {
         String token = UUID.randomUUID().toString();
         long timesecs = 0;
 
@@ -80,14 +110,16 @@ public class RestUtilities {
             public void onResponse(String response) {
                 if (onSuccessListener != null) {
                     onSuccessListener.onSuccess(response);
-                    MessageUtils.showShortToast(context, response);
+                    Log.i(TAG, "Error" + response);
+
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 onSuccessListener.onError(error.getMessage());
-                MessageUtils.showShortToast(context, error.getMessage());
+                Log.i(TAG, "Error" + error.getMessage());
+
             }
         });
         simpleMultiPartRequest.addFile("file", filepath);
@@ -109,7 +141,6 @@ public class RestUtilities {
         }
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(simpleMultiPartRequest);
-        return null;
     }
 
     /**
@@ -130,6 +161,47 @@ public class RestUtilities {
 
 
     /**
+     * COLLECTION METHODS
+     */
+
+    public void addCollection(Context context, ReqAddCollection reqAddCollection, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqAddCollection), ADD_COLLECTION);
+    }
+
+    public void getCollection(Context context, OnSuccessListener onSuccessListener) {
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_COLLECTION);
+    }
+
+    public void getCollectionImsges(Context context, ReqGetCollectionorCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqGetCategoryImages), GET_COLLECTION_IMAGES);
+    }
+
+
+    /**
+     * CATEGORY METHODS
+     */
+
+    public void addCategory(Context context, ReqAddCategory reqAddCategory, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqAddCategory), ADD_CATEGORY);
+    }
+
+    public void getCategory(Context context, OnSuccessListener onSuccessListener) {
+        getJsonObjectApi(context, onSuccessListener, GET_CATEGORY);
+    }
+
+    public void getCategoryImages(Context context, ReqGetCollectionorCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqGetCategoryImages), GET_CATEGORY_IMAGES);
+    }
+
+    /**
+     * IMAGE METHODS
+     */
+
+    public void uploadImages(Context context, ReqUploadImages reqUploadImages, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUploadImages), UPLOAD_IMAGE);
+    }
+
+    /**
      * CALLER METHODS
      */
     private void postJsonObjectApi(Context context, OnSuccessListener onSuccessListener, JSONObject jsonObject, String url) {
@@ -148,7 +220,9 @@ public class RestUtilities {
         MySingleton.addJsonObjRequest(context, jsonObjectRequest);
     }
 
-    private void getJsonObjectApi(Context context, OnSuccessListener onSuccessListener, String url) {
+    private void getJsonObjectApi(Context context,
+                                  OnSuccessListener onSuccessListener,
+                                  String url) {
         JsonObjectRequest jsonObjectRequest
                 =
                 new JsonObjectRequest(Request.Method.GET, url, null,
@@ -180,17 +254,22 @@ public class RestUtilities {
         MySingleton.addJsonObjRequest(context, jsonObjectRequest);
     }
 
-    private void getJsonObjectWithAuthHeaderApi(Context context, OnSuccessListener onSuccessListener, String url) {
+    private void getJsonObjectWithAuthHeaderApi(Context context,
+                                                OnSuccessListener onSuccessListener,
+                                                String url) {
         JsonObjectRequest jsonObjectRequest
                 =
-                new JsonObjectRequestwithAuthHeader(Request.Method.GET, url, null,
+                new JsonObjectRequestwithAuthHeader(Request.Method.GET,
+                        url,
+                        null,
                         response -> {
                             logTheResponse(response, "API RESPONSE --> ");
                             if (onSuccessListener != null) {
                                 onSuccessListener.onSuccess(response);
                             }
                         },
-                        error -> onSuccessListener.onError(getRelevantVolleyErrorMessage(context, error)), context);
+                        error ->
+                                onSuccessListener.onError(getRelevantVolleyErrorMessage(context, error)), context);
 
         MySingleton.addJsonObjRequest(context, jsonObjectRequest);
     }
@@ -250,14 +329,10 @@ public class RestUtilities {
         Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
         mac.init(secretKeySpec);
         return toHexString(mac.doFinal(data.getBytes()));
-
-//        return new String(Hex.encodeHex(mac.doFinal(data.getBytes(StandardCharsets.UTF_8))));
-
     }
 
     private static String toHexString(byte[] bytes) {
         Formatter formatter = new Formatter();
-
         for (byte b : bytes) {
             formatter.format("%02x", b);
         }

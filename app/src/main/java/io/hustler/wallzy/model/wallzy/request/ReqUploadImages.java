@@ -2,6 +2,7 @@ package io.hustler.wallzy.model.wallzy.request;
 
 import io.hustler.wallzy.model.base.BaseRequest;
 
+import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 
 /*{

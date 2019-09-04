@@ -1,6 +1,6 @@
 package io.hustler.wallzy.model.wallzy.response;
 
-public class ResCategoryClass {
+public class BaseCategoryClass {
     private long id;
     private String name;
     private String cover;

@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/upload_cat_coll_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_16"
-    android:gravity="center"
+    android:background="@drawable/rounded_rect_blue"
+    android:elevation="@dimen/cardview_default_elevation"
     android:visibility="visible"
     tools:context=".fragments.AdminCatCollFragment">
 
@@ -16,15 +17,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imagesLayout"
         android:layout_margin="@dimen/margin_16"
-        android:background="@drawable/rounded_rect_blue"
+        android:background="@drawable/rounded_rect_white"
         android:text="@string/upload"
-        android:textColor="@android:color/white" />
+        android:textColor="@color/text_color" />
 
     <LinearLayout
         android:id="@+id/imagesLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_input_layout"
+        android:animateLayoutChanges="true"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -34,7 +36,7 @@
             android:layout_height="96dp"
             android:layout_margin="@dimen/margin_16"
             android:layout_weight="1"
-            android:background="@drawable/rounded_rect_bbg" />
+            android:background="@drawable/rounded_rect_white" />
 
         <ImageView
             android:id="@+id/image2"
@@ -42,7 +44,8 @@
             android:layout_height="96dp"
             android:layout_margin="@dimen/margin_16"
             android:layout_weight="1"
-            android:background="@drawable/rounded_rect_bbg" />
+            android:background="@drawable/rounded_rect_white"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image3"
@@ -50,13 +53,15 @@
             android:layout_height="96dp"
             android:layout_margin="@dimen/margin_16"
             android:layout_weight="1"
-            android:background="@drawable/rounded_rect_bbg" />
+            android:background="@drawable/rounded_rect_white"
+            android:visibility="gone" />
     </LinearLayout>
 
     <RadioGroup
         android:id="@+id/rd_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/header"
         android:layout_margin="@dimen/margin_8"
         android:background="@drawable/rounded_rect_blue"
         android:gravity="center"
@@ -70,6 +75,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:buttonTint="@color/white"
+            android:checked="true"
             android:gravity="center"
             android:text="@string/category"
             android:textColor="@android:color/white" />
@@ -85,20 +91,38 @@
             android:textColor="@android:color/white" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rect_bbg"
+        android:gravity="center"
+        android:padding="@dimen/padding_16"
+        android:text="@string/upload"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_24"
+        android:textStyle="bold" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rd_group"
         android:layout_margin="@dimen/margin_16"
-        android:background="@drawable/rounded_rect_bbg"
-        android:padding="@dimen/padding_16">
+        android:padding="@dimen/padding_8"
+        android:background="@drawable/rounded_rect_white"
+        android:gravity="center">
 
         <EditText
             android:id="@+id/name_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name" />
+            android:background="@android:color/transparent"
+            android:hint="@string/name"
+
+            android:padding="@dimen/padding_16" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
