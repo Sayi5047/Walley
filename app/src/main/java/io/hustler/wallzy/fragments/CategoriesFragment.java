@@ -14,18 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import io.hustler.wallzy.Executors.AppExecutor;
-import io.hustler.wallzy.MVVM.CategoryOldViewModel;
 import io.hustler.wallzy.MVVM.CategoryViewModel;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.Room.AppDatabase;
 import io.hustler.wallzy.Room.Domains.CategoryTable;
 import io.hustler.wallzy.activity.ImagesActivity;
 import io.hustler.wallzy.adapters.VerticalImagesAdapter;
@@ -37,8 +33,6 @@ public class CategoriesFragment extends Fragment {
     private static final String TAG = "CategoriesFragment";
     private VerticalRecyclerView verticalRv;
     private AppExecutor mAppExecutor;
-    private CategoryViewModel categoryOldViewModel;
-    private AppDatabase mAppDatabase;
     private VerticalImagesAdapter verticalImagesAdapter;
 
     public static CategoriesFragment getInstance() {
@@ -62,11 +56,10 @@ public class CategoriesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mAppExecutor = AppExecutor.getInstance();
-        categoryOldViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
-        mAppDatabase = AppDatabase.getmAppDatabaseinstance(getContext());
+        CategoryViewModel categoryViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
         setDatToRv(new ArrayList<>());
 
-        categoryOldViewModel.getLiveCategoryData().observe(getActivity(), categoryTables -> {
+        categoryViewModel.getLiveCategoryData().observe(getActivity(), categoryTables -> {
             Log.d(TAG, "ONCHANGE CALLED");
             mAppExecutor.getMainThreadExecutor().execute(() -> {
                 verticalImagesAdapter.setData((ArrayList<CategoryTable>) categoryTables);
@@ -83,6 +76,7 @@ public class CategoriesFragment extends Fragment {
                     Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
                     intent.putExtra(Constants.INTENT_CAT_NAME, category.getCollectionname());
                     intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCoverImage());
+                    intent.putExtra(Constants.INTENT_CAT_ID, category.getFirebaseId());
                     ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(CategoriesFragment.this.getActivity())
                             , imageView, CategoriesFragment.this.getString(R.string.transistion_blur_image));
                     CategoriesFragment.this.startActivity(intent, optionsCompat.toBundle());

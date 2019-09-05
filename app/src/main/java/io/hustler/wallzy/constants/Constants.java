@@ -9,6 +9,8 @@ public class Constants {
 
     public static final String INTENT_CAT_NAME = "INTENT_CAT_NAME";
     public static final String INTENT_CAT_IMAGE = "INTENT_CAT_IMAGE";
+    public static final String INTENT_CAT_ID = "INTENT_CAT_ID";
+
     public static final String SHARED_PREFS_SYSTEM_AUTH_KEY = "SHARED_PREFS_SYSTEM_AUTH_KEY";
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";

@@ -13,45 +13,45 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.model.base.ResponseImageClass;
+import io.hustler.wallzy.model.wallzy.response.ResGetCategoryImages;
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewHolder> {
     Activity activity;
     OnItemClcikListener onItemClcikListener;
+    ArrayList<ResponseImageClass> imagesList;
 
-    public ImagesAdapter(Activity activity, OnItemClcikListener onItemClcikListener, ArrayList<String> imagesList) {
+    public ImagesAdapter(Activity activity, OnItemClcikListener onItemClcikListener, ArrayList<ResponseImageClass> imagesList) {
         this.activity = activity;
         this.onItemClcikListener = onItemClcikListener;
-        this.imagesList = imagesList;
-    }
-
-    ArrayList<String> imagesList = new ArrayList<>();
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
-
-    public OnItemClcikListener getOnItemClcikListener() {
-        return onItemClcikListener;
-    }
-
-    public void setOnItemClcikListener(OnItemClcikListener onItemClcikListener) {
-        this.onItemClcikListener = onItemClcikListener;
-    }
-
-    public ArrayList<String> getImagesList() {
-        return imagesList;
-    }
-
-    public void setImagesList(ArrayList<String> imagesList) {
         this.imagesList = imagesList;
     }
 
     public interface OnItemClcikListener {
         void onItemClick(int position);
+    }
+
+    public void AddData(ArrayList<ResponseImageClass> resGetCategoryImages) {
+        for (ResponseImageClass resGetCategoryImages1 : resGetCategoryImages) {
+            addOne(resGetCategoryImages1);
+        }
+    }
+
+    public void addOne(ResponseImageClass resGetCategoryImages) {
+        imagesList.add(resGetCategoryImages);
+        notifyItemInserted(imagesList.size() - 1);
+    }
+
+    public void remove(ResGetCategoryImages resGetCategoryImages) {
+        int position = imagesList.indexOf(resGetCategoryImages);
+        if (position > -1) {
+            imagesList.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+
     }
 
     @NonNull
@@ -62,7 +62,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        Glide.with(activity).load(imagesList.get(position)).centerCrop().into(holder.imageView);
+        Glide.with(activity).load(imagesList.get(position).getThumbUrl()).centerCrop().into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

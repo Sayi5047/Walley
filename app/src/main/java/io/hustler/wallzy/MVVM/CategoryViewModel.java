@@ -105,6 +105,7 @@ public class CategoryViewModel extends AndroidViewModel {
                 categoryTable.setCollectionname(collectionClass.getName());
                 categoryTable.setCreatedDate(System.currentTimeMillis());
                 categoryTable.setActive(true);
+                categoryTable.setFirebaseId((int) collectionClass.getId());
                 categoryTable.setCoverImage(collectionClass.getCover());
                 categoryTables.add(categoryTable);
             }
