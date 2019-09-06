@@ -14,12 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -54,6 +57,18 @@ import io.hustler.wallzy.utils.MessageUtils;
 import static android.app.Activity.RESULT_OK;
 
 public class AdminCatCollFragment extends Fragment {
+    @BindView(R.id.image4)
+    ImageView artistImage;
+    @BindView(R.id.header)
+    TextView header;
+    @BindView(R.id.coversHead)
+    TextView coversHead;
+    @BindView(R.id.link_input_layout)
+    EditText linkInputLayout;
+    @BindView(R.id.text_artist_link_input_layout)
+    TextInputLayout textArtistLinkInputLayout;
+    @BindView(R.id.isArtist_check_box)
+    CheckBox isArtistCheckBox;
     private int PICK_IMAGE_COLLECTION = 1;
     private ArrayList<String> selectedImagesArrayList;
 
@@ -105,6 +120,18 @@ public class AdminCatCollFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin_cat_coll, container, false);
         ButterKnife.bind(this, view);
         catBtnRd.setChecked(true);
+        isArtistCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    artistImage.setVisibility(View.VISIBLE);
+                    textArtistLinkInputLayout.setVisibility(View.VISIBLE);
+                } else {
+                    artistImage.setVisibility(View.GONE);
+                    textArtistLinkInputLayout.setVisibility(View.GONE);
+                }
+            }
+        });
         return view;
     }
 
@@ -137,7 +164,7 @@ public class AdminCatCollFragment extends Fragment {
                 if (isCategory) {
                     String fileName = null;
                     String fileLocation = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         fileLocation = selectedImagesArrayList.get(0);
                         fileName = Paths.get(fileLocation).getFileName().toString();
 
@@ -198,27 +225,18 @@ public class AdminCatCollFragment extends Fragment {
                             });
                 } else {
                     uploadedImagesUrl = new ArrayList<>();
-                    AppExecutor.getInstance().getNetworkExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            new TaskCollector()
-                                    .putTaskCount(3).
+                    AppExecutor.getInstance().getNetworkExecutor().execute(() -> new TaskCollector()
+                            .putTaskCount(3).
                                     callBack(() -> {
                                         uploadCollection(restUtilities);
-                                        AppExecutor.getInstance().getMainThreadExecutor().execute(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                progressDialog.cancel();
-                                                MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
+                                        AppExecutor.getInstance().getMainThreadExecutor().execute(() -> {
+                                            progressDialog.cancel();
+                                            MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
 
-                                            }
                                         });
 
                                     }).
-                                    sendToTaskManager().execute();
-
-                        }
-                    });
+                                    sendToTaskManager().execute());
                 }
                 break;
             case R.id.imagesLayout:
@@ -228,11 +246,17 @@ public class AdminCatCollFragment extends Fragment {
             case R.id.cat_btn_rd:
                 image2.setVisibility(View.GONE);
                 image3.setVisibility(View.GONE);
+
+                isArtistCheckBox.setChecked(false);
+                isArtistCheckBox.setVisibility(View.GONE);
+
                 isCategory = true;
+
                 break;
             case R.id.col_btn_rd:
                 image2.setVisibility(View.VISIBLE);
                 image3.setVisibility(View.VISIBLE);
+                isArtistCheckBox.setVisibility(View.VISIBLE);
                 isCategory = false;
                 break;
         }
@@ -266,8 +290,15 @@ public class AdminCatCollFragment extends Fragment {
             coverMap.put(i, url);
         }
         resCollectionClass.setCovers(coverMap);
+        if (isArtistCheckBox.getVisibility() == View.VISIBLE && isArtistCheckBox.isChecked()) {
+            resCollectionClass.setArtistImage(uploadedImagesUrl.get(3));
+            resCollectionClass.setArtistLink(linkInputLayout.getText().toString());
+            resCollectionClass.setCurated(true);
+            resCollectionClass.setArtistName(nameInputLayout.getText().toString());
+        }
         resCollectionClassArrayList.add(resCollectionClass);
         reqAddCollection.setCollections(resCollectionClassArrayList);
+
         reqAddCollection.setOrigin("ANDROID_MOBILE_APP");
         reqAddCollection.setVersion("1.0");
         reqAddCollection.setCountry("IN");
@@ -313,7 +344,7 @@ public class AdminCatCollFragment extends Fragment {
 
 
     private void launchGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
@@ -341,6 +372,7 @@ public class AdminCatCollFragment extends Fragment {
                     Glide.with(Objects.requireNonNull(getActivity())).load(selectedImagesArrayList.get(0)).centerCrop().into(image1);
                     Glide.with(Objects.requireNonNull(getActivity())).load(selectedImagesArrayList.get(1)).centerCrop().into(image2);
                     Glide.with(Objects.requireNonNull(getActivity())).load(selectedImagesArrayList.get(2)).centerCrop().into(image3);
+                    Glide.with(Objects.requireNonNull(getActivity())).load(selectedImagesArrayList.get(3)).centerCrop().into(artistImage);
                     MessageUtils.showShortToast(getActivity(), "Selected images are" + clipData.getItemCount());
                 }
 
@@ -407,11 +439,11 @@ public class AdminCatCollFragment extends Fragment {
     }
 
     public class TaskManager extends Thread {
-        private AdminCatCollFragment.Callback callback;
+        private Callback callback;
         private CountDownLatch countDownLatch;
         private ConcurrentLinkedQueue<TaskWorker> taskWorkers;
 
-        private TaskManager(List<Runnable> tasks, AdminCatCollFragment.Callback callback) {
+        private TaskManager(List<Runnable> tasks, Callback callback) {
             this.callback = callback;
             taskWorkers = new ConcurrentLinkedQueue<>();
             countDownLatch = new CountDownLatch(tasks.size());
@@ -421,7 +453,7 @@ public class AdminCatCollFragment extends Fragment {
             }
         }
 
-        private TaskManager(int tasksCount, AdminCatCollFragment.Callback callback) {
+        private TaskManager(int tasksCount, Callback callback) {
             this.callback = callback;
             taskWorkers = new ConcurrentLinkedQueue<>();
             countDownLatch = new CountDownLatch(tasksCount);
@@ -496,7 +528,7 @@ public class AdminCatCollFragment extends Fragment {
 
             String fileName = null;
             String fileLocation = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 fileLocation = selectedImagesArrayList.get(index);
                 fileName = Paths.get(fileLocation).getFileName().toString();
 

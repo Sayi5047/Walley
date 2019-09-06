@@ -90,5 +90,8 @@
     <string name="upload">Upload</string>
     <string name="Gallery">Launch Gallery</string>
     <string name="Images">Upload Images</string>
+    <string name="covers">Covers</string>
+    <string name="link">Credit Link</string>
+    <string name="artist_curated">Artist Curated</string>
 
 </resources>
