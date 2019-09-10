@@ -4,6 +4,7 @@
     android:id="@+id/root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_margin="@dimen/margin_16"
     android:background="@color/bg"
     android:orientation="vertical"
@@ -15,31 +16,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/bg"
-       >
+        android:clipChildren="true"
+        android:clipToPadding="true">
 
         <ImageView
             android:id="@+id/cat_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:scaleType="centerCrop"
-            android:transitionName="@string/transistion_blur_image"
-             />
+            app:layout_constraintVertical_bias="0.2" />
 
         <TextView
             android:id="@+id/cat_name"
-            android:layout_width="wrap_content"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="150dp"
-            android:layout_alignParentEnd="true"
-            android:elevation="@dimen/margin_4"
-            android:background="@drawable/custom_cut_shape_left"
-            android:padding="@dimen/padding_8"
+            android:layout_below="@id/cat_image"
+            android:gravity="center"
+            android:background="@color/bg"
             android:text="@string/dummy_category"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             android:textSize="@dimen/text_18"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

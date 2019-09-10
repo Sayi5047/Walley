@@ -226,7 +226,7 @@ public class AdminCatCollFragment extends Fragment {
                 } else {
                     uploadedImagesUrl = new ArrayList<>();
                     AppExecutor.getInstance().getNetworkExecutor().execute(() -> new TaskCollector()
-                            .putTaskCount(3).
+                            .putTaskCount(isArtistCheckBox.isChecked() ? 4 : 3).
                                     callBack(() -> {
                                         uploadCollection(restUtilities);
                                         AppExecutor.getInstance().getMainThreadExecutor().execute(() -> {
@@ -291,7 +291,7 @@ public class AdminCatCollFragment extends Fragment {
         }
         resCollectionClass.setCovers(coverMap);
         if (isArtistCheckBox.getVisibility() == View.VISIBLE && isArtistCheckBox.isChecked()) {
-            resCollectionClass.setArtistImage(uploadedImagesUrl.get(3));
+            resCollectionClass.setArtistImage(uploadedImagesUrl.get(uploadedImagesUrl.size()-1));
             resCollectionClass.setArtistLink(linkInputLayout.getText().toString());
             resCollectionClass.setCurated(true);
             resCollectionClass.setArtistName(nameInputLayout.getText().toString());

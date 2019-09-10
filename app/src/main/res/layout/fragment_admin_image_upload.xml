@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:visibility="visible"
+    android:background="@color/bg"
     tools:context=".fragments.AdminImageUploadFragment">
 
     <RelativeLayout
@@ -17,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/gallery_btn"
-            android:layout_margin="@dimen/margin_16"
-            android:background="@drawable/rounded_rect_blue"
+            android:layout_margin="@dimen/margin_8"
+            android:background="@android:color/holo_green_dark"
             android:text="@string/upload"
             android:textColor="@android:color/white" />
 
@@ -27,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/upload_images_rv"
-            android:layout_margin="@dimen/margin_16"
-            android:background="@drawable/rounded_rect_blue"
+            android:layout_margin="@dimen/margin_8"
+            android:background="@android:color/background_dark"
             android:text="@string/Gallery"
             android:textColor="@android:color/white" />
 
@@ -42,6 +43,7 @@
             android:background="@drawable/rounded_rect_blue"
             android:gravity="center"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:padding="@dimen/padding_16">
 
             <RadioButton
@@ -67,6 +69,35 @@
                 android:text="@string/collection"
                 android:textColor="@android:color/white" />
         </RadioGroup>
+        <TextView
+            android:id="@+id/statusHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_18"
+            android:gravity="center"
+            android:layout_below="@id/header"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:padding="@dimen/padding_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"/>
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status"
+            android:textSize="@dimen/text_18"
+            android:gravity="center"
+            android:layout_below="@id/statusHead"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:padding="@dimen/padding_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_8"/>
 
         <TextView
             android:id="@+id/header"
@@ -83,23 +114,82 @@
             android:textSize="@dimen/text_24"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/imagesHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Images"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_18"
+            android:gravity="center"
+            android:layout_below="@id/coll_items_rv"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:padding="@dimen/padding_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/upload_images_rv"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_below="@id/cat_coll_items_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imagesHead"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/margin_16"
-            android:padding="@dimen/margin_16" />
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_8" />
 
+        <TextView
+            android:id="@+id/catHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/categories"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_18"
+            android:gravity="center"
+            android:layout_below="@id/statusText"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:padding="@dimen/padding_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/cat_coll_items_rv"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:id="@+id/cat_items_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/rd_upload_Images_group"
-            android:layout_margin="@dimen/margin_16"
-            android:padding="@dimen/padding_16" />
+            android:layout_below="@id/catHead"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_8" />
+        <TextView
+            android:id="@+id/collHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/collection"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_18"
+            android:gravity="center"
+            android:layout_below="@id/cat_items_rv"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:padding="@dimen/padding_8"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/coll_items_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/collHead"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_8"
+            />
     </RelativeLayout>
 
 

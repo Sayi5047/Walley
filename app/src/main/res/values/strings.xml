@@ -1,74 +1,20 @@
 <resources>
 
-    <string name="imagekitpublickey">C7OjVdkwf9vZKg4FktMTWuF+WRo=</string>
-
 
     <string name="app_name">Wallzy</string>
-    <string name="NODE_PRODUCTS">products</string>
-    <string name="add">Add</string>
-    <string name="_10">10</string>
-    <string name="_70_inr">70 INR</string>
-    <string name="haldirams">HALDIRAMS</string>
-    <string name="Order">order</string>
-    <string name="orders">orders</string>
-    <string name="Confirm_Order">Confirm Order</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="Please_wait_while_we_load">Please, wait while we load the products</string>
-    <string name="Loading_products">Loading Products</string>
-    <string name="current_orders">Current Orders</string>
-    <string name="completed_orders">Completed Orders</string>
-    <string name="status">status</string>
-    <string name="FB_ORDERS_NODE">orders</string>
-    <string name="FB_DRIVER_NODE">drivers</string>
-    <string name="john_doe">John Doe</string>
-    <string name="retailer">Retailer</string>
-    <string name="mobilenumber">MobileNumber</string>
-    <string name="StoreName">Store Name</string>
-    <string name="Address">Address</string>
-    <string name="vehicleNumber">Vehicle Number</string>
-    <string name="NODE_RETAILER">retailers</string>
-    <string name="review_cart">Review Cart</string>
-    <string name="php_1270">Php 1270</string>
-    <string name="place_order">Place Order</string>
-    <string name="order_details">Order Details</string>
-    <string name="summary">Summary</string>
-    <string name="items">Items</string>
-    <string name="dummy_text">We\'re going to create our own implementation of a determinate progress bar by creating a custom view. The progress bar will have an indicator that represents a goal. We will define custom attributes, handle measuring and drawing, and animations.</string>
-    <string name="delivery_details">Delivery Details</string>
-    <string name="INVOICE">Invoice</string>
-    <string name="close">close</string>
-    <string name="daily_gulb_jamun">Daily Gulb_jamun</string>
-    <string name="Items">Items</string>
-    <string name="Products">Products</string>
-    <string name="OrderItems">Order Items</string>
-    <string name="ORDERS">Orders</string>
-    <string name="Checking_orders">Checking Orders</string>
-    <string name="License">License Number</string>
-    <string name="dummy_order_id">order id: ncknacj ncksmkck cnsknckjs</string>
-    <string name="otp">Otp</string>
-    <string name="pick_up_order">Pick up Order</string>
-    <string name="orderId">Order Id</string>
-    <string name="deliver_order">Deliver Order</string>
-    <string name="enter_otp_here">enter Otp here</string>
-    <string name="MY_ORDERS">My Trips</string>
-    <string name="ORDERS_FB_PATH">orders</string>
-    <string name="STATUS_DELIVERED">DELIVERED</string>
+    <string name="status">Status</string>
     <string name="login">Login</string>
     <string name="dummy_password">starpay</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="dummy_number">+631091010911</string>
-    <string name="dummy_number2">+631091010912</string>
     <string name="or">--------------OR--------------</string>
     <string name="Welcome_to_wallzy">Hi,There \n Welcome to Wallzy</string>
     <string name="ok">Ok</string>
-    <string name="logout">Logout</string>
-    <string name="NightMode">Night Mode</string>
     <string name="file_provider_authority">io.hustler.wallzy.fileprovider</string>
     <string name="notication_channel_desc">Wallpaper Download Channel</string>
     <string name="storage_permission_rejected_message">Storage Permission is required for downloading Walpapers</string>
-    <string name="DB_CAT_NODE">Categories</string>
     <string name="DB_LATEST_IMAGE_NODE">LatestImages</string>
     <string name="dummy_category">Dummy Category</string>
     <string name="transistion_blur_image">tran_blur_image</string>
@@ -82,7 +28,6 @@
     <string name="NETWORK_ERROR">Network is\'nt working properly</string>
     <string name="PARSE_ERROR">Invalid data parse error</string>
 
-    <string name="sBn5vOoKKETgIohac44eRiB0B5YeODdTeeqP5FEhJutMCYtx8hXGxkXkds5zQGw">83EEF617F362C9D9037115E933E81F225D9B5626D5873D572E6DE6614DAC9B3D</string>
     <string name="server_client_id">1055557239870-ue8iqi0qucq6ho6onttnthc7k0pqhqka.apps.googleusercontent.com</string>
     <string name="category">Category</string>
     <string name="collection">Collection</string>
@@ -93,5 +38,8 @@
     <string name="covers">Covers</string>
     <string name="link">Credit Link</string>
     <string name="artist_curated">Artist Curated</string>
+    <string name="categories">Categories</string>
+    <string name="collection_name">Collection Name</string>
+    <string name="_504_images">504 Images</string>
 
 </resources>

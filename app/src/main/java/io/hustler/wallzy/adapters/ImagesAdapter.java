@@ -1,6 +1,7 @@
 package io.hustler.wallzy.adapters;
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -17,9 +20,9 @@ import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetCategoryImages;
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewHolder> {
-    Activity activity;
-    OnItemClcikListener onItemClcikListener;
-    ArrayList<ResponseImageClass> imagesList;
+    private Activity activity;
+    private OnItemClcikListener onItemClcikListener;
+    private ArrayList<ResponseImageClass> imagesList;
 
     public ImagesAdapter(Activity activity, OnItemClcikListener onItemClcikListener, ArrayList<ResponseImageClass> imagesList) {
         this.activity = activity;
@@ -28,13 +31,19 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
     }
 
     public interface OnItemClcikListener {
-        void onItemClick(int position);
+        void onItemClick(ResponseImageClass position);
     }
 
     public void AddData(ArrayList<ResponseImageClass> resGetCategoryImages) {
         for (ResponseImageClass resGetCategoryImages1 : resGetCategoryImages) {
             addOne(resGetCategoryImages1);
         }
+    }
+
+    public void AddAllData(ArrayList<ResponseImageClass> resGetCategoryImages) {
+        int lastPosition = imagesList.size();
+        imagesList.addAll(resGetCategoryImages);
+        notifyItemRangeChanged(lastPosition - 1, resGetCategoryImages.size());
     }
 
     public void addOne(ResponseImageClass resGetCategoryImages) {
@@ -50,6 +59,12 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return imagesList.get(position).getId();
+
+    }
+
     public void clear() {
 
     }
@@ -62,11 +77,13 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        Glide.with(activity).load(imagesList.get(position).getThumbUrl()).centerCrop().into(holder.imageView);
+//        Picasso.get().load(imagesList.get(position).getUrl() + "?tr=w-400,h-400").into(holder.imageView);
+//        ););+ "?tr=w-200,h-200"
+        Glide.with(activity).load(imagesList.get(position).getUrl() ).fitCenter().into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClcikListener.onItemClick(position);
+                onItemClcikListener.onItemClick(imagesList.get(position));
             }
         });
     }
@@ -82,6 +99,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image);
+
         }
     }
 }

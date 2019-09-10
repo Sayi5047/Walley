@@ -31,7 +31,6 @@ import java.util.UUID;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.model.wallzy.request.ReqAddCategory;
 import io.hustler.wallzy.model.wallzy.request.ReqAddCollection;
@@ -43,7 +42,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.9:8080/private";
+    private final String ROOT_IP = "http://192.168.1.10:8080/private";
 
     /**
      * AUTH API PATHS
@@ -77,7 +76,7 @@ public class RestUtilities {
      */
     private final String IMAGEPATH = ROOT_IP + "/image";
     private final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
-    private final String GET_IMAGES = IMAGEPATH + "/getAllImages ";
+    private final String GET_IMAGES = IMAGEPATH + "/getAllImages";
 
     /**
      * IMAGE KIT APIS
@@ -202,7 +201,7 @@ public class RestUtilities {
 
     public void getLatestCats(Context context, OnSuccessListener onSuccessListener, long id) {
         id += 1;
-        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_LATEST_CATS + "/" +id);
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_LATEST_CATS + "/" + id);
     }
 
     /**
@@ -213,6 +212,9 @@ public class RestUtilities {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUploadImages), UPLOAD_IMAGE);
     }
 
+    public void getAllImages(Context context,long pageId,OnSuccessListener onSuccessListener){
+        getJsonObjectWithAuthHeaderApi(context,onSuccessListener,GET_IMAGES+"/"+pageId);
+    }
     /**
      * CALLER METHODS
      */
@@ -293,7 +295,7 @@ public class RestUtilities {
     private JSONObject getJSONObject(Object checkDriverRequest) {
         try {
             JSONObject jsonObject = new JSONObject(new Gson().toJson(checkDriverRequest));
-            logTheResponse(jsonObject, "REQUEST DATA --> ");
+            logTheResponse(jsonObject, "API REQUEST DATA --> ");
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -302,9 +304,7 @@ public class RestUtilities {
     }
 
     private void logTheResponse(JSONObject response, String API_NAME) {
-        if (BuildConfig.DEBUG) {
-            Log.i(API_NAME + " --> ", response.toString());
-        }
+        Log.i(API_NAME + " --> ", response.toString());
     }
 
     @Nullable

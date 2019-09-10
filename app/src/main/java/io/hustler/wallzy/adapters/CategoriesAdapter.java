@@ -1,6 +1,6 @@
 package io.hustler.wallzy.adapters;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.Room.Domains.CategoryTable;
+import io.hustler.wallzy.model.wallzy.response.BaseCategoryClass;
 
-public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAdapter.VerticalViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.VerticalViewHolder> {
 
-    private ArrayList<CategoryTable> categoryArrayList = new ArrayList<>();
-    private Activity activity;
+    private ArrayList<BaseCategoryClass> categoryArrayList = new ArrayList<>();
+    private Context activity;
     private OnChildClickListener onChildClickListener;
 
-    public VerticalImagesAdapter(ArrayList<CategoryTable> categoryArrayList, Activity activity, OnChildClickListener onChildClickListener) {
+    public CategoriesAdapter(ArrayList<BaseCategoryClass> categoryArrayList, Context activity, OnChildClickListener onChildClickListener) {
         this.categoryArrayList = categoryArrayList;
         this.activity = activity;
         this.onChildClickListener = onChildClickListener;
@@ -31,7 +32,7 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
 
 
     public interface OnChildClickListener {
-        void onCLick(CategoryTable category, ImageView imageView);
+        void onCLick(BaseCategoryClass category, ImageView imageView);
     }
 
     @NonNull
@@ -41,10 +42,10 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
                 (LayoutInflater.from(activity).inflate(R.layout.rv_category_vertical_item, parent, false));
     }
 
-    public void setData(ArrayList<CategoryTable> newData) {
+    public void setData(ArrayList<BaseCategoryClass> newData) {
         categoryArrayList.clear();
         notifyDataSetChanged();
-        for (CategoryTable newCategory : newData) {
+        for (BaseCategoryClass newCategory : newData) {
             this.categoryArrayList.add(newCategory);
             notifyDataSetChanged();
         }
@@ -59,9 +60,9 @@ public class VerticalImagesAdapter extends RecyclerView.Adapter<VerticalImagesAd
 
     @Override
     public void onBindViewHolder(@NonNull VerticalViewHolder holder, int position) {
-        CategoryTable category = categoryArrayList.get(position);
-        holder.categoryName.setText(category.getCollectionname());
-        Glide.with(activity).load(category.getCoverImage()).centerCrop().into(holder.categoryImage);
+        BaseCategoryClass category = categoryArrayList.get(position);
+        holder.categoryName.setText(category.getName());
+        Glide.with(activity).load(category.getCover()+"?tr=w-250,h-200").centerCrop().into(holder.categoryImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

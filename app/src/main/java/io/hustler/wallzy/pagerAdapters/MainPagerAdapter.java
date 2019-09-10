@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import io.hustler.wallzy.fragments.CategoriesFragment;
 import io.hustler.wallzy.fragments.CollectionsFragment;
 import io.hustler.wallzy.fragments.ExploreFragment;
-import io.hustler.wallzy.fragments.FavsFragment;
+import io.hustler.wallzy.fragments.ProfileFragment;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
     public MainPagerAdapter(@NonNull FragmentManager fm) {
@@ -34,18 +34,18 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
+            case 2:
+                return getSpannableString("Collection");
             case 0:
                 return getSpannableString("Category");
-            case 2:
-                return getSpannableString("Curated");
-            case 3:
-                return getSpannableString("Liked");
-            default:
+            case 1:
                 return getSpannableString("Explore");
+            default:
+                return getSpannableString("Profile");
         }
     }
 
-   public SpannableString getSpannableString(String val) {
+    private SpannableString getSpannableString(String val) {
         SpannableString spannableString = new SpannableString(val);
         spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, val.length(), 0);
         return spannableString;
@@ -55,18 +55,14 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
+            case 2:
+                return CollectionsFragment.getInstance();
             case 0:
                 return CategoriesFragment.getInstance();
             case 1:
                 return ExploreFragment.getInstance();
-            case 2:
-                return CollectionsFragment.getInstance();
-            case 3:
-                return FavsFragment.getInstance();
-//            case 4:
-//                return FavsFragment.getInstance();
             default:
-                return ExploreFragment.getInstance();
+                return ProfileFragment.getInstance();
         }
     }
 

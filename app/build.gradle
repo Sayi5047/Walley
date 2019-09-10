@@ -87,7 +87,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
     implementation 'commons-codec:commons-codec:1.10'
     implementation 'dev.dworks.libs:volleyplus:+'
-
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.MikeOrtiz:TouchImageView:2.2.0' // Android X
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
 }

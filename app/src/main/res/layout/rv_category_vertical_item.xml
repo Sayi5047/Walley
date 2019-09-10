@@ -4,40 +4,44 @@
     android:id="@+id/root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_margin="@dimen/margin_16"
+    android:layout_margin="@dimen/margin_8"
+    android:background="@color/bg"
     android:orientation="vertical"
-    app:cardCornerRadius="@dimen/corner_rad_8">
+    app:cardCornerRadius="@dimen/corner_rad_8"
+    app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clipChildren="true"
-        android:clipToPadding="true">
+        android:background="@color/bg"
+        >
 
         <ImageView
             android:id="@+id/cat_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintVertical_bias="0.2" />
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            />
 
         <TextView
             android:id="@+id/cat_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:padding="@dimen/padding_16"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="150dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/custom_cut_shape_left"
+            android:padding="@dimen/padding_8"
             android:text="@string/dummy_category"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_20"
-            android:textStyle="bold" />
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/margin_16" />
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="0.4"
-            android:background="@color/colorAccent" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

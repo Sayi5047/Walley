@@ -1,7 +1,9 @@
 package io.hustler.wallzy.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +13,12 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -29,9 +32,11 @@ import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.adapters.ImagesAdapter;
 import io.hustler.wallzy.constants.Constants;
-import io.hustler.wallzy.customviews.PaginationScrollListeners;
+import io.hustler.wallzy.customviews.StaggeredGridPaginationScrollListener;
+import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.response.ResGetCategoryImages;
+import io.hustler.wallzy.model.wallzy.response.ResGetCollectionIMages;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.ImageProcessingUtils;
 import io.hustler.wallzy.utils.MessageUtils;
@@ -49,42 +54,44 @@ public class ImagesActivity extends AppCompatActivity {
     ImageView bgBlurImage;
 
     private final int PAGE_START = 0;
-    int totalItemCount = 0;
     boolean isLoading = false;
     boolean isLastPage = false;
-    private int currentpage = PAGE_START;
+    private int currentPage = PAGE_START;
     private int TOTAL_PAGES = 0;
-    private String catName;
     String catImage;
-    Integer catId;
+    Long catId;
     ImagesAdapter imagesAdapter;
 
 
-    PaginationScrollListeners paginationScrollListeners;
+    StaggeredGridPaginationScrollListener gridPaginationScrollListener;
+    private boolean isCat;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_images);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(ImagesActivity.this, 3);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         imagesRv.setLayoutManager(gridLayoutManager);
-        catName = getIntent().getStringExtra(Constants.INTENT_CAT_NAME);
+        String catName = getIntent().getStringExtra(Constants.INTENT_CAT_NAME);
         catImage = getIntent().getStringExtra(Constants.INTENT_CAT_IMAGE);
-        catId = getIntent().getIntExtra(Constants.INTENT_CAT_ID, 0);
+        catId = getIntent().getLongExtra(Constants.INTENT_CAT_ID, 0l);
+        isCat = getIntent().getBooleanExtra(Constants.INTENT_IS_CAT, false);
 
-        paginationScrollListeners = new PaginationScrollListeners(gridLayoutManager) {
+        gridPaginationScrollListener = new StaggeredGridPaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-                currentpage += 1;
+                currentPage += 1;
                 // TODO: 05-09-2019 call Api For More Data
                 loadMoreDataItems();
             }
@@ -105,7 +112,7 @@ public class ImagesActivity extends AppCompatActivity {
             }
 
         };
-        imagesRv.addOnScrollListener(paginationScrollListeners);
+        imagesRv.addOnScrollListener(gridPaginationScrollListener);
         loadDataForFirstTime();
 
 
@@ -113,7 +120,7 @@ public class ImagesActivity extends AppCompatActivity {
         appExecutor.getDiskExecutor().execute(() -> {
             try {
                 Bitmap checfBitMap = null;
-                checfBitMap = Glide.with(ImagesActivity.this).asBitmap().load(catImage).submit().get();
+                checfBitMap = Glide.with(ImagesActivity.this).asBitmap().centerCrop().load(catImage).submit().get();
                 Bitmap finalChecfBitMap = checfBitMap;
                 appExecutor.getMainThreadExecutor().execute(new Runnable() {
                     @Override
@@ -133,38 +140,72 @@ public class ImagesActivity extends AppCompatActivity {
     private void loadMoreDataItems() {
 
         isLoading = true;
+
+
         ReqGetCollectionorCategoryImages reqGetCollectionorCategoryImages = new ReqGetCollectionorCategoryImages();
         reqGetCollectionorCategoryImages.setId(catId);
-        reqGetCollectionorCategoryImages.setPageNumber(currentpage);
-        new RestUtilities().getCategoryImages(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
-            @Override
-            public void onSuccess(Object onSuccessResponse) {
-                isLoading = false;
-                ResGetCategoryImages resGetCategoryImages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCategoryImages.class);
-                TOTAL_PAGES = resGetCategoryImages.getTotalPages();
-                if (resGetCategoryImages.isApiSuccess()) {
-                    if (null != imagesAdapter) {
-                        imagesAdapter.AddData(resGetCategoryImages.getImages());
-                    }
-                    if (currentpage >= TOTAL_PAGES) {
-                        isLastPage = true;
-                        MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
+        reqGetCollectionorCategoryImages.setPageNumber(currentPage);
+        if (isCat) {
+            new RestUtilities().getCategoryImages(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    isLoading = false;
+                    ResGetCategoryImages resGetCategoryImages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCategoryImages.class);
+                    TOTAL_PAGES = resGetCategoryImages.getTotalPages();
+                    if (resGetCategoryImages.isApiSuccess()) {
+                        if (null != imagesAdapter) {
+                            imagesAdapter.AddData(resGetCategoryImages.getImages());
+                        }
+                        if (currentPage >= TOTAL_PAGES) {
+                            isLastPage = true;
+                            MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
 
+                        }
+                        MessageUtils.showShortToast(ImagesActivity.this, "PAGINATION ADDED MORE ITEMS");
+                    } else {
+                        Log.e(TAG, "onSuccess: " + resGetCategoryImages.getMessage());
                     }
-                    MessageUtils.showShortToast(ImagesActivity.this, "PAGINATION ADDED MORE ITEMS");
-                } else {
-                    Log.e(TAG, "onSuccess: " + resGetCategoryImages.getMessage());
                 }
-            }
 
-            @Override
-            public void onError(String error) {
-                isLoading = false;
-                Log.e(TAG, "onSuccess: " + error);
+                @Override
+                public void onError(String error) {
+                    isLoading = false;
+                    Log.e(TAG, "onSuccess: " + error);
 
 
-            }
-        });
+                }
+            });
+        } else {
+            new RestUtilities().getCollectionImsges(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    isLoading = false;
+                    ResGetCollectionIMages resGetCollectionIMages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCollectionIMages.class);
+                    TOTAL_PAGES = resGetCollectionIMages.getTotalPages();
+                    if (resGetCollectionIMages.isApiSuccess()) {
+                        if (null != imagesAdapter) {
+                            imagesAdapter.AddData(resGetCollectionIMages.getImages());
+                        }
+                        if (currentPage >= TOTAL_PAGES) {
+                            isLastPage = true;
+                            MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
+
+                        }
+                        MessageUtils.showShortToast(ImagesActivity.this, "PAGINATION ADDED MORE ITEMS");
+                    } else {
+                        Log.e(TAG, "onSuccess: " + resGetCollectionIMages.getMessage());
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    isLoading = false;
+                    Log.e(TAG, "onSuccess: " + error);
+                }
+            });
+        }
+
+
     }
 
     private void loadDataForFirstTime() {
@@ -172,42 +213,86 @@ public class ImagesActivity extends AppCompatActivity {
         ReqGetCollectionorCategoryImages reqGetCollectionorCategoryImages = new ReqGetCollectionorCategoryImages();
         reqGetCollectionorCategoryImages.setId(catId);
         reqGetCollectionorCategoryImages.setPageNumber(0);
-        new RestUtilities().getCategoryImages(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
-            @Override
-            public void onSuccess(Object onSuccessResponse) {
-                isLoading = false;
-                ResGetCategoryImages resGetCategoryImages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCategoryImages.class);
-                TOTAL_PAGES = resGetCategoryImages.getTotalPages();
-                if (resGetCategoryImages.isApiSuccess()) {
-                    imagesAdapter = new ImagesAdapter(ImagesActivity.this, new ImagesAdapter.OnItemClcikListener() {
-                        @Override
-                        public void onItemClick(int position) {
-                            // TODO: 06-09-2019 SHOW IMAGE
-                            MessageUtils.showDismissableSnackBar(ImagesActivity.this, imagesRv, position + "");
+        if (isCat) {
+            new RestUtilities().getCategoryImages(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    isLoading = false;
+                    ResGetCategoryImages resGetCategoryImages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCategoryImages.class);
+                    TOTAL_PAGES = resGetCategoryImages.getTotalPages();
+                    if (resGetCategoryImages.isApiSuccess()) {
+                        imagesAdapter = new ImagesAdapter(ImagesActivity.this, new ImagesAdapter.OnItemClcikListener() {
+                            @Override
+                            public void onItemClick(ResponseImageClass responseImageClass) {
+                                Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
+                                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                startActivity(intent);
+                            }
+                        }, resGetCategoryImages.getImages());
+                        imagesRv.setAdapter(imagesAdapter);
+                        int resId = R.anim.layout_anim_fall_down;
+                        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
+                        imagesRv.setLayoutAnimation(animation);
+                        if (currentPage >= TOTAL_PAGES) {
+                            isLastPage = true;
+                            MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
+
                         }
-                    }, resGetCategoryImages.getImages());
-                    imagesRv.setAdapter(imagesAdapter);
-                    int resId = R.anim.layout_anim_fall_down;
-                    LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
-                    imagesRv.setLayoutAnimation(animation);
-                    if (currentpage >= TOTAL_PAGES) {
-                        isLastPage = true;
-                        MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
+                    } else {
+                        Log.e(TAG, "onSuccess: " + resGetCategoryImages.getMessage());
 
                     }
-                } else {
-                    Log.e(TAG, "onSuccess: " + resGetCategoryImages.getMessage());
+                }
+
+                @Override
+                public void onError(String error) {
+                    isLoading = false;
+                    Log.e(TAG, "onSuccess: " + error);
 
                 }
-            }
+            });
 
-            @Override
-            public void onError(String error) {
-                isLoading = false;
-                Log.e(TAG, "onSuccess: " + error);
+        } else {
+            new RestUtilities().getCollectionImsges(getApplicationContext(), reqGetCollectionorCategoryImages, new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    isLoading = false;
+                    ResGetCollectionIMages resGetCollectionIMages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCollectionIMages.class);
+                    TOTAL_PAGES = resGetCollectionIMages.getTotalPages();
+                    if (resGetCollectionIMages.isApiSuccess()) {
+                        imagesAdapter = new ImagesAdapter(ImagesActivity.this, new ImagesAdapter.OnItemClcikListener() {
+                            @Override
+                            public void onItemClick(ResponseImageClass responseImageClass) {
+                                // TODO: 06-09-2019 SHOW IMAGE
+                                Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
+                                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                startActivity(intent);
+                            }
+                        }, resGetCollectionIMages.getImages());
+                        imagesRv.setAdapter(imagesAdapter);
+                        int resId = R.anim.layout_anim_fall_down;
+                        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
+                        imagesRv.setLayoutAnimation(animation);
+                        if (currentPage >= TOTAL_PAGES) {
+                            isLastPage = true;
+                            MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
 
-            }
-        });
+                        }
+                    } else {
+                        Log.e(TAG, "onSuccess: " + resGetCollectionIMages.getMessage());
+
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    isLoading = false;
+                    Log.e(TAG, "onSuccess: " + error);
+
+                }
+            });
+
+        }
 
     }
 

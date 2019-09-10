@@ -3,37 +3,39 @@ package io.hustler.wallzy.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import io.hustler.wallzy.Executors.AppExecutor;
-import io.hustler.wallzy.MVVM.CategoryViewModel;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.Room.Domains.CategoryTable;
 import io.hustler.wallzy.activity.ImagesActivity;
-import io.hustler.wallzy.adapters.VerticalImagesAdapter;
+import io.hustler.wallzy.adapters.CategoriesAdapter;
 import io.hustler.wallzy.constants.Constants;
-import io.hustler.wallzy.customviews.VerticalRecyclerView;
+import io.hustler.wallzy.model.base.ResponseImageClass;
+import io.hustler.wallzy.model.wallzy.response.BaseCategoryClass;
+import io.hustler.wallzy.model.wallzy.response.ResGetAllCategories;
+import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.MessageUtils;
 
 public class CategoriesFragment extends Fragment {
     private static final String TAG = "CategoriesFragment";
-    private VerticalRecyclerView verticalRv;
-    private AppExecutor mAppExecutor;
-    private VerticalImagesAdapter verticalImagesAdapter;
+    private RecyclerView verticalRv;
+    private CategoriesAdapter categoriesAdapter;
 
     public static CategoriesFragment getInstance() {
         return new CategoriesFragment();
@@ -48,6 +50,20 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         verticalRv = view.findViewById(R.id.verticalRv);
+        new RestUtilities().getCategory(getActivity(), new RestUtilities.OnSuccessListener() {
+            @Override
+            public void onSuccess(Object onSuccessResponse) {
+                ResGetAllCategories resGetAllCategories = new Gson().fromJson(onSuccessResponse.toString(), ResGetAllCategories.class);
+                if (resGetAllCategories.isApiSuccess()) {
+                    setDatToRv(resGetAllCategories.getCollections());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
         return view;
     }
 
@@ -55,35 +71,71 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAppExecutor = AppExecutor.getInstance();
-        CategoryViewModel categoryViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
-        setDatToRv(new ArrayList<>());
-
-        categoryViewModel.getLiveCategoryData().observe(getActivity(), categoryTables -> {
-            Log.d(TAG, "ONCHANGE CALLED");
-            mAppExecutor.getMainThreadExecutor().execute(() -> {
-                verticalImagesAdapter.setData((ArrayList<CategoryTable>) categoryTables);
-                CategoriesFragment.this.runLayoutAnimation(verticalRv);
-            });
-
-        });
+//        AppExecutor mAppExecutor = AppExecutor.getInstance();
+//        CategoryViewModel categoryViewModel = new CategoryViewModel(Objects.requireNonNull(getActivity()).getApplication());
+//        setDatToRv(new ArrayList<>());
+//
+//        categoryViewModel.getLiveCategoryData().observe(getActivity(), categoryTables -> {
+//            Log.d(TAG, "ONCHANGE CALLED");
+//            mAppExecutor.getMainThreadExecutor().execute(() -> {
+//
+//                ResGetAllCategories resGetAllCategories = new ResGetAllCategories();
+//                ArrayList<BaseCategoryClass> baseCategoryClasses = new ArrayList<>();
+//                resGetAllCategories.setCollections(baseCategoryClasses);
+//                for (CategoryTable categoryTable : categoryTables) {
+//                    BaseCategoryClass baseCategoryClass = new BaseCategoryClass();
+//                    baseCategoryClass.setId(categoryTable.getId());
+//                    baseCategoryClass.setName(categoryTable.getCollectionname());
+//                    baseCategoryClass.setCover(categoryTable.getCoverImage());
+//                    baseCategoryClasses.add(baseCategoryClass);
+//                }
+//                setDatToRv(resGetAllCategories.getCollections());
+//                CategoriesFragment.this.runLayoutAnimation(verticalRv);
+//            });
+//
+//        });
     }
 
-    private void setDatToRv(ArrayList<CategoryTable> categoryTables) {
-        verticalImagesAdapter = new VerticalImagesAdapter(categoryTables,
-                CategoriesFragment.this.getActivity(),
-                (category, imageView) -> {
-                    Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
-                    intent.putExtra(Constants.INTENT_CAT_NAME, category.getCollectionname());
-                    intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCoverImage());
-                    intent.putExtra(Constants.INTENT_CAT_ID, category.getFirebaseId());
-                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(CategoriesFragment.this.getActivity())
-                            , imageView, CategoriesFragment.this.getString(R.string.transistion_blur_image));
-                    CategoriesFragment.this.startActivity(intent, optionsCompat.toBundle());
-                    MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getCollectionname());
-                });
-        verticalRv.intiate(verticalImagesAdapter);
-        CategoriesFragment.this.runLayoutAnimation(verticalRv);
+    private void setDatToRv(ArrayList<BaseCategoryClass> baseCategoryClasses) {
+        ArrayList<ResponseImageClass> responseImageClasses = new ArrayList<>();
+        for (BaseCategoryClass b : baseCategoryClasses) {
+            ResponseImageClass responseImageClass = new ResponseImageClass();
+            responseImageClass.setUrl(b.getCover());
+            responseImageClass.setName(b.getName());
+            responseImageClass.setId(b.getId());
+            responseImageClasses.add(responseImageClass);
+        }
+
+//        ImagesAdapter imagesAdapter = new ImagesAdapter(getActivity(), new ImagesAdapter.OnItemClcikListener() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
+//                intent.putExtra(Constants.INTENT_CAT_NAME, responseImageClasses.get(position).getName());
+//                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClasses.get(position).getUrl());
+//                intent.putExtra(Constants.INTENT_CAT_ID, responseImageClasses.get(position).getId());
+////                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
+//                Objects.requireNonNull(getActivity()).startActivity(intent);
+////                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getName());
+//
+//            }
+//        }, responseImageClasses);
+
+        categoriesAdapter = new CategoriesAdapter(baseCategoryClasses, getActivity(), new CategoriesAdapter.OnChildClickListener() {
+            @Override
+            public void onCLick(BaseCategoryClass category, ImageView imageView) {
+                Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
+                intent.putExtra(Constants.INTENT_CAT_NAME, category.getName());
+                intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCover());
+                intent.putExtra(Constants.INTENT_CAT_ID, category.getId());
+                intent.putExtra(Constants.INTENT_IS_CAT, true);
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
+                getActivity().startActivity(intent, optionsCompat.toBundle());
+                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getName());
+            }
+        });
+        verticalRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        verticalRv.setAdapter(categoriesAdapter);
+        runLayoutAnimation(verticalRv);
     }
 
     private void runLayoutAnimation(final RecyclerView recyclerView) {
@@ -96,41 +148,4 @@ public class CategoriesFragment extends Fragment {
         recyclerView.scheduleLayoutAnimation();
     }
 }
-//        final Observer<List<CategoryTable>> categoryDataObserver = new Observer<List<CategoryTable>>() {
-//            @Override
-//            public void onChanged(List<CategoryTable> categoryTables) {
-//                Log.i(TAG, categoryTables.toString());
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        setDatToRv((ArrayList<CategoryTable>) categoryTables);
-//                    }
-//                });
-//            }
-//        };
-//        viewModelLiveCategoryData.observe(this, categoryDataObserver);
-//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//        DatabaseReference databaseReference = firebaseDatabase.getReference(getActivity().getString(R.string.DB_CAT_NODE));
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Log.i(TAG, dataSnapshot.toString());
-//                CategoryImagesDTO categoryImagesDTO = new CategoryImagesDTO();
-//                ArrayList<CategoryImagesDTO.Category> categoryArrayList = new ArrayList<>();
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    CategoryImagesDTO.Category category = new CategoryImagesDTO.Category();
-//                    category.setName(snapshot.getKey());
-//                    category.setCoverImage(snapshot.getValue(String.class));
-//                    categoryArrayList.add(category);
-//                }
-//                categoryImagesDTO.setCategoryArrayList(categoryArrayList);
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Log.i(TAG, "Cancelled");
-//
-//            }
-//        });
+

@@ -1,16 +1,19 @@
 package io.hustler.wallzy.activity;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +23,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,9 +31,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,13 +46,6 @@ public class HomeActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     public SharedPrefsUtils mSharedPrefs;
 
-
-    @BindView(R.id.signout_btn)
-    ImageView signoutBtn;
-    @BindView(R.id.night_mode_btn)
-    ImageView nightModeBtn;
-
-    FirebaseAuth mFirebaseAuth;
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
@@ -97,36 +89,31 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout SignoutLayout;
     @BindView(R.id.bottom_layout)
     RelativeLayout bottomLayout;
-    private GoogleSignInClient mGoogleSigninClient;
-    private GoogleSignInOptions gso;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-        }
-        setContentView(R.layout.activity_home);
 
+        setContentView(R.layout.activity_home);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
         ButterKnife.bind(this);
-        TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
-        mFirebaseAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
+        setStatubar();
+
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
-
-        tabLayout.setSelected(true);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            viewPager.setNestedScrollingEnabled(true);
+        }
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setCurrentItem(0, true);
-        MessageUtils.showShortToast(HomeActivity.this, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
-        Log.i(TAG, new SharedPrefsUtils(getApplicationContext()).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
 
-        setWidth();
-        hideBottom();
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -152,42 +139,27 @@ public class HomeActivity extends AppCompatActivity {
         appName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                startActivity(new Intent(HomeActivity.this,AdminActivity.class));
+                startActivity(new Intent(HomeActivity.this, AdminActivity.class));
                 return false;
             }
         });
 
-//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                   (tab.getIcon()).setTint(ContextCompat.getColor(getApplicationContext(), R.color.tab_selected_color));
-//                } else {
-//                    Objects.requireNonNull(tab.getIcon()).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.tab_selected_color), PorterDuff.Mode.SRC_IN);
-//
-//                }
-//            }
+        TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
+        setWidth();
+        hideBottom();
+        TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
 
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    (tab.getIcon()).setTint(ContextCompat.getColor(getApplicationContext(), R.color.tab_unselected_color));
-//                } else {
-//                    Objects.requireNonNull(tab.getIcon()).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.tab_unselected_color), PorterDuff.Mode.SRC_IN);
-//
-//                }
-//
+    }
 
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//
-//            }
-//        });
-//    }
-
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     private void setWidth() {
@@ -199,25 +171,10 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    /*CUSTOMISING TAB FEATURES*/
-    private void setTabIcon(TabLayout tabLayout, int i, int p) {
-        Objects.requireNonNull(tabLayout.getTabAt(i)).setIcon(ContextCompat.getDrawable(getApplicationContext(), p));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (tabLayout.getTabAt(i).getIcon()).setTint(ContextCompat.getColor(getApplicationContext(), R.color.tab_unselected_color));
-        } else {
-            (tabLayout.getTabAt(i).getIcon()).setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.tab_unselected_color), PorterDuff.Mode.SRC_IN);
 
-        }
-
-    }
-
-    /*NIGHT MODE FEATURE*/
-
-    @OnClick({R.id.night_mode_btn, R.id.signout_btn, R.id.menu_icon, R.id.search_icon, R.id.themeLayout, R.id.creditsLayout, R.id.Signout_layout})
+    @OnClick({R.id.menu_icon, R.id.search_icon, R.id.themeLayout, R.id.creditsLayout, R.id.Signout_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-
-
             case R.id.menu_icon:
                 if (bottomLayout.getHeight() == (int) convertDptoPixels(180, getResources())) {
                     hideBottom();
@@ -236,6 +193,11 @@ public class HomeActivity extends AppCompatActivity {
                 MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
                 break;
             case R.id.Signout_layout:
+                GoogleSignInClient mGoogleSigninClient;
+                GoogleSignInOptions gso;
+                gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+
+                mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
                 mGoogleSigninClient.signOut()
                         .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                             @Override
@@ -260,12 +222,45 @@ public class HomeActivity extends AppCompatActivity {
         int newNightMode;
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             newNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+
         } else {
             newNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+
         }
         saveNightModeToPreferences(newNightMode);
         initNightMode(newNightMode);
         recreate();
+    }
+
+    private void setLightStatusbar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
+        }
+    }
+
+    private void setStatubar() {
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is not active, we're in day time
+                setLightStatusbar();
+                Log.i(TAG, "setStatubar: Daymode foun");
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're at night!
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    int flags = getWindow().getDecorView().getSystemUiVisibility(); // get current flag
+                    flags = flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags
+                    this.getWindow().getDecorView().setSystemUiVisibility(flags);
+                    this.getWindow().setStatusBarColor(Color.TRANSPARENT);
+                    Log.i(TAG, "setStatubar: NightMode Found");
+
+
+                }
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                // We don't know what mode we're in, assume notnight
+                setLightStatusbar();
+        }
     }
 
     private void initNightMode(int newNightMode) {
@@ -278,15 +273,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void hideBottom() {
 
-        float alpha = 100f;
         ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(180, getResources()), (int) convertDptoPixels(0, getResources()));
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
-                layoutParams.height = ((Integer) valueAnimator.getAnimatedValue());
-                bottomLayout.requestLayout();
-            }
+        valueAnimator.addUpdateListener(valueAnimator1 -> {
+            ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+            layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
+            bottomLayout.requestLayout();
         });
         valueAnimator.setDuration(300).start();
 
@@ -294,21 +285,18 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showBottom() {
 
-        float alpha = 100f;
         ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), (int) convertDptoPixels(180, getResources()));
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
-                layoutParams.height = ((Integer) valueAnimator.getAnimatedValue());
-                bottomLayout.requestLayout();
-            }
+        valueAnimator.addUpdateListener(valueAnimator1 -> {
+            ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+            layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
+            bottomLayout.requestLayout();
         });
         valueAnimator.setDuration(300).start();
 
     }
 
-    public static float convertDptoPixels(float dp, Resources resources) {
+    public float convertDptoPixels(float dp, Resources resources) {
+
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
     }
 }

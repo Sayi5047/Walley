@@ -8,19 +8,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import io.hustler.wallzy.R;
 
-public class FavsFragment extends Fragment {
+public class ProfileFragment extends Fragment {
+    private final String TAG = this.getClass().getSimpleName();
 
-    FavsFragment categoriesFragment;
-
-    public static FavsFragment getInstance() {
-        return new FavsFragment();
+    public static ProfileFragment getInstance() {
+        return new ProfileFragment();
 
     }
 
-    public FavsFragment() {
+    public ProfileFragment() {
     }
 
     @Nullable
@@ -29,4 +29,6 @@ public class FavsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favs, container, false);
         return view;
     }
+
+
 }

@@ -33,7 +33,7 @@ public class VerticalRecyclerView extends RecyclerView {
 
     public void intiate(RecyclerView.Adapter adapter) {
 
-        verticalLayoutManager = new StaggeredGridLayoutManager( 2,VERTICAL);
+        verticalLayoutManager = new GridLayoutManager( getContext(),2);
         setLayoutManager(verticalLayoutManager);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

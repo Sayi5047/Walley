@@ -47,7 +47,9 @@ public class ReqUploadImages extends BaseRequest {
         private long width;
         private long height;
         private boolean isCollection;
-        private long id;
+        private long collectionId;
+        private long categoryId;
+        private long imageId;
         private ArrayList<String> hashTags;
 
         public String getFilePath() {
@@ -130,13 +132,31 @@ public class ReqUploadImages extends BaseRequest {
             isCollection = collection;
         }
 
-        public long getId() {
-            return id;
+        public long getCollectionId() {
+            return collectionId;
         }
 
-        public void setId(long id) {
-            this.id = id;
+        public void setCollectionId(long collectionId) {
+            this.collectionId = collectionId;
         }
+
+        public long getCategoryId() {
+            return categoryId;
+        }
+
+        public void setCategoryId(long categoryId) {
+            this.categoryId = categoryId;
+        }
+
+        public long getImageId() {
+            return imageId;
+        }
+
+        public void setImageId(long imageId) {
+            this.imageId = imageId;
+        }
+
+
 
         public ArrayList<String> getHashTags() {
             return hashTags;

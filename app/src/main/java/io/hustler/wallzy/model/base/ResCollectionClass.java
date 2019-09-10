@@ -9,6 +9,15 @@ public class ResCollectionClass {
     private String artistImage;
     private String artistLink;
     private boolean curated;
+    private int imageCount;
+
+    public int getImageCount() {
+        return imageCount;
+    }
+
+    public void setImageCount(int imageCount) {
+        this.imageCount = imageCount;
+    }
 
     public String getArtistName() {
         return artistName;

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#cfd8dc</color>
-    <color name="colorPrimaryDark">#cfd8dc</color>
-    <color name="colorAccent">#263238</color>
-    <color name="text_color">#283747</color>
-    <color name="bg">#cfd8dc</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#005b96</color>
+    <color name="text_color">#000000</color>
+    <color name="bg">#ffffff</color>
     <color name="white">#ffffff</color>
-    <color name="bt_color">#3498DB</color>
-    <color name="fab_tint">@color/colorAccent</color>
+    <color name="bt_color">@color/colorAccent</color>
 
 
     <color name="tab_selected_color">#FFFFFf</color>
-    <color name="tab_unselected_color">#ec407a</color>
+    <color name="image_border_color">#40000000</color>
 
 </resources>

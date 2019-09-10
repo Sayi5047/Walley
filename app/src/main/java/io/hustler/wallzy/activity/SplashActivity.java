@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
                 R.anim.slideup));
         mAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(getApplicationContext());
-//        initNightMode();
+        initNightMode();
     }
 
 

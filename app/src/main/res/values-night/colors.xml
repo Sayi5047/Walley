@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2c2f33</color>
-    <color name="colorPrimaryDark">#2c2f33</color>
-    <color name="colorAccent">#ff32a6</color>
+<!--    <color name="colorPrimary">#243447</color>-->
+    <color name="colorPrimary">#141d26</color>
+    <color name="colorPrimaryDark">#141d26</color>
+    <color name="colorAccent">#c51f5d</color>
     <color name="text_color">#ffffff</color>
-    <color name="bg">#2c2f33</color>
+    <color name="bg">#141d26</color>
     <color name="white">#ffffff</color>
     <color name="bt_color">#24292E</color>
-    <color name="fab_tint">@color/colorAccent</color>
 
 
     <color name="tab_selected_color">#24292E</color>
-    <color name="tab_unselected_color">#fefefe</color>
 
+    <color name="image_border_color">#40ffffff</color>
 </resources>

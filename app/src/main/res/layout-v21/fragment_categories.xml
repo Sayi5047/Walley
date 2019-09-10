@@ -2,15 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="@dimen/margin_4">
 
-    <io.hustler.wallzy.customviews.VerticalRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/verticalRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        />
+        android:background="@color/bg"
+         />
 </LinearLayout>

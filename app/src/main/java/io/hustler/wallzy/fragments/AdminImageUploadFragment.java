@@ -43,7 +43,7 @@ import butterknife.OnClick;
 import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.Room.Domains.CategoryTable;
-import io.hustler.wallzy.adapters.VerticalImagesAdapter;
+import io.hustler.wallzy.adapters.UploadImagesAdapter;
 import io.hustler.wallzy.model.base.BaseResponse;
 import io.hustler.wallzy.model.base.ResCollectionClass;
 import io.hustler.wallzy.model.imagekit.ResUploadImageToCdn;
@@ -70,22 +70,36 @@ public class AdminImageUploadFragment extends Fragment {
     RadioButton uploadColBtnRd;
     @BindView(R.id.rd_upload_Images_group)
     RadioGroup rdUploadImagesGroup;
-    @BindView(R.id.cat_coll_items_rv)
-    RecyclerView catCollItemsRv;
+    @BindView(R.id.cat_items_rv)
+    RecyclerView categoryItemsRv;
     @BindView(R.id.upload_cat_coll_images_layout)
     RelativeLayout uploadCatCollImagesLayout;
     @BindView(R.id.gallery_btn)
     Button galleryBtn;
     @BindView(R.id.header)
     TextView header;
+    @BindView(R.id.statusHead)
+    TextView statusHead;
+    @BindView(R.id.statusText)
+    TextView statusText;
+    @BindView(R.id.imagesHead)
+    TextView imagesHead;
+    @BindView(R.id.catHead)
+    TextView catHead;
+    @BindView(R.id.collHead)
+    TextView collHead;
+    @BindView(R.id.coll_items_rv)
+    RecyclerView collItemsRv;
     private int PICK_IMAGE_COLLECTION = 1;
+    private int categoryId, collectionId = 0;
+    private String categoryName, collectionName = "";
+    private String statusMessage;
 
-    AppExecutor appExecutor;
+    private AppExecutor appExecutor;
     private ArrayList<String> selectedImagesArrayList;
-    private LinearLayoutManager linearLayoutManager, linearLayoutManager2;
-    private VerticalImagesAdapter catcollAdapter, imagesAdapter;
+    private UploadImagesAdapter categoriesAdapter;
+    private UploadImagesAdapter collectionAdapter;
     private int id = 0;
-    private boolean isCat = true;
     private RestUtilities restUtilities;
     private ArrayList<ReqUploadImages.Image> uploadedImagesUrl;
 
@@ -111,20 +125,24 @@ public class AdminImageUploadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin_image_upload, container, false);
         ButterKnife.bind(this, view);
         restUtilities = new RestUtilities();
-
-        uploadCatBtnRd.setChecked(true);
-        isCat = true;
         appExecutor = AppExecutor.getInstance();
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
-        linearLayoutManager2 = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
-        catCollItemsRv.setLayoutManager(linearLayoutManager);
-        uploadImagesRv.setLayoutManager(linearLayoutManager2);
-        uploadCatBtnRd.setChecked(true);
-        uploadCatBtnRd.performClick();
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager3 = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
+        categoryItemsRv.setLayoutManager(linearLayoutManager);
+        collItemsRv.setLayoutManager(linearLayoutManager2);
+        uploadImagesRv.setLayoutManager(linearLayoutManager3);
+        setDefaultStatusMessage();
+        getCategoriesData();
+        getCollectionsData();
 
         return view;
+    }
+
+    private void setDefaultStatusMessage() {
+        statusMessage = "Selected Category is Null1 \n and \n Collection is Null2 \n and \n Selected images are Null3 \n";
+        statusText.setText(statusMessage);
     }
 
 
@@ -140,17 +158,32 @@ public class AdminImageUploadFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.upload_imagescatcollbtn, R.id.upload_cat_btn_rd, R.id.upload_col_btn_rd, R.id.rd_upload_Images_group})
+    @OnClick({R.id.upload_imagescatcollbtn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.upload_imagescatcollbtn:
-                if (id == 0) {
+                if (categoryId == 0 & collectionId == 0) {
                     MessageUtils.showShortToast(getActivity(), "Please select a category or collection");
+                } else if (null == selectedImagesArrayList) {
+                    MessageUtils.showShortToast(getActivity(), "Please select at least an image to upload");
+                } else if (0 >= selectedImagesArrayList.size()) {
+                    MessageUtils.showShortToast(getActivity(), "Please select at least an image to upload");
+
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Attention");
-                    String val = isCat ? "Category" : "Collection";
-                    builder.setMessage("Upload " + selectedImagesArrayList.size() + " images to" + header.getText().toString() + " " + val);
+                    String val;
+                    if (categoryId == 0) {
+                        val = "Category Not Attached\n";
+                    } else {
+                        val = "Post Images with the \n Category Id : " + categoryId + "\n Category Name : " + categoryName + "\n";
+                    }
+                    if (collectionId == 0) {
+                        val = val + " " + "Collection Not Attached\n";
+                    } else {
+                        val = val + " And \n Post Images with \n Collection Id : " + collectionId + "\n Collection Name : " + collectionName + "\n";
+                    }
+                    builder.setMessage(val + " Total Images Size are " + selectedImagesArrayList.size());
                     builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -166,24 +199,16 @@ public class AdminImageUploadFragment extends Fragment {
                     });
                     builder.show();
                     builder.setCancelable(false);
-                    startWorkerThreads();
-
-
                 }
                 break;
-            case R.id.upload_cat_btn_rd:
-                isCat = true;
-                getCategoriesData();
-                break;
-            case R.id.upload_col_btn_rd:
-                isCat = false;
-                getCollectionsData();
-                break;
-            case R.id.rd_upload_Images_group:
-                break;
+
         }
     }
 
+    /**
+     * Method that handles ot upload task
+     * Uploads multiple images asynchronously
+     */
     private void startWorkerThreads() {
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Step 1 : Uploading");
@@ -217,6 +242,9 @@ public class AdminImageUploadFragment extends Fragment {
         });
     }
 
+    /**
+     * Get The Category Data to upload images to specific Category
+     */
     private void getCategoriesData() {
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Getting Categories");
@@ -240,14 +268,19 @@ public class AdminImageUploadFragment extends Fragment {
                                 table.setCoverImage(baseCategoryClass.getCover());
                                 data.add(table);
                             }
-                            id = 0;
-                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), (category, imageView) -> {
-                                id = category.getId();
-                                header.setText(category.getCollectionname());
+                            categoryId = 0;
+                            categoriesAdapter = new UploadImagesAdapter(data, getActivity(), (category, imageView) -> {
+                                categoryId = category.getId();
+                                categoryName = category.getCollectionname();
+                                statusText.setText(statusMessage
+                                        .replace("Null1", categoryName)
+                                        .replace("Null2", collectionName)
+                                        .replace("Null3", null == selectedImagesArrayList ? "Null3" : String.valueOf(selectedImagesArrayList.size())));
+
                                 MessageUtils.showShortToast(getActivity(), category.getCollectionname() + " " + id);
 
                             });
-                            catCollItemsRv.setAdapter(catcollAdapter);
+                            categoryItemsRv.setAdapter(categoriesAdapter);
                         }
                     }
 
@@ -258,6 +291,10 @@ public class AdminImageUploadFragment extends Fragment {
                     }
                 });
     }
+
+    /**
+     * Get The Collection Data to upload images to specific Category
+     */
 
     private void getCollectionsData() {
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
@@ -282,14 +319,18 @@ public class AdminImageUploadFragment extends Fragment {
                                 table.setCoverImage(baseCategoryClass.getCovers().get(1));
                                 data.add(table);
                             }
-                            id = 0;
-                            catcollAdapter = new VerticalImagesAdapter(data, getActivity(), (category, imageView) -> {
-                                id = category.getId();
-                                header.setText(category.getCollectionname());
+                            collectionId = 0;
+                            collectionAdapter = new UploadImagesAdapter(data, getActivity(), (category, imageView) -> {
+                                collectionId = category.getId();
+                                collectionName = category.getCollectionname();
+                                statusText.setText(statusMessage
+                                        .replace("Null1", categoryName)
+                                        .replace("Null2", collectionName)
+                                        .replace("Null3", null == selectedImagesArrayList ? "Null3" : String.valueOf(selectedImagesArrayList.size())));
                                 MessageUtils.showShortToast(getActivity(), category.getCollectionname() + " " + id);
 
                             });
-                            catCollItemsRv.setAdapter(catcollAdapter);
+                            collItemsRv.setAdapter(collectionAdapter);
                         }
                     }
 
@@ -302,6 +343,9 @@ public class AdminImageUploadFragment extends Fragment {
     }
 
 
+    /**
+     * REST API CALL TO SAVE THE DATA TO OUR DATABASE
+     */
     private void uploadImagestoDatabase(RestUtilities restUtilities) {
         final ProgressDialog[] progressDialog = new ProgressDialog[1];
 
@@ -341,6 +385,13 @@ public class AdminImageUploadFragment extends Fragment {
                                     MessageUtils.showShortToast(getActivity(), "Collection Successfully Added");
                                     selectedImagesArrayList.clear();
                                     uploadedImagesUrl.clear();
+                                    categoryId = 0;
+                                    collectionId = 0;
+                                    categoryName = "";
+                                    collectionName = "";
+                                    setDefaultStatusMessage();
+                                    uploadImagesRv.setAdapter(null);
+
 
                                 } else {
                                     MessageUtils.showShortToast(getActivity(), baseResponse.getMessage());
@@ -381,13 +432,22 @@ public class AdminImageUploadFragment extends Fragment {
                 selectedImagesArrayList = new ArrayList<>();
                 if (data.getData() != null) {
                     /*USER SELECTS SINGLE IMAGE*/
-                    selectedImagesArrayList.add(getSingleImageLocatioFromGalley(data.getData()));
+                    String url = getSingleImageLocatioFromGalley(data.getData());
+                    selectedImagesArrayList.add(url);
+                    ArrayList<CategoryTable> categoryTables = new ArrayList<>();
+                    CategoryTable categoryTable = new CategoryTable();
+                    categoryTable.setCollectionname("");
+                    categoryTable.setCoverImage(url);
+                    categoryTables.add(categoryTable);
+                    setDataToGalleryRv(categoryTables);
+
+
                 } else if (null != data.getClipData()) {
                     /*USER SELECTS MULTIPLE IMAGES*/
                     ClipData clipData = data.getClipData();
                     ArrayList<CategoryTable> categoryTables = new ArrayList<>();
-
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                    int length = clipData.getItemCount();
+                    for (int i = 0; i < length; i++) {
                         ClipData.Item item = clipData.getItemAt(i);
                         String url = getSingleImageLocatioFromGalley(item.getUri());
                         selectedImagesArrayList.add(url);
@@ -397,17 +457,7 @@ public class AdminImageUploadFragment extends Fragment {
                         categoryTables.add(categoryTable);
 
                     }
-                    imagesAdapter = new VerticalImagesAdapter(categoryTables, getActivity(), new VerticalImagesAdapter.OnChildClickListener() {
-                        @Override
-                        public void onCLick(CategoryTable category, ImageView imageView) {
-                            MessageUtils.showShortToast(getActivity(), category.getCollectionname());
-
-                        }
-                    });
-                    uploadImagesRv.setAdapter(imagesAdapter);
-
-
-                    MessageUtils.showShortToast(getActivity(), "Selected images are " + clipData.getItemCount());
+                    setDataToGalleryRv(categoryTables);
                 }
 
             } else {
@@ -419,6 +469,21 @@ public class AdminImageUploadFragment extends Fragment {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setDataToGalleryRv(ArrayList<CategoryTable> categoryTables) {
+        UploadImagesAdapter imagesAdapter = new UploadImagesAdapter(categoryTables, getActivity(), new UploadImagesAdapter.OnChildClickListener() {
+            @Override
+            public void onCLick(CategoryTable category, ImageView imageView) {
+                MessageUtils.showShortToast(getActivity(), category.getCollectionname());
+
+            }
+        });
+        uploadImagesRv.setAdapter(imagesAdapter);
+        statusText.setText(statusMessage
+                .replace("Null1", categoryName)
+                .replace("Null2", collectionName)
+                .replace("Null3", null == selectedImagesArrayList ? "Null3" : String.valueOf(selectedImagesArrayList.size())));
     }
 
     private String getSingleImageLocatioFromGalley(Uri data) {
@@ -586,9 +651,10 @@ public class AdminImageUploadFragment extends Fragment {
                     image.setSize(baseResponse.getSize());
                     image.setWidth(baseResponse.getWidth());
                     image.setHeight(baseResponse.getHeight());
-                    image.setCollection(isCat);
-                    image.setHashTags(new ArrayList<String>());
-                    image.setId(id);
+                    image.setCollection(uploadColBtnRd.isChecked());
+                    image.setHashTags(new ArrayList<>());
+                    image.setCollectionId(collectionId);
+                    image.setCategoryId(categoryId);
 
 
                     uploadedImagesUrl.add(image);
