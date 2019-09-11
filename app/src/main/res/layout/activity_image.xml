@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bg"
-    tools:context=".activity.ImageActivity">
-
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.ortiz.touchview.TouchImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter" />
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@id/info_layout" />
+
     <ImageView
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_transparent_rounded_rect_right"
         android:layout_marginTop="@dimen/margin_32"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/ic_arrow_back_black_24dp"
-        android:padding="@dimen/padding_20"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/padding_20" />
+
+    <ImageView
+        android:id="@+id/info_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_transparent_rounded_rect_left"
+        android:layout_marginTop="@dimen/margin_32"
+        android:layout_alignParentEnd="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/ic_info_black_24dp"
+        android:padding="@dimen/padding_20"
+        android:layout_alignParentRight="true" />
+
     <LinearLayout
         android:id="@+id/optionsLayout"
         android:layout_width="wrap_content"
@@ -32,9 +43,12 @@
         android:background="@drawable/bg_transparent_rounded_rect_left"
         android:gravity="bottom"
         android:padding="@dimen/padding_4"
+        android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="@dimen/margin_32">
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/margin_32"
+        android:layout_alignParentRight="true">
 
         <ImageView
             android:id="@+id/like"
@@ -58,13 +72,145 @@
             android:layout_margin="@dimen/margin_8" />
 
         <ImageView
-            android:id="@+id/info"
+            android:id="@+id/report"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/rounded_rect_blue"
             android:layout_margin="@dimen/margin_8" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_rounded_rect_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_4"
+        android:layout_marginRight="@dimen/margin_4">
+
+        <LinearLayout
+            android:id="@+id/imageAnalyticsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_4"
+            android:padding="@dimen/padding_8"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Name : \nSayi Sugavasi"
+                android:textColor="@color/text_color"
+                android:layout_margin="@dimen/margin_4" />
+
+            <TextView
+                android:id="@+id/likes"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_height="wrap_content"
+                android:text="Likes : \n100"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/downloads"
+                android:layout_margin="@dimen/margin_4"
+                android:text="Downloads : \n100"
+                android:textColor="@color/text_color" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/walls"
+                android:layout_margin="@dimen/margin_4"
+                android:text="Walls : \n100"
+                android:textColor="@color/text_color" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/artistInfoHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageAnalyticsLayout"
+            android:text="Artist Info"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_24"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/margin_8" />
+
+        <RelativeLayout
+            android:id="@+id/artistInforLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/artistInfoHead">
+
+            <TextView
+                android:id="@+id/artistName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sayi Sugavasi"
+
+                android:textSize="@dimen/text_18"
+                android:padding="@dimen/padding_8"
+                android:layout_marginStart="@dimen/margin_16"
+                android:textColor="@color/text_color"
+                android:layout_toEndOf="@id/artistImage"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_toRightOf="@id/artistImage" />
+
+            <ImageView
+                android:id="@+id/artistImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/rounded_rect_blue"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/margin_16" />
+
+            <ImageView
+                android:id="@+id/artistCreditLink"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/rounded_rect_blue"
+                android:layout_marginEnd="@dimen/margin_16"
+                android:layout_marginRight="@dimen/margin_16"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/CopyRightsHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/artistInforLayout"
+            android:text="CopyRights"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_24"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/margin_8" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/creditsData"
+            android:layout_below="@id/CopyRightsHead"
+            android:layout_marginStart="@dimen/margin_16"
+            android:padding="@dimen/padding_4"
+            android:textColor="@color/text_color"
+            android:layout_marginBottom="@dimen/margin_4"
+            android:text="All the copyrights belongs to Respective designer. Please, contact artist before using commercial use."
+            android:layout_marginLeft="@dimen/margin_16" />
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
