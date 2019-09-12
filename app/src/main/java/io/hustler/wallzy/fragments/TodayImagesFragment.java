@@ -41,7 +41,7 @@ import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.Services.DownloadImageJobService;
 import io.hustler.wallzy.adapters.HorizantalImagesAdapter;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.customviews.HorizntalRecyclerView;
 import io.hustler.wallzy.utils.ImageProcessingUtils;
 import io.hustler.wallzy.utils.MessageUtils;
@@ -81,7 +81,7 @@ public class TodayImagesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
         ButterKnife.bind(this, view);
         if (!PermissionUtils.isStoragePermissionAvailable(Objects.requireNonNull(getActivity()))) {
-            PermissionUtils.requestStoragrPermissions(getActivity(), Constants.MY_PERMISSION_REQUEST_STORAGE);
+            PermissionUtils.requestStoragrPermissions(getActivity(), WallZyConstants.MY_PERMISSION_REQUEST_STORAGE);
         }
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading Images");
@@ -174,7 +174,7 @@ public class TodayImagesFragment extends Fragment {
                         }
                     }
                 } else {
-                    PermissionUtils.requestStoragrPermissions(getActivity(), Constants.MY_PERMISSION_REQUEST_STORAGE_FOR_DOWNLOAD_WALLPAPER);
+                    PermissionUtils.requestStoragrPermissions(getActivity(), WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_DOWNLOAD_WALLPAPER);
                 }
                 break;
             case R.id.fab_set_wallpaper:
@@ -185,7 +185,7 @@ public class TodayImagesFragment extends Fragment {
                         }
                     }
                 } else {
-                    PermissionUtils.requestStoragrPermissions(getActivity(), Constants.MY_PERMISSION_REQUEST_STORAGE_FOR_SETWALLPAPER);
+                    PermissionUtils.requestStoragrPermissions(getActivity(), WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_SETWALLPAPER);
                 }
 
                 break;
@@ -194,9 +194,9 @@ public class TodayImagesFragment extends Fragment {
 
     private void downloadImage(String url) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ImageUrl_to_download, url);
-        bundle.putString(Constants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
-        bundle.putBoolean(Constants.is_to_setWallpaper_fromActivity, false);
+        bundle.putString(WallZyConstants.ImageUrl_to_download, url);
+        bundle.putString(WallZyConstants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
+        bundle.putBoolean(WallZyConstants.is_to_setWallpaper_fromActivity, false);
         if (null == driver) {
             driver = new GooglePlayDriver(Objects.requireNonNull(getActivity()));
         }
@@ -204,7 +204,7 @@ public class TodayImagesFragment extends Fragment {
             firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
 
         }
-        firebaseJobDispatcher.cancel(Constants.DONWLOADIMAGE_IMAGE_JOB_TAG);
+        firebaseJobDispatcher.cancel(WallZyConstants.DONWLOADIMAGE_IMAGE_JOB_TAG);
         Job downloadJob = firebaseJobDispatcher.
                 newJobBuilder().
                 setService(DownloadImageJobService.class)
@@ -212,7 +212,7 @@ public class TodayImagesFragment extends Fragment {
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setExtras(bundle)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setTag(Constants.DONWLOADIMAGE_IMAGE_JOB_TAG)
+                .setTag(WallZyConstants.DONWLOADIMAGE_IMAGE_JOB_TAG)
                 .build();
         firebaseJobDispatcher.mustSchedule(downloadJob);
 
@@ -220,9 +220,9 @@ public class TodayImagesFragment extends Fragment {
 
     private void setWallPaper(String url) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ImageUrl_to_download, url);
-        bundle.putString(Constants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
-        bundle.putBoolean(Constants.is_to_setWallpaper_fromActivity, true);
+        bundle.putString(WallZyConstants.ImageUrl_to_download, url);
+        bundle.putString(WallZyConstants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
+        bundle.putBoolean(WallZyConstants.is_to_setWallpaper_fromActivity, true);
         if (null == driver) {
             driver = new GooglePlayDriver(Objects.requireNonNull(getActivity()));
         }
@@ -230,7 +230,7 @@ public class TodayImagesFragment extends Fragment {
             firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
 
         }
-        firebaseJobDispatcher.cancel(Constants.SETWALLPAPER_IMAGE_TAG);
+        firebaseJobDispatcher.cancel(WallZyConstants.SETWALLPAPER_IMAGE_TAG);
         Job downloadJob = firebaseJobDispatcher
                 .newJobBuilder()
                 .setService(DownloadImageJobService.class)
@@ -240,7 +240,7 @@ public class TodayImagesFragment extends Fragment {
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .setExtras(bundle)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setTag(Constants.SETWALLPAPER_IMAGE_TAG)
+                .setTag(WallZyConstants.SETWALLPAPER_IMAGE_TAG)
                 .build();
         firebaseJobDispatcher.mustSchedule(downloadJob);
     }
@@ -249,13 +249,13 @@ public class TodayImagesFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.MY_PERMISSION_REQUEST_STORAGE: {
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE: {
                 if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     showStorageErrorMessage();
                 }
             }
             break;
-            case Constants.MY_PERMISSION_REQUEST_STORAGE_FOR_DOWNLOAD_WALLPAPER: {
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_DOWNLOAD_WALLPAPER: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fabDownloadImage.performClick();
 
@@ -265,7 +265,7 @@ public class TodayImagesFragment extends Fragment {
 
             }
             break;
-            case Constants.MY_PERMISSION_REQUEST_STORAGE_FOR_SETWALLPAPER: {
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_SETWALLPAPER: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fabSetWallpaper.performClick();
 

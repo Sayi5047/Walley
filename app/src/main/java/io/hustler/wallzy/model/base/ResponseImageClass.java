@@ -1,6 +1,8 @@
 package io.hustler.wallzy.model.base;
 
-public class ResponseImageClass {
+import java.io.Serializable;
+
+public class ResponseImageClass implements Serializable {
     private String url;
     private String name;
     private String fileType;
@@ -9,6 +11,59 @@ public class ResponseImageClass {
     private long width;
     private long height;
     private long id;
+    private long likes;
+    private long dislikes;
+    private long downloads;
+    private String artistName, artsistImage, artistBackLink;
+
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
+    }
+
+    public String getArtsistImage() {
+        return artsistImage;
+    }
+
+    public void setArtsistImage(String artsistImage) {
+        this.artsistImage = artsistImage;
+    }
+
+    public String getArtistBackLink() {
+        return artistBackLink;
+    }
+
+    public void setArtistBackLink(String artistBackLink) {
+        this.artistBackLink = artistBackLink;
+    }
+
+    public long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(long likes) {
+        this.likes = likes;
+    }
+
+    public long getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(long dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public long getDownloads() {
+        return downloads;
+    }
+
+    public void setDownloads(long downloads) {
+        this.downloads = downloads;
+    }
 
     public String getUrl() {
         return url;

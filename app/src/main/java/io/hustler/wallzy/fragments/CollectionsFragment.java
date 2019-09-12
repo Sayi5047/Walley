@@ -29,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.activity.ImagesActivity;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.ResCollectionClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetAllCollections;
 import io.hustler.wallzy.networkhandller.RestUtilities;
@@ -99,10 +99,10 @@ public class CollectionsFragment extends Fragment {
             @Override
             public void onClick(ResCollectionClass resCollectionClass, ImageView imageView) {
                 Intent intent = new Intent(getActivity(), ImagesActivity.class);
-                intent.putExtra(Constants.INTENT_CAT_NAME, resCollectionClass.getName());
-                intent.putExtra(Constants.INTENT_CAT_IMAGE, resCollectionClass.getCovers().get(0));
-                intent.putExtra(Constants.INTENT_CAT_ID, resCollectionClass.getId());
-                intent.putExtra(Constants.INTENT_IS_CAT, false);
+                intent.putExtra(WallZyConstants.INTENT_CAT_NAME, resCollectionClass.getName());
+                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, resCollectionClass.getCovers().get(0));
+                intent.putExtra(WallZyConstants.INTENT_CAT_ID, resCollectionClass.getId());
+                intent.putExtra(WallZyConstants.INTENT_IS_CAT, false);
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity())
                         , imageView, getActivity().getString(R.string.transistion_blur_image));
                 getActivity().startActivity(intent, optionsCompat.toBundle());

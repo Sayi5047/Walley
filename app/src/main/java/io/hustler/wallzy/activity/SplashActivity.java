@@ -24,7 +24,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 
 public class SplashActivity extends AppCompatActivity {
@@ -58,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private int retrieveNightModeFromPreferences() {
-        return mSharedPrefs.getInt(Constants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY);
+        return mSharedPrefs.getInt(WallZyConstants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY);
     }
 
     @Override

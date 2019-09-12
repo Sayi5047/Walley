@@ -2,7 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root">
+
 
     <com.ortiz.touchview.TouchImageView
         android:id="@+id/image"
@@ -10,6 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@id/info_layout" />
+
 
     <ImageView
         android:id="@+id/back"
@@ -86,26 +89,31 @@
         android:background="@drawable/bg_rounded_rect_top"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/margin_4"
-        android:layout_marginRight="@dimen/margin_4">
+        android:layout_marginLeft="@dimen/margin_16"
+        android:layout_marginRight="@dimen/margin_16"
+        android:paddingTop="@dimen/padding_4"
+        android:paddingLeft="@dimen/padding_4">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sayi Sugavasi"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_24"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/margin_8" />
 
         <LinearLayout
             android:id="@+id/imageAnalyticsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/name"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/margin_4"
             android:padding="@dimen/padding_8"
             android:gravity="center">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Name : \nSayi Sugavasi"
-                android:textColor="@color/text_color"
-                android:layout_margin="@dimen/margin_4" />
 
             <TextView
                 android:id="@+id/likes"
@@ -113,7 +121,8 @@
                 android:layout_weight="1"
                 android:layout_margin="@dimen/margin_4"
                 android:layout_height="wrap_content"
-                android:text="Likes : \n100"
+                android:textAlignment="center"
+                android:text="Likes : 100"
                 android:textColor="@color/text_color" />
 
             <TextView
@@ -122,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/downloads"
                 android:layout_margin="@dimen/margin_4"
-                android:text="Downloads : \n100"
+                android:text="Downloads : 100"
                 android:textColor="@color/text_color" />
 
             <TextView
@@ -131,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/walls"
                 android:layout_margin="@dimen/margin_4"
-                android:text="Walls : \n100"
+                android:text="Walls : 100"
                 android:textColor="@color/text_color" />
         </LinearLayout>
 
@@ -182,7 +191,7 @@
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/rounded_rect_blue"
+                android:src="@drawable/ic_instagram"
                 android:layout_marginEnd="@dimen/margin_16"
                 android:layout_marginRight="@dimen/margin_16"
                 android:layout_centerVertical="true" />

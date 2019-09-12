@@ -25,7 +25,7 @@ import java.util.Objects;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.activity.ImagesActivity;
 import io.hustler.wallzy.adapters.CategoriesAdapter;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.model.wallzy.response.BaseCategoryClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetAllCategories;
@@ -110,9 +110,9 @@ public class CategoriesFragment extends Fragment {
 //            @Override
 //            public void onItemClick(int position) {
 //                Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
-//                intent.putExtra(Constants.INTENT_CAT_NAME, responseImageClasses.get(position).getName());
-//                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClasses.get(position).getUrl());
-//                intent.putExtra(Constants.INTENT_CAT_ID, responseImageClasses.get(position).getId());
+//                intent.putExtra(WallZyConstants.INTENT_CAT_NAME, responseImageClasses.get(position).getName());
+//                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClasses.get(position).getUrl());
+//                intent.putExtra(WallZyConstants.INTENT_CAT_ID, responseImageClasses.get(position).getId());
 ////                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
 //                Objects.requireNonNull(getActivity()).startActivity(intent);
 ////                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getName());
@@ -124,10 +124,10 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onCLick(BaseCategoryClass category, ImageView imageView) {
                 Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
-                intent.putExtra(Constants.INTENT_CAT_NAME, category.getName());
-                intent.putExtra(Constants.INTENT_CAT_IMAGE, category.getCover());
-                intent.putExtra(Constants.INTENT_CAT_ID, category.getId());
-                intent.putExtra(Constants.INTENT_IS_CAT, true);
+                intent.putExtra(WallZyConstants.INTENT_CAT_NAME, category.getName());
+                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, category.getCover());
+                intent.putExtra(WallZyConstants.INTENT_CAT_ID, category.getId());
+                intent.putExtra(WallZyConstants.INTENT_IS_CAT, true);
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
                 getActivity().startActivity(intent, optionsCompat.toBundle());
                 MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getName());

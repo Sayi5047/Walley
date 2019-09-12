@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import io.hustler.wallzy.BuildConfig;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -98,13 +98,13 @@ public class SharedPrefsUtils {
 
     public boolean storeUserData(ResLoginUser resLoginUser) {
         SharedPreferences.Editor mEditor = mShare.edit();
-        mEditor.putString(Constants.SP_USERDATA_KEY, new Gson().toJson(resLoginUser));
+        mEditor.putString(WallZyConstants.SP_USERDATA_KEY, new Gson().toJson(resLoginUser));
         return mEditor.commit();
 
     }
 
     public FirebaseUser getUserData() {
-        return new Gson().fromJson(mShare.getString(Constants.SP_USERDATA_KEY, null), FirebaseUser.class);
+        return new Gson().fromJson(mShare.getString(WallZyConstants.SP_USERDATA_KEY, null), FirebaseUser.class);
     }
 
 

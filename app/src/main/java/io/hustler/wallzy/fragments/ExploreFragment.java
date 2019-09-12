@@ -26,9 +26,8 @@ import butterknife.Unbinder;
 import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.activity.ImageActivity;
-import io.hustler.wallzy.activity.ImagesActivity;
 import io.hustler.wallzy.adapters.ImagesAdapter;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.customviews.StaggeredGridPaginationScrollListener;
 import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetAllImages;
@@ -132,7 +131,8 @@ public class ExploreFragment extends Fragment {
                                             @Override
                                             public void onItemClick(ResponseImageClass responseImageClass) {
                                                 Intent intent = new Intent(getActivity(), ImageActivity.class);
-                                                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
                                                 startActivity(intent); }
                                         }, resGetCategoryImages.getImages());
                                         latestImagesAdapter.setHasStableIds(true);

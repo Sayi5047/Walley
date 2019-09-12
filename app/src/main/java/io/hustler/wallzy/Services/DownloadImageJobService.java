@@ -33,7 +33,7 @@ import java.util.Objects;
 
 import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.utils.FileUtils;
 
 import static android.os.Build.VERSION_CODES.O;
@@ -93,9 +93,9 @@ public class DownloadImageJobService extends JobService {
                     final FileOutputStream[] fileOutputStream = new FileOutputStream[1];
                     final InputStream[] inputStream = new InputStream[1];
                     final String url;
-                    url = Objects.requireNonNull(jobParameters.getExtras()).getString(Constants.ImageUrl_to_download);
-                    mFileName = jobParameters.getExtras().getString(Constants.Image_Name_to_save_key);
-                    is_to_set_wallpaper = (Boolean) jobParameters.getExtras().get(Constants.is_to_setWallpaper_fromActivity);
+                    url = Objects.requireNonNull(jobParameters.getExtras()).getString(WallZyConstants.ImageUrl_to_download);
+                    mFileName = jobParameters.getExtras().getString(WallZyConstants.Image_Name_to_save_key);
+                    is_to_set_wallpaper = (Boolean) jobParameters.getExtras().get(WallZyConstants.is_to_setWallpaper_fromActivity);
 
                     mNotificationManager = (NotificationManager) downloadImageJobService.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -132,7 +132,7 @@ public class DownloadImageJobService extends JobService {
                     mNotificationManager.notify(NOTIFY_ID, notification);
                     try {
                         URL imageUrl = new URL(url);
-                        File destination_downloading_directory = new File(Constants.APP_WALLPAPERS_FOLDER);
+                        File destination_downloading_directory = new File(WallZyConstants.APP_WALLPAPERS_FOLDER);
                         if (!destination_downloading_directory.exists()) {
                             destination_downloading_directory.mkdirs();
                         }
@@ -193,7 +193,7 @@ public class DownloadImageJobService extends JobService {
                             }
 
                         } else {
-                            Intent intent_gallery = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(downloadImageJobService, Constants.FILEPROVIDER_AUTHORITY, (downloading_File)));
+                            Intent intent_gallery = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(downloadImageJobService, WallZyConstants.FILEPROVIDER_AUTHORITY, (downloading_File)));
                             intent_gallery.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             PendingIntent pendingIntent = PendingIntent.getActivity(downloadImageJobService, NOTIFY_ID, intent_gallery, PendingIntent.FLAG_ONE_SHOT);
                             mNotification_Builder.setContentTitle("Completed");

@@ -5,7 +5,7 @@ import android.os.Environment;
 import java.io.File;
 import java.text.MessageFormat;
 
-public class Constants {
+public class WallZyConstants {
 
     public static final String INTENT_CAT_NAME = "INTENT_CAT_NAME";
     public static final String INTENT_CAT_IMAGE = "INTENT_CAT_IMAGE";
@@ -13,6 +13,7 @@ public class Constants {
     public static final String INTENT_IS_CAT = "INTENT_IS_CAT";
 
     public static final String SHARED_PREFS_SYSTEM_AUTH_KEY = "SHARED_PREFS_SYSTEM_AUTH_KEY";
+    public static final String INTENT_SERIALIZED_IMAGE = "INTENT_SERIALISED_IMAGE_OBJECT";
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
 

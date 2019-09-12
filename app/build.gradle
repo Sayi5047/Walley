@@ -91,4 +91,5 @@ dependencies {
     implementation 'com.github.MikeOrtiz:TouchImageView:2.2.0' // Android X
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 }

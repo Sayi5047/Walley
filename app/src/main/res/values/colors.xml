@@ -11,5 +11,6 @@
 
     <color name="tab_selected_color">#FFFFFf</color>
     <color name="image_border_color">#40000000</color>
+    <color name="blur_bg_color">#ffffff</color>
 
 </resources>

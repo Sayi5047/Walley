@@ -25,7 +25,7 @@ import java.net.URLConnection;
 import java.util.Objects;
 
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 
 public class FileUtils {
 
@@ -66,7 +66,7 @@ public class FileUtils {
 //                GET URL
             URL url = new URL(param);
 //                CRETAE DIRECTORY IN SD CARD WITH GIVEN NAME
-            File destination_downloading_directory = new File(Constants.APP_WALLPAPERS_FOLDER);
+            File destination_downloading_directory = new File(WallZyConstants.APP_WALLPAPERS_FOLDER);
             if (!destination_downloading_directory.exists()) {
                 destination_downloading_directory.mkdirs();
             }

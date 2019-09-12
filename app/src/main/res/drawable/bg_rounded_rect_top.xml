@@ -5,7 +5,7 @@
     <corners
         android:topRightRadius="@dimen/margin_16"
         android:topLeftRadius="@dimen/margin_16" />
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/blur_bg_color" />
     <stroke
         android:color="@color/image_border_color"
         android:width="1dp" />

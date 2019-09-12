@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.constants.ServerConstants;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
@@ -43,8 +42,6 @@ import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -108,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 SharedPrefsUtils sharedPreferencesUtils = new SharedPrefsUtils(getApplication());
-                sharedPreferencesUtils.getString(Constants.SP_USERDATA_KEY);
+                sharedPreferencesUtils.getString(WallZyConstants.SP_USERDATA_KEY);
 
             } else {
                 Toast.makeText(getApplicationContext(), "Google Sign-in failed", Toast.LENGTH_SHORT).show();
@@ -132,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                     ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
                     if (resLoginUser.getStatuscode() == ServerConstants.API_SUCCESS) {
                         new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
-                        new SharedPrefsUtils(getApplicationContext()).putString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
+                        new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
                         updateUI(account);
 
                     } else {

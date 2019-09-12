@@ -2,6 +2,14 @@ package io.hustler.wallzy.activity;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,18 +24,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
+import io.hustler.wallzy.model.base.ResponseImageClass;
+import io.hustler.wallzy.utils.ImageProcessingUtils;
+import io.hustler.wallzy.utils.TextUtils;
 
 public class ImageActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
+
+    @BindView(R.id.root)
+    ConstraintLayout constraintLayout;
     @BindView(R.id.image)
     ImageView image;
     @BindView(R.id.back)
@@ -73,6 +94,8 @@ public class ImageActivity extends AppCompatActivity {
     TextView creditsData;
     @BindView(R.id.info_layout)
     RelativeLayout infoLayout;
+    String url;
+    ResponseImageClass responseImageClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +108,12 @@ public class ImageActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         optionsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 255, getResources().getDisplayMetrics());
-        infoHeaight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250, getResources().getDisplayMetrics());
+        infoHeaight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
         backWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics());
-
-        String url = getIntent().getStringExtra(Constants.INTENT_CAT_IMAGE);
+        TextUtils.findText_and_applyTypeface(constraintLayout, ImageActivity.this);
+        url = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
+        String serialisedObject = getIntent().getStringExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE);
+        responseImageClass = new Gson().fromJson(serialisedObject, ResponseImageClass.class);
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +126,55 @@ public class ImageActivity extends AppCompatActivity {
                 }
             }
         });
+        fillViews(url);
+    }
+
+    private void fillViews(String url) {
         Glide.with(this).load(url).into(image);
+        likes.setText("Likes \n" + responseImageClass.getLikes());
+        downloads.setText("Downloads \n" + responseImageClass.getDownloads());
+        walls.setText("Walls \n" + responseImageClass.getDislikes());
+        name.setText(null == responseImageClass.getName() ? "NA" : responseImageClass.getName());
+        artistName.setText(null == responseImageClass.getArtistName() ? "NA" : responseImageClass.getArtistName());
+        if (null != responseImageClass.getArtsistImage()) {
+            Glide.with(this).load(responseImageClass.getArtsistImage()).into(artistImage);
+        }
+        if (null != responseImageClass.getArtistBackLink()) {
+            artistCreditLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri = Uri.parse(responseImageClass.getArtistBackLink());
+                    Intent insta = new Intent(Intent.ACTION_VIEW, uri);
+                    insta.setPackage("com.instagram.android");
+
+                    if (isIntentAvailable(ImageActivity.this, insta)) {
+                        startActivity(insta);
+                    } else {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(responseImageClass.getArtistBackLink())));
+                    }
+
+
+                }
+            });
+        } else {
+            artistCreditLink.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    public void applyBlur(Bitmap bitmap, Activity context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            infoLayout.setBackground(new BitmapDrawable(getResources(), ImageProcessingUtils.create_blur(bitmap, 25.0f, context)));
+
+        }
+
+    }
+
+    private boolean isIntentAvailable(Context ctx, Intent intent) {
+        final PackageManager packageManager = ctx.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     private void hideScreenViews() {
@@ -135,7 +208,7 @@ public class ImageActivity extends AppCompatActivity {
         infoBtnAnim.start();
         optionsLayoutAnimtor.start();
         backButtonValueAnimator.start();
-        if(isInfoShown){
+        if (isInfoShown) {
             hideInfo();
         }
     }
@@ -172,6 +245,17 @@ public class ImageActivity extends AppCompatActivity {
         optionsValueAnimator.start();
         backButtonValueAnimator.start();
 
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//            Drawable drawable = null;
+//
+//            drawable = getDrawable(R.drawable.bg_rounded_rect_top);
+//            Bitmap mutableBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+//            Canvas canvas = new Canvas(mutableBitmap);
+//            drawable.setBounds(0, 0, image.getRight(), image.getBottom());
+//            drawable.draw(canvas);
+//            applyBlur(mutableBitmap, ImageActivity.this);
+//
+//        }
 
     }
 
@@ -183,6 +267,23 @@ public class ImageActivity extends AppCompatActivity {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 ViewGroup.LayoutParams layoutParams = infoLayout.getLayoutParams();
                 layoutParams.height = (int) valueAnimator.getAnimatedValue();
+
+
+                if (valueAnimator.getAnimatedFraction() < 0.5) {
+                    Log.i(TAG, "onAnimationUpdate: Animated value" + valueAnimator.getAnimatedValue());
+                    Log.i(TAG, "onAnimationUpdate: Animated fraction" + valueAnimator.getAnimatedFraction());
+                    Log.i(TAG, "onAnimationUpdate: translate Animated fraction" + (-valueAnimator.getAnimatedFraction() * 1000));
+                    image.setScaleX(1 - valueAnimator.getAnimatedFraction());
+                    image.setScaleY(1 - valueAnimator.getAnimatedFraction());
+                    SpringAnimation springAnimation = new SpringAnimation(image, DynamicAnimation.TRANSLATION_Y, -valueAnimator.getAnimatedFraction() * 1000);
+                    springAnimation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);
+                    springAnimation.start();
+
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    image.setElevation(32f);
+                }
                 infoLayout.requestLayout();
             }
         });
@@ -203,6 +304,21 @@ public class ImageActivity extends AppCompatActivity {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 ViewGroup.LayoutParams layoutParams = infoLayout.getLayoutParams();
                 layoutParams.height = (int) valueAnimator.getAnimatedValue();
+                if (valueAnimator.getAnimatedFraction() > 0.5) {
+                    image.setScaleX(valueAnimator.getAnimatedFraction());
+                    image.setScaleY(valueAnimator.getAnimatedFraction());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        image.setTranslationZ((valueAnimator.getAnimatedFraction() * 1000) - 1000);
+                    }
+                    //                    new  SpringAnimation(image, DynamicAnimation.TRANSLATION_Y, (valueAnimator.getAnimatedFraction() * 1000) - 1000).start();
+
+                    image.setTranslationY((valueAnimator.getAnimatedFraction() * 1000) - 1000);
+
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    image.setElevation(0f);
+                }
                 infoLayout.requestLayout();
             }
         });

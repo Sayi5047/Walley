@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.adapters.ImagesAdapter;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.customviews.StaggeredGridPaginationScrollListener;
 import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
@@ -82,10 +82,10 @@ public class ImagesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         imagesRv.setLayoutManager(gridLayoutManager);
-        String catName = getIntent().getStringExtra(Constants.INTENT_CAT_NAME);
-        catImage = getIntent().getStringExtra(Constants.INTENT_CAT_IMAGE);
-        catId = getIntent().getLongExtra(Constants.INTENT_CAT_ID, 0l);
-        isCat = getIntent().getBooleanExtra(Constants.INTENT_IS_CAT, false);
+        String catName = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_NAME);
+        catImage = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
+        catId = getIntent().getLongExtra(WallZyConstants.INTENT_CAT_ID, 0l);
+        isCat = getIntent().getBooleanExtra(WallZyConstants.INTENT_IS_CAT, false);
 
         gridPaginationScrollListener = new StaggeredGridPaginationScrollListener(gridLayoutManager) {
             @Override
@@ -225,7 +225,9 @@ public class ImagesActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ResponseImageClass responseImageClass) {
                                 Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
-                                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
+
                                 startActivity(intent);
                             }
                         }, resGetCategoryImages.getImages());
@@ -265,7 +267,9 @@ public class ImagesActivity extends AppCompatActivity {
                             public void onItemClick(ResponseImageClass responseImageClass) {
                                 // TODO: 06-09-2019 SHOW IMAGE
                                 Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
-                                intent.putExtra(Constants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
+
                                 startActivity(intent);
                             }
                         }, resGetCollectionIMages.getImages());

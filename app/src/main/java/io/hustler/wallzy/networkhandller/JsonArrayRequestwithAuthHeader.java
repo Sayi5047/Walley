@@ -13,7 +13,7 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 
 /**
@@ -48,7 +48,7 @@ public class JsonArrayRequestwithAuthHeader extends JsonArrayRequest {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("content-type", "application/json");
         hashMap.put("accept-version", "v1");
-        hashMap.put("Authorization", new SharedPrefsUtils(mContext).getString(Constants.SHARED_PREFS_SYSTEM_AUTH_KEY));
+        hashMap.put("Authorization", new SharedPrefsUtils(mContext).getString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY));
         return hashMap;
     }
 }

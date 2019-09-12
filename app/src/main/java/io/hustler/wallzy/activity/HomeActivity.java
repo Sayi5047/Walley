@@ -23,6 +23,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.Constants;
+import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
 import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
@@ -121,6 +124,9 @@ public class HomeActivity extends AppCompatActivity {
                 float transalationOffset = (positionOffset + position) * jellyViewDynamicWidth;
                 layoutParams.leftMargin = (int) transalationOffset;
                 jellyView.setLayoutParams(layoutParams);
+//                SpringAnimation springAnimation=new SpringAnimation(jellyView, DynamicAnimation.TRANSLATION_X,layoutParams.leftMargin);
+//                springAnimation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY);
+//                springAnimation.start();
 
             }
 
@@ -268,7 +274,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void saveNightModeToPreferences(int newNightMode) {
-        mSharedPrefs.putInt(Constants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY, newNightMode);
+        mSharedPrefs.putInt(WallZyConstants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY, newNightMode);
     }
 
     private void hideBottom() {
