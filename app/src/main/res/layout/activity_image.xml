@@ -3,14 +3,15 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root">
+    android:id="@+id/root"
+    android:background="@color/colorPrimary">
 
 
     <com.ortiz.touchview.TouchImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@id/info_layout" />
 
 
@@ -53,32 +54,36 @@
         android:layout_marginBottom="@dimen/margin_32"
         android:layout_alignParentRight="true">
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/like"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_rect_blue"
+            android:layout_width="@dimen/margin_48"
+            android:layout_height="@dimen/margin_48"
+            app:lottie_rawRes="@raw/lottie_heart"
+            app:lottie_autoPlay="false"
             android:layout_margin="@dimen/margin_8" />
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/download"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_rect_blue"
+            app:lottie_rawRes="@raw/lottie_download"
+            app:lottie_autoPlay="false"
             android:layout_margin="@dimen/margin_8" />
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/wallpaper"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_rect_blue"
+            app:lottie_rawRes="@raw/lottie_wallpaper"
+            app:lottie_autoPlay="false"
             android:layout_margin="@dimen/margin_8" />
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/report"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_rect_blue"
+            app:lottie_rawRes="@raw/lottie_report"
+            app:lottie_autoPlay="false"
             android:layout_margin="@dimen/margin_8" />
     </LinearLayout>
 

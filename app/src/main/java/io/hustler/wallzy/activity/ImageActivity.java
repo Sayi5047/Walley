@@ -1,5 +1,6 @@
 package io.hustler.wallzy.activity;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -29,6 +30,7 @@ import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
@@ -41,6 +43,7 @@ import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.ResponseImageClass;
 import io.hustler.wallzy.utils.ImageProcessingUtils;
+import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
 public class ImageActivity extends AppCompatActivity {
@@ -56,13 +59,13 @@ public class ImageActivity extends AppCompatActivity {
     @BindView(R.id.info_btn)
     ImageView infoBtn;
     @BindView(R.id.like)
-    ImageView like;
+    LottieAnimationView like;
     @BindView(R.id.download)
-    ImageView download;
+    LottieAnimationView download;
     @BindView(R.id.wallpaper)
-    ImageView wallpaper;
+    LottieAnimationView wallpaper;
     @BindView(R.id.report)
-    ImageView reportBtn;
+    LottieAnimationView reportBtn;
     @BindView(R.id.optionsLayout)
     LinearLayout optionsLayout;
     float optionsWidth, infoHeaight;
@@ -96,6 +99,7 @@ public class ImageActivity extends AppCompatActivity {
     RelativeLayout infoLayout;
     String url;
     ResponseImageClass responseImageClass;
+    boolean isLiked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -346,6 +350,35 @@ public class ImageActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.like:
+                if (isLiked) {
+                    like.reverseAnimationSpeed();
+                    like.playAnimation();
+                    isLiked = false;
+                } else {
+                    like.playAnimation();
+                    isLiked=true;
+                }
+                like.addAnimatorListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        MessageUtils.showShortToast(ImageActivity.this, "Like Api Called");
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
                 break;
             case R.id.download:
                 break;
