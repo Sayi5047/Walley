@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/root"
+    android:clipChildren="true">
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allison Woods"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_32"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginLeft="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_32" />
+
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_below="@id/profileName"
+        android:layout_width="200dp"
+        android:layout_height="230dp"
+        android:background="@drawable/rounded_rect_white"
+        android:layout_marginStart="@dimen/margin_16"
+        android:src="@drawable/ic_wallpaper"
+        android:layout_marginLeft="@dimen/margin_16" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_toEndOf="@id/profileImage"
+        android:layout_below="@id/profileName"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/margin_4"
+        android:layout_marginEnd="@dimen/margin_4"
+        android:layout_toRightOf="@id/profileImage">
+
+        <TextView
+            android:id="@+id/donwload_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Downloads"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_14"
+            android:padding="@dimen/padding_4"
+            android:textColor="@color/text_color"
+            android:alpha="0.5"
+            android:layout_marginTop="@dimen/margin_16"
+            />
+
+        <TextView
+            android:id="@+id/downlaod_val"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_below="@id/donwload_tv"
+            android:textSize="@dimen/text_18"
+            android:textColor="@color/text_color"
+            android:layout_marginBottom="@dimen/margin_16" />
+
+        <TextView
+            android:id="@+id/favs_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Favourites"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_14"
+            android:textColor="@color/text_color"
+            android:alpha="0.5"
+            android:padding="@dimen/padding_4"
+            android:layout_below="@id/downlaod_val" />
+
+        <TextView
+            android:id="@+id/favs_val"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_below="@id/favs_tv"
+            android:textSize="@dimen/text_18"
+            android:textColor="@color/text_color"
+            android:layout_marginBottom="@dimen/margin_16" />
+
+        <TextView
+            android:id="@+id/walls_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Walls"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:alpha="0.5"
+            android:textSize="@dimen/text_14"
+            android:padding="@dimen/padding_4"
+            android:layout_below="@id/favs_val" />
+
+        <TextView
+            android:id="@+id/walls_val"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_below="@id/walls_tv"
+            android:textSize="@dimen/text_18"
+
+            android:textColor="@color/text_color"
+            android:layout_marginBottom="@dimen/margin_16" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/verticalRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/profileImage"
+        android:layout_marginTop="@dimen/margin_4"
+        android:padding="@dimen/padding_16" />
+</RelativeLayout>

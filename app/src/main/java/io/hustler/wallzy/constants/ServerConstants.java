@@ -40,4 +40,10 @@ public class ServerConstants {
     public static final int TOKEN_EXPIRY_MINUTE_MOBILE_STORE = 8; // 8 mins
     public static final int OTP_EXPIRY_MINUTES = 5;
     public static final int DATA_UNAVAILABLE = -2004;
+
+
+
+    public static final int NO_LATEST_CAT_FOUND = -2005;
+    public static final int IMAGE_UNAVAILABLE = -5600;
+    public static final int NO_FAVS_FOUND = -5601;
 }

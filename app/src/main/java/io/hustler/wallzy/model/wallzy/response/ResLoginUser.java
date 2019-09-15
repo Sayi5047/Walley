@@ -1,9 +1,11 @@
 package io.hustler.wallzy.model.wallzy.response;
 
 
+import java.io.Serializable;
+
 import io.hustler.wallzy.model.base.BaseResponseUser;
 
-public class ResLoginUser extends BaseResponseUser {
+public class ResLoginUser extends BaseResponseUser implements Serializable {
     private String fbAuthToken;
     private String sysAuthToken;
     private String personId;

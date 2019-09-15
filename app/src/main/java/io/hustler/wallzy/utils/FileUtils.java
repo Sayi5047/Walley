@@ -47,6 +47,7 @@ public class FileUtils {
                 intent = new Intent(WallpaperManager.getInstance(activity).getCropAndSetWallpaperIntent(FileUtils.getImageContentUri(activity, new File(imagepath))));
             }
             Objects.requireNonNull(intent).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             activity.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();

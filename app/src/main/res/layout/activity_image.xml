@@ -3,8 +3,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
-    android:background="@color/colorPrimary">
+    android:id="@+id/root">
 
 
     <com.ortiz.touchview.TouchImageView
@@ -62,28 +61,28 @@
             app:lottie_autoPlay="false"
             android:layout_margin="@dimen/margin_8" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/download"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:lottie_rawRes="@raw/lottie_download"
-            app:lottie_autoPlay="false"
+            android:src="@drawable/ic_cloud_download_black_24dp"
+            android:padding="@dimen/padding_8"
             android:layout_margin="@dimen/margin_8" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/wallpaper"
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:lottie_rawRes="@raw/lottie_wallpaper"
-            app:lottie_autoPlay="false"
+            android:layout_height="@dimen/margin_48"
+            android:src="@drawable/ic_image_black_24dp"
+            android:padding="@dimen/padding_8"
             android:layout_margin="@dimen/margin_8" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/report"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:lottie_rawRes="@raw/lottie_report"
-            app:lottie_autoPlay="false"
+            android:layout_width="@dimen/margin_48"
+            android:layout_height="@dimen/margin_48"
+            android:src="@drawable/ic_report_black_24dp"
+            android:padding="@dimen/padding_8"
             android:layout_margin="@dimen/margin_8" />
     </LinearLayout>
 
@@ -93,9 +92,10 @@
         android:layout_height="1dp"
         android:background="@drawable/bg_rounded_rect_top"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="@dimen/padding_8"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/margin_16"
-        android:layout_marginRight="@dimen/margin_16"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginRight="@dimen/margin_8"
         android:paddingTop="@dimen/padding_4"
         android:paddingLeft="@dimen/padding_4">
 
@@ -105,18 +105,17 @@
             android:layout_height="wrap_content"
             android:text="Sayi Sugavasi"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/text_24"
+            android:textSize="@dimen/text_20"
             android:textStyle="bold"
             android:layout_margin="@dimen/margin_8" />
 
         <LinearLayout
+
             android:id="@+id/imageAnalyticsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/name"
+            android:layout_below="@id/ivAnalyticsLayout"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_4"
-            android:padding="@dimen/padding_8"
             android:gravity="center">
 
 
@@ -124,10 +123,9 @@
                 android:id="@+id/likes"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/margin_4"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:text="Likes : 100"
+                android:text="100"
                 android:textColor="@color/text_color" />
 
             <TextView
@@ -135,8 +133,9 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/downloads"
-                android:layout_margin="@dimen/margin_4"
-                android:text="Downloads : 100"
+                android:text="100"
+                android:textAlignment="center"
+
                 android:textColor="@color/text_color" />
 
             <TextView
@@ -144,8 +143,47 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:id="@+id/walls"
-                android:layout_margin="@dimen/margin_4"
-                android:text="Walls : 100"
+                android:textAlignment="center"
+                android:text="100"
+                android:textColor="@color/text_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ivAnalyticsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:gravity="center">
+
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:src="@drawable/ic_favorite_black_24dp"
+                android:tint="@color/text_color"
+                android:textColor="@color/text_color" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cloud_download_black_24dp"
+                android:tint="@color/text_color"
+
+                android:textColor="@color/text_color" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image_black_24dp"
+                android:tint="@color/text_color"
                 android:textColor="@color/text_color" />
         </LinearLayout>
 
@@ -156,7 +194,7 @@
             android:layout_below="@id/imageAnalyticsLayout"
             android:text="Artist Info"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/text_24"
+            android:textSize="@dimen/text_20"
             android:textStyle="bold"
             android:layout_margin="@dimen/margin_8" />
 
@@ -209,7 +247,7 @@
             android:layout_below="@id/artistInforLayout"
             android:text="CopyRights"
             android:textColor="@color/text_color"
-            android:textSize="@dimen/text_24"
+            android:textSize="@dimen/text_20"
             android:textStyle="bold"
             android:layout_margin="@dimen/margin_8" />
 

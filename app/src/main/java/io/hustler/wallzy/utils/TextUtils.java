@@ -1,6 +1,7 @@
 package io.hustler.wallzy.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -19,22 +20,22 @@ public class TextUtils {
     public static final String FONT_SERIF = "fonts/ft_dm_serif.ttf";
     public static final String FONT_RALEWAY = "fonts/Raleway.ttf";
 
-    public static void setFont(@Nullable final Activity activity, @NonNull final TextView tv, final String fontname) {
+    public static void setFont(@Nullable final Context activity, @NonNull final TextView tv, final String fontname) {
         assert activity != null;
         tv.setTypeface(Typeface.createFromAsset(activity.getApplicationContext().getAssets(), fontname));
     }
 
 
-    public static void setEdit_Font(Activity activity, EditText et, String fontname) {
+    public static void setEdit_Font(Context activity, EditText et, String fontname) {
         et.setTypeface(Typeface.createFromAsset(activity.getApplicationContext().getAssets(), fontname));
     }
 
-    public static void set_Radio_font(Activity activity, RadioButton et, String fontname) {
+    public static void set_Radio_font(Context activity, RadioButton et, String fontname) {
         et.setTypeface(Typeface.createFromAsset(activity.getApplicationContext().getAssets(), fontname));
     }
 
     @Nullable
-    public static String getArrayItem_of_String(Activity activity, String name, int index) {
+    public static String getArrayItem_of_String(Context activity, String name, int index) {
         int arrayid;
         arrayid = activity.getResources().getIdentifier(name, "array", activity.getApplicationContext().getPackageName());
         TypedArray typedArray;
@@ -49,7 +50,7 @@ public class TextUtils {
         tv.setShadowLayer(raduis, x, y, color);
     }
 
-    public static void findText_and_applyTypeface(final ViewGroup viewGroup, @NonNull final Activity activity) {
+    public static void findText_and_applyTypeface(final ViewGroup viewGroup, @NonNull final Context activity) {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -75,7 +76,7 @@ public class TextUtils {
     }
 
 
-    public static int getMatColor(Activity activity, String md_300) {
+    public static int getMatColor(Context activity, String md_300) {
         int returnColor = Color.BLACK;
         int arrayId = activity.getResources().getIdentifier(md_300, "array", activity.getApplicationContext().getPackageName());
 

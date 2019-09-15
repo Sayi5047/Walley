@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardCornerRadius="@dimen/margin_8"
+    android:background="@drawable/rounded_rect_white"
+    android:layout_marginLeft="@dimen/margin_8"
+    android:layout_marginRight="@dimen/margin_8"
+    android:id="@+id/root">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:padding="@dimen/padding_8"
+
+            android:text="Title"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_24"
+            android:textStyle="bold" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/imageView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:layout_marginRight="@dimen/margin_8"
+            app:lottie_rawRes="@raw/lottie_download"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/imageView"
+            android:layout_centerVertical="true"
+            android:layout_below="@id/title"
+            android:text="Are you sure you want to do this?"
+            android:textSize="@dimen/text_18"
+            android:paddingTop="@dimen/padding_16"
+            android:paddingBottom="@dimen/padding_16"
+            android:paddingStart="@dimen/padding_8"
+            android:textColor="@color/text_color"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_gravity="center_vertical|start"
+            android:gravity="start"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_toLeftOf="@id/imageView"
+            android:paddingLeft="@dimen/padding_8" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_below="@id/message"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/margin_16">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_negative"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="@string/negative"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:textColor="@android:color/white"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_rect_negative" />
+
+            <Button
+                android:id="@+id/btn_possitive"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:text="@string/positive"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginLeft="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_8"
+                android:textColor="@android:color/white"
+                android:textAllCaps="false"
+                android:background="@drawable/rounded_rect_poitive" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

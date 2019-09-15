@@ -39,10 +39,11 @@ import io.hustler.wallzy.model.wallzy.request.ReqEmailSignup;
 import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
 import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
+import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.7:8080/private";
+    private final String ROOT_IP = "http://192.168.1.6:8080/private";
 
     /**
      * AUTH API PATHS
@@ -77,6 +78,17 @@ public class RestUtilities {
     private final String IMAGEPATH = ROOT_IP + "/image";
     private final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
     private final String GET_IMAGES = IMAGEPATH + "/getAllImages";
+
+    /**
+     * USER APIS
+     */
+    private final String USERPATH = ROOT_IP + "/User/v0";
+    private final String LIKE_IMAGES = USERPATH + "/likeImage";
+    private final String DOWNLOAD_IMAGES = USERPATH + "/downloadImage";
+    private final String WALL_IMAGES = USERPATH + "/setWall";
+    private final String REPORT_IMAGES = USERPATH + "/reportImage";
+    private final String GET_USER_FAVS = USERPATH + "/getUserFavs";
+    private final String IS_LIKED = USERPATH + "/isLiked";
 
     /**
      * IMAGE KIT APIS
@@ -212,9 +224,39 @@ public class RestUtilities {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUploadImages), UPLOAD_IMAGE);
     }
 
-    public void getAllImages(Context context,long pageId,OnSuccessListener onSuccessListener){
-        getJsonObjectWithAuthHeaderApi(context,onSuccessListener,GET_IMAGES+"/"+pageId);
+    public void getAllImages(Context context, long pageId, OnSuccessListener onSuccessListener) {
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_IMAGES + "/" + pageId);
     }
+
+    /**
+     * USER APIS
+     */
+
+    public void getUserFavs(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), GET_USER_FAVS);
+    }
+
+    public void reportImage(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), REPORT_IMAGES);
+    }
+
+    public void likeImage(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), LIKE_IMAGES);
+    }
+
+    public void downloadImage(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), DOWNLOAD_IMAGES);
+    }
+
+    public void setWall(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), WALL_IMAGES);
+    }
+
+    public void isImageLiked(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), IS_LIKED);
+
+    }
+
     /**
      * CALLER METHODS
      */

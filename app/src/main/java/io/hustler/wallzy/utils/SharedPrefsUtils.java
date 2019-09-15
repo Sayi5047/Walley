@@ -103,8 +103,8 @@ public class SharedPrefsUtils {
 
     }
 
-    public FirebaseUser getUserData() {
-        return new Gson().fromJson(mShare.getString(WallZyConstants.SP_USERDATA_KEY, null), FirebaseUser.class);
+    public ResLoginUser getUserData() {
+        return new Gson().fromJson(mShare.getString(WallZyConstants.SP_USERDATA_KEY, null), ResLoginUser.class);
     }
 
 

@@ -16,8 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="o">
-        <activity android:name=".activity.ImageActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.ImageActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.AdminActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -61,10 +62,12 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <dist:module dist:instant="true" />
 

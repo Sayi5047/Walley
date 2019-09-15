@@ -41,5 +41,7 @@
     <string name="categories">Categories</string>
     <string name="collection_name">Collection Name</string>
     <string name="_504_images">504 Images</string>
+    <string name="positive">Positive</string>
+    <string name="negative">Negative</string>
 
 </resources>
