@@ -24,7 +24,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ImagesActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.TransparentTheme" />
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true"

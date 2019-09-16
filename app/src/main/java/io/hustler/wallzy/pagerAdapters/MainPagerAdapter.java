@@ -1,7 +1,9 @@
 package io.hustler.wallzy.pagerAdapters;
 
 import android.graphics.Typeface;
+import android.text.Html;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.StyleSpan;
 
 import androidx.annotation.NonNull;
@@ -45,10 +47,12 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    private SpannableString getSpannableString(String val) {
-        SpannableString spannableString = new SpannableString(val);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, val.length(), 0);
-        return spannableString;
+    private Spanned getSpannableString(String val) {
+        String html="<html><body><b>"+val+"</b></body></html";
+        return Html.fromHtml(html);
+//        SpannableString spannableString = new SpannableString(val);
+//        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, val.length(), 0);
+//        return spannableString;
     }
 
     @NonNull

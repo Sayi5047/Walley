@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -33,12 +34,21 @@ public class MessageUtils {
     }
 
     public static void showDismissableSnackBar(Activity activity, View view, String message) {
-        Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
-        snackbar.setAction(activity.getString(R.string.ok), v -> {
-            snackbar.dismiss();
-        });
-        snackbar.setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(activity.getApplication()), R.color.colorAccent));
-        snackbar.show();
+        try {
+            if (null != activity) {
+                if (null != view) {
+                    Snackbar snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+                    snackbar.setAction(activity.getString(R.string.ok), v -> {
+                        snackbar.dismiss();
+                    });
+                    snackbar.setActionTextColor(ContextCompat.getColor(Objects.requireNonNull(activity.getApplication()), R.color.colorAccent));
+                    snackbar.show();
+                }
+            }
+        } catch (IllegalArgumentException illargexception) {
+            illargexception.printStackTrace();
+            Log.i("MessageUtils", "showDismissableSnackBar: " + illargexception.getMessage());
+        }
     }
 
     public interface BinaryClickListener {

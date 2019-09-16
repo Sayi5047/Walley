@@ -80,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@android:color/black"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        >
 
         <ImageView
             android:id="@+id/menu_icon"
