@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.LayoutDirection;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -139,69 +138,41 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+
                 if (selectedPosition >= position && positionOffsetPixels > 10 && (positionOffsetPixels > previosOffsetPixel)) {
-//                    Log.i(TAG, "onPageScrolled: " + "FORWARD " + selectedPosition + " " + position);
-                    View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
-                    if (positionOffset != 0.0) {
-                        int val = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
+                    if ((positionOffset * 100 > 0) && (positionOffset * 100 < 85)) {
+                        int width = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
                         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
-                        layoutParams.width = (val);
+                        layoutParams.width = (width);
+                        Log.i(TAG, "onPageScrolled: Calculated Value " + width);
                         if (layoutParams.height > tabView.getHeight() / 2) {
                             layoutParams.height = (int) (layoutParams.height - 0.1);
-                            Log.i(TAG, "onPageScrolled: HEIGHT" + layoutParams.height);
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            layoutParams.setLayoutDirection(LayoutDirection.LTR);
                         }
                         jellyView.setLayoutParams(layoutParams);
-
-//                        Log.i(TAG, "onPageScrolled: onPageScrolled position " + position + " offset " + positionOffset + " offsetpixels " + positionOffsetPixels);
-
                     }
                     previosOffsetPixel = positionOffsetPixels;
                 } else {
-                    Log.i(TAG, "onPageScrolled: " + "BACKWARDd " + selectedPosition + " " + position);
                     previosOffsetPixel = positionOffsetPixels;
-                    View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
-                    if (positionOffset != 0.0) {
-                        int val = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
-                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
-                        layoutParams.width = (val);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                            layoutParams.setLayoutDirection(LayoutDirection.RTL);
-//                        }
-                        jellyView.setLayoutParams(layoutParams);
-
-                        Log.i(TAG, "onPageScrolled: onPageScrolled position " + position + " offset " + positionOffset + " offsetpixels " + positionOffsetPixels);
-
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
+//                    layoutParams.width = tabView.getWidth();
+                    if (layoutParams.height > tabView.getHeight() / 2) {
+                        layoutParams.height = (int) (layoutParams.height - 0.1);
                     }
-
+                    jellyView.setLayoutParams(layoutParams);
                 }
-
-
-//                final ValueAnimator widthAnimator = ValueAnimator.ofInt(tabView.getWidth(), (int) (tabView.getWidth()+((tabView.getWidth()/100)*(positionOffset*10))));
-//                widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//                    @Override
-//                    public void onAnimationUpdate(ValueAnimator animation) {
-//                        ViewGroup.LayoutParams params = jellyView.getLayoutParams();
-//                        params.width = (Integer) widthAnimator.getAnimatedValue();
-//                        jellyView.setLayoutParams(params);
-//                    }
-//                });
-//                widthAnimator.start();
-
-
             }
 
             @Override
             public void onPageSelected(int position) {
+                View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+
                 if (selectedPosition < position) {
                     // TODO: 19-09-2019 forward
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
 
-                            View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
                             final ValueAnimator xpositionAnimator = ValueAnimator.ofFloat(jellyView.getX(), tabView.getX());
                             final ValueAnimator insideWidthAnimtor = ValueAnimator.ofInt(jellyView.getWidth(), tabView.getWidth());
                             final ValueAnimator insideheightAnimtor = ValueAnimator.ofInt(jellyView.getHeight(), (int) DimenUtils.convertDptoPixels(32, getResources()));
@@ -215,12 +186,11 @@ public class HomeActivity extends AppCompatActivity {
                             insideWidthAnimtor.addUpdateListener(valueAnimator -> {
                                 ViewGroup.LayoutParams params = jellyView.getLayoutParams();
                                 params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
-
                                 jellyView.setLayoutParams(params);
+
                             });
                             insideheightAnimtor.addUpdateListener(valueAnimator -> {
                                 ViewGroup.LayoutParams params = jellyView.getLayoutParams();
-                                Log.i(TAG, "onPage Selected: height" + (Integer) insideWidthAnimtor.getAnimatedValue());
                                 params.height = (Integer) insideheightAnimtor.getAnimatedValue();
                                 jellyView.setLayoutParams(params);
                             });
@@ -234,8 +204,9 @@ public class HomeActivity extends AppCompatActivity {
                             });
                             animatorSet.start();
 
+
                         }
-                    }, 257);
+                    }, 100);
 
 
                 } else {
@@ -243,8 +214,6 @@ public class HomeActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            Log.i(TAG, "onPage Selected: " + position);
-                            View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
                             final ValueAnimator xpositionAnimator = ValueAnimator.ofFloat(jellyView.getX(), tabView.getX());
                             xpositionAnimator.addUpdateListener(valueAnimator -> {
                                 float x = (Float) valueAnimator.getAnimatedValue();
@@ -257,57 +226,21 @@ public class HomeActivity extends AppCompatActivity {
                                 params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
                                 jellyView.setLayoutParams(params);
                             });
-//                            insideWidthAnimtor.start();
+                            insideWidthAnimtor.start();
+                            final ValueAnimator insideheightAnimtor = ValueAnimator.ofInt(jellyView.getHeight(), (int) DimenUtils.convertDptoPixels(32, getResources()));
+
+                            insideheightAnimtor.addUpdateListener(valueAnimator -> {
+                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+                                params.height = (Integer) insideheightAnimtor.getAnimatedValue();
+                                jellyView.setLayoutParams(params);
+                            });
+                            insideheightAnimtor.start();
                             selectedPosition = position;
 
                         }
-                    }, 257);
+                    }, 100);
 
                 }
-//                AnimatorSet animatorSet = new AnimatorSet();
-//                animatorSet.addListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        super.onAnimationEnd(animation);
-//
-//                    }
-//                });
-//                animatorSet.playTogether(insideWidthAnimtor, xpositionAnimator);
-//                animatorSet.start();
-
-
-//                final ValueAnimator widthAnimator = ValueAnimator.ofInt(jellyView.getWidth(), jellyView.getWidth()*2);
-//                widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//                    @Override
-//                    public void onAnimationUpdate(ValueAnimator animation) {
-//                        ViewGroup.LayoutParams params = jellyView.getLayoutParams();
-//                        params.width = (Integer) widthAnimator.getAnimatedValue();
-//                        jellyView.setLayoutParams(params);
-//                    }
-//                });
-//                widthAnimator.addListener(new Animator.AnimatorListener() {
-//                    @Override
-//                    public void onAnimationStart(Animator animator) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animator animator) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationCancel(Animator animator) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animator animator) {
-//
-//                    }
-//                });
-//                widthAnimator.start();
-
             }
 
             @Override
@@ -345,7 +278,9 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setWidth() {
         tabLayout.post(() -> {
-            jellyViewDynamicWidth = tabLayout.getWidth() / tabLayout.getTabCount();
+            View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(0);
+
+            jellyViewDynamicWidth = tabView.getWidth();
             FrameLayout.LayoutParams jellyViewParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
             jellyViewParams.width = jellyViewDynamicWidth;
             jellyView.setLayoutParams(jellyViewParams);

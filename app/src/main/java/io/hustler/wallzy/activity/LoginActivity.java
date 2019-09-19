@@ -82,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
         TextUtils.findText_and_applyTypeface(mRootContainer, LoginActivity.this);
+        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
     }
 
     @OnClick(R.id.google_signin)
