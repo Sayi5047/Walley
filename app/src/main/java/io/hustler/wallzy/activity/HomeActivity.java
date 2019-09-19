@@ -1,5 +1,8 @@
 package io.hustler.wallzy.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +11,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.LayoutDirection;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -40,6 +45,7 @@ import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
+import io.hustler.wallzy.utils.DimenUtils;
 import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
@@ -93,6 +99,12 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout bottomLayout;
 
 
+    private int selectedPosition = 0;
+    private int previousPosition = 0;
+    boolean shown = false;
+    private int previosOffsetPixel = 0;
+    private int height = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +125,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         setStatubar();
-
+        height = jellyView.getHeight();
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -127,18 +139,174 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
-                float transalationOffset = (positionOffset + position) * jellyViewDynamicWidth;
-                layoutParams.leftMargin = (int) transalationOffset;
-                jellyView.setLayoutParams(layoutParams);
-//                SpringAnimation springAnimation=new SpringAnimation(jellyView, DynamicAnimation.TRANSLATION_X,layoutParams.leftMargin);
-//                springAnimation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY);
-//                springAnimation.start();
+                if (selectedPosition >= position && positionOffsetPixels > 10 && (positionOffsetPixels > previosOffsetPixel)) {
+//                    Log.i(TAG, "onPageScrolled: " + "FORWARD " + selectedPosition + " " + position);
+                    View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+                    if (positionOffset != 0.0) {
+                        int val = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
+                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
+                        layoutParams.width = (val);
+                        if (layoutParams.height > tabView.getHeight() / 2) {
+                            layoutParams.height = (int) (layoutParams.height - 0.1);
+                            Log.i(TAG, "onPageScrolled: HEIGHT" + layoutParams.height);
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            layoutParams.setLayoutDirection(LayoutDirection.LTR);
+                        }
+                        jellyView.setLayoutParams(layoutParams);
+
+//                        Log.i(TAG, "onPageScrolled: onPageScrolled position " + position + " offset " + positionOffset + " offsetpixels " + positionOffsetPixels);
+
+                    }
+                    previosOffsetPixel = positionOffsetPixels;
+                } else {
+                    Log.i(TAG, "onPageScrolled: " + "BACKWARDd " + selectedPosition + " " + position);
+                    previosOffsetPixel = positionOffsetPixels;
+                    View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+                    if (positionOffset != 0.0) {
+                        int val = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
+                        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
+                        layoutParams.width = (val);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                            layoutParams.setLayoutDirection(LayoutDirection.RTL);
+//                        }
+                        jellyView.setLayoutParams(layoutParams);
+
+                        Log.i(TAG, "onPageScrolled: onPageScrolled position " + position + " offset " + positionOffset + " offsetpixels " + positionOffsetPixels);
+
+                    }
+
+                }
+
+
+//                final ValueAnimator widthAnimator = ValueAnimator.ofInt(tabView.getWidth(), (int) (tabView.getWidth()+((tabView.getWidth()/100)*(positionOffset*10))));
+//                widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                    @Override
+//                    public void onAnimationUpdate(ValueAnimator animation) {
+//                        ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+//                        params.width = (Integer) widthAnimator.getAnimatedValue();
+//                        jellyView.setLayoutParams(params);
+//                    }
+//                });
+//                widthAnimator.start();
+
 
             }
 
             @Override
             public void onPageSelected(int position) {
+                if (selectedPosition < position) {
+                    // TODO: 19-09-2019 forward
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+                            final ValueAnimator xpositionAnimator = ValueAnimator.ofFloat(jellyView.getX(), tabView.getX());
+                            final ValueAnimator insideWidthAnimtor = ValueAnimator.ofInt(jellyView.getWidth(), tabView.getWidth());
+                            final ValueAnimator insideheightAnimtor = ValueAnimator.ofInt(jellyView.getHeight(), (int) DimenUtils.convertDptoPixels(32, getResources()));
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            animatorSet.playTogether(insideWidthAnimtor, xpositionAnimator, insideheightAnimtor);
+
+                            xpositionAnimator.addUpdateListener(valueAnimator -> {
+                                float x = (Float) valueAnimator.getAnimatedValue();
+                                jellyView.setX(x);
+                            });
+                            insideWidthAnimtor.addUpdateListener(valueAnimator -> {
+                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+                                params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
+
+                                jellyView.setLayoutParams(params);
+                            });
+                            insideheightAnimtor.addUpdateListener(valueAnimator -> {
+                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+                                Log.i(TAG, "onPage Selected: height" + (Integer) insideWidthAnimtor.getAnimatedValue());
+                                params.height = (Integer) insideheightAnimtor.getAnimatedValue();
+                                jellyView.setLayoutParams(params);
+                            });
+                            animatorSet.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    selectedPosition = position;
+
+                                }
+                            });
+                            animatorSet.start();
+
+                        }
+                    }, 257);
+
+
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.i(TAG, "onPage Selected: " + position);
+                            View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(position);
+                            final ValueAnimator xpositionAnimator = ValueAnimator.ofFloat(jellyView.getX(), tabView.getX());
+                            xpositionAnimator.addUpdateListener(valueAnimator -> {
+                                float x = (Float) valueAnimator.getAnimatedValue();
+                                jellyView.setX(x);
+                            });
+                            xpositionAnimator.start();
+                            final ValueAnimator insideWidthAnimtor = ValueAnimator.ofInt(jellyView.getWidth(), tabView.getWidth());
+                            insideWidthAnimtor.addUpdateListener(valueAnimator -> {
+                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+                                params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
+                                jellyView.setLayoutParams(params);
+                            });
+//                            insideWidthAnimtor.start();
+                            selectedPosition = position;
+
+                        }
+                    }, 257);
+
+                }
+//                AnimatorSet animatorSet = new AnimatorSet();
+//                animatorSet.addListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        super.onAnimationEnd(animation);
+//
+//                    }
+//                });
+//                animatorSet.playTogether(insideWidthAnimtor, xpositionAnimator);
+//                animatorSet.start();
+
+
+//                final ValueAnimator widthAnimator = ValueAnimator.ofInt(jellyView.getWidth(), jellyView.getWidth()*2);
+//                widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                    @Override
+//                    public void onAnimationUpdate(ValueAnimator animation) {
+//                        ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+//                        params.width = (Integer) widthAnimator.getAnimatedValue();
+//                        jellyView.setLayoutParams(params);
+//                    }
+//                });
+//                widthAnimator.addListener(new Animator.AnimatorListener() {
+//                    @Override
+//                    public void onAnimationStart(Animator animator) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animator animator) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animator) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animator animator) {
+//
+//                    }
+//                });
+//                widthAnimator.start();
 
             }
 

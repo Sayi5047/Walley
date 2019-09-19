@@ -130,7 +130,7 @@ public class CategoriesFragment extends Fragment {
                 intent.putExtra(WallZyConstants.INTENT_IS_CAT, true);
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
                 getActivity().startActivity(intent, optionsCompat.toBundle());
-                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), verticalRv, category.getName());
+                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), getView(), category.getName());
             }
         });
         verticalRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));

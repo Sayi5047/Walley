@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/root"
+    android:fitsSystemWindows="true"
     android:clipChildren="true">
 
+    <RelativeLayout
+        android:id="@+id/root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <TextView
         android:id="@+id/profileName"
         android:layout_width="wrap_content"
@@ -17,27 +21,28 @@
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginStart="@dimen/margin_16"
         android:layout_marginLeft="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_32" />
+        android:layout_marginBottom="@dimen/margin_16" />
 
     <ImageView
         android:id="@+id/profileImage"
         android:layout_below="@id/profileName"
-        android:layout_width="200dp"
-        android:layout_height="230dp"
-        android:background="@drawable/rounded_rect_white"
+        android:layout_width="170dp"
+        android:layout_height="200dp"
+        android:background="@drawable/rounded_rect_bbg"
         android:layout_marginStart="@dimen/margin_16"
         android:src="@drawable/ic_wallpaper"
         android:layout_marginLeft="@dimen/margin_16" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="200dp"
         android:layout_toEndOf="@id/profileImage"
         android:layout_below="@id/profileName"
         android:gravity="center"
         android:layout_marginStart="@dimen/margin_4"
         android:layout_marginEnd="@dimen/margin_4"
-        android:layout_toRightOf="@id/profileImage">
+        android:layout_toRightOf="@id/profileImage"
+        >
 
         <TextView
             android:id="@+id/donwload_tv"
@@ -49,8 +54,7 @@
             android:padding="@dimen/padding_4"
             android:textColor="@color/text_color"
             android:alpha="0.5"
-            android:layout_marginTop="@dimen/margin_16"
-            />
+            android:layout_marginTop="@dimen/margin_8" />
 
         <TextView
             android:id="@+id/downlaod_val"
@@ -115,12 +119,58 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/profileImage"
+        android:layout_marginTop="@dimen/margin_8">
+
+        <ImageView
+            android:id="@+id/likes"
+            android:layout_width="@dimen/margin_32"
+            android:layout_height="@dimen/margin_32"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_heart"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/padding_4"
+            android:layout_marginStart="@dimen/margin_48"
+            android:layout_marginLeft="@dimen/margin_48" />
+
+        <ImageView
+            android:id="@+id/downlaods"
+            android:layout_width="@dimen/margin_32"
+            android:layout_height="@dimen/margin_32"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/padding_4"
+
+            android:src="@drawable/ic_inbox"
+           />
+
+        <ImageView
+            android:id="@+id/walls"
+            android:layout_width="@dimen/margin_32"
+            android:layout_height="@dimen/margin_32"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/padding_4"
+
+            android:src="@drawable/ic_image"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/margin_48"
+            android:layout_marginRight="@dimen/margin_48" />
+
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+
         android:id="@+id/verticalRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/profileImage"
+        android:layout_below="@id/tabLayout"
         android:layout_marginTop="@dimen/margin_4"
-        android:padding="@dimen/padding_16" />
-</RelativeLayout>
+       android:layout_marginStart="@dimen/margin_4"
+        android:layout_marginLeft="@dimen/margin_4" />
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

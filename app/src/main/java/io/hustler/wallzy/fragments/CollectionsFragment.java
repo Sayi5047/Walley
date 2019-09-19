@@ -106,7 +106,7 @@ public class CollectionsFragment extends Fragment {
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity())
                         , imageView, getActivity().getString(R.string.transistion_blur_image));
                 getActivity().startActivity(intent, optionsCompat.toBundle());
-                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(getActivity()), verticalRv, resCollectionClass.getName());
+                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(getActivity()), getView(), resCollectionClass.getName());
 
             }
         });

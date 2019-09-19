@@ -11,9 +11,8 @@ public class ServerConstants {
     public static final short QUOTES_UPLOAD_FAILURE = -3000;
     public static final short PASSWORD_MISMATCH = -5001;
 
-    public static  final short USER_ALREADY_EXISTS=-4000;
-    public static  final short USER_CREATED=4000;
-
+    public static final short USER_ALREADY_EXISTS = -4000;
+    public static final short USER_CREATED = 4000;
 
 
     /*ROLES BETWEEN 3000 to 3100*/
@@ -34,7 +33,6 @@ public class ServerConstants {
     public static final int INVALID_OTP = 5508;
 
 
-
     public static final int TOKEN_EXPIRY_HOURS_WEB = 12;
     public static final int TOKEN_EXPIRY_HOURS_MOBILE = 60 * 24; // two months
     public static final int TOKEN_EXPIRY_MINUTE_MOBILE_STORE = 8; // 8 mins
@@ -42,8 +40,14 @@ public class ServerConstants {
     public static final int DATA_UNAVAILABLE = -2004;
 
 
-
     public static final int NO_LATEST_CAT_FOUND = -2005;
     public static final int IMAGE_UNAVAILABLE = -5600;
     public static final int NO_FAVS_FOUND = -5601;
+
+
+    public static class FlatIconCredits {
+        public static String HEART_ICON = "https://www.flaticon.com/authors/kiranshastry/lineal-color";
+        public static String DOWNLOAD_ICON = "<div>Icons made by <a href=\"https://www.flaticon.com/authors/good-ware\" title=\"Good Ware\">Good Ware</a> from <a href=\"https://www.flaticon.com/\"title=\"Flaticon\">www.flaticon.com</a></div>";
+        public static String IMAGE_ICON = "<div>Icons made by <a href=\"https://www.flaticon.com/authors/xnimrodx\" title=\"xnimrodx\">xnimrodx</a> from <a href=\"https://www.flaticon.com/\"             title=\"Flaticon\">www.flaticon.com</a></div>";
+    }
 }
