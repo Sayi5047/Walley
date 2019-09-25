@@ -9,17 +9,17 @@
     android:clipChildren="false"
     tools:context=".activity.HomeActivity">
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/coordinator"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:elevation="0dp"
-           >
+            app:elevation="0dp">
+
             <FrameLayout
                 android:id="@+id/jelly_frame"
                 android:layout_width="match_parent"
@@ -28,16 +28,13 @@
                 android:animateLayoutChanges="true"
                 android:layout_marginTop="@dimen/margin_32"
                 android:background="@color/bg"
-                app:layout_scrollFlags="scroll|enterAlways"
-               >
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <View
                     android:id="@+id/jelly_view"
                     android:layout_width="0dp"
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
                     android:background="@drawable/rounded_rect_blue" />
 
                 <com.google.android.material.tabs.TabLayout
@@ -55,214 +52,215 @@
 
             </FrameLayout>
         </com.google.android.material.appbar.AppBarLayout>
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/footer_rl"
-        android:animateLayoutChanges="true"
-        android:layout_marginBottom="@dimen/margin_32"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="@drawable/home_screen_half_rounded_bg" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/footer_rl"
+            android:animateLayoutChanges="true"
+            android:layout_marginBottom="@dimen/margin_32"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:background="@drawable/home_screen_half_rounded_bg" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <RelativeLayout
         android:id="@+id/footer_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-       >
+        android:layout_alignParentBottom="true">
 
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@android:color/black"
-        android:layout_alignParentBottom="true"
-        >
-
-        <ImageView
-            android:id="@+id/menu_icon"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/paddin_12"
-            android:src="@drawable/ic_menu_black_24dp"
-            android:tint="@android:color/white" />
-
-
-
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:src="@drawable/ic_menu_black_24dp"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_18"
-            android:tint="@android:color/white" />
-        <ImageView
-            android:id="@+id/search_icon"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/paddin_12"
-            android:src="@drawable/ic_search_black_24dp"
-            android:tint="@android:color/white" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_above="@id/footer"
-        android:background="@android:color/black"
-        android:visibility="visible">
-
-        <RelativeLayout
-            android:id="@+id/themeLayout"
+        <LinearLayout
+            android:id="@+id/footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="48dp"
+            android:background="@android:color/black"
+            android:layout_alignParentBottom="true">
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/margin_16"
-                android:layout_marginRight="@dimen/margin_16"
-                android:foregroundGravity="center"
-                android:src="@drawable/ic_night_mode_24dp" />
+                android:id="@+id/menu_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/paddin_12"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:tint="@android:color/white" />
+
 
             <TextView
-                android:id="@+id/toggle_theme_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/margin_4"
-                android:layout_toStartOf="@id/imageView"
-                android:layout_toLeftOf="@id/imageView"
-                android:gravity="end"
-                android:padding="@dimen/padding_20"
-                android:text="@string/toggle_theme"
-
-                android:textAlignment="textEnd"
+                android:id="@+id/app_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:text="@string/app_name"
+                android:textAlignment="center"
+                android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_18"
+                android:tint="@android:color/white" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@id/toggle_theme_textView"
-                android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginLeft="@dimen/margin_16"
-                android:layout_marginEnd="@dimen/margin_48"
-                android:layout_marginRight="@dimen/margin_32"
-                android:alpha="0.2"
-                android:background="@android:color/white" />
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/paddin_12"
+                android:src="@drawable/ic_search_black_24dp"
+                android:tint="@android:color/white" />
+
+        </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/creditsLayout"
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/themeLayout">
+            android:padding="@dimen/padding_8"
+            android:layout_above="@id/footer"
+            android:background="@android:color/black"
+            android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/CreditsimageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/margin_16"
+            <RelativeLayout
+                android:id="@+id/themeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                android:layout_marginRight="@dimen/margin_16"
-                android:foregroundGravity="center"
-                android:src="@drawable/ic_info_black_24dp" />
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_16"
+                    android:layout_marginRight="@dimen/margin_16"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/ic_night_mode_24dp" />
 
-            <TextView
-                android:id="@+id/Credits_textView"
+                <TextView
+                    android:id="@+id/toggle_theme_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_4"
+                    android:layout_toStartOf="@id/imageView"
+                    android:layout_toLeftOf="@id/imageView"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_20"
+                    android:text="@string/toggle_theme"
+
+                    android:textAlignment="textEnd"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/toggle_theme_textView"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:layout_marginLeft="@dimen/margin_16"
+                    android:layout_marginEnd="@dimen/margin_48"
+                    android:layout_marginRight="@dimen/margin_32"
+                    android:alpha="0.2"
+                    android:background="@android:color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/creditsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/margin_4"
-                android:layout_toStartOf="@id/CreditsimageView"
-                android:layout_toLeftOf="@id/CreditsimageView"
-                android:gravity="end"
-                android:padding="@dimen/padding_16"
-                android:text="@string/About"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:layout_below="@id/themeLayout">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@id/Credits_textView"
-                android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginLeft="@dimen/margin_16"
-                android:layout_marginEnd="@dimen/margin_48"
-                android:layout_marginRight="@dimen/margin_48"
-                android:alpha="0.2"
-                android:background="@android:color/white" />
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/CreditsimageView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_16"
 
-        <RelativeLayout
-            android:id="@+id/Signout_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/creditsLayout">
+                    android:layout_marginRight="@dimen/margin_16"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/ic_info_black_24dp" />
 
-            <ImageView
-                android:id="@+id/signOutIV"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/margin_16"
+                <TextView
+                    android:id="@+id/Credits_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_4"
+                    android:layout_toStartOf="@id/CreditsimageView"
+                    android:layout_toLeftOf="@id/CreditsimageView"
+                    android:gravity="end"
+                    android:padding="@dimen/padding_16"
+                    android:text="@string/About"
+                    android:textAlignment="textEnd"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
 
-                android:layout_marginRight="@dimen/margin_16"
-                android:foregroundGravity="center"
-                android:src="@drawable/ic_exit_to_app_black_24dp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/Credits_textView"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:layout_marginLeft="@dimen/margin_16"
+                    android:layout_marginEnd="@dimen/margin_48"
+                    android:layout_marginRight="@dimen/margin_48"
+                    android:alpha="0.2"
+                    android:background="@android:color/white" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/Signout_textView"
+            <RelativeLayout
+                android:id="@+id/Signout_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/margin_4"
-                android:layout_toStartOf="@id/signOutIV"
-                android:layout_toLeftOf="@id/signOutIV"
-                android:gravity="end"
-                android:padding="@dimen/padding_16"
-                android:text="@string/Signout"
-                android:textAlignment="viewEnd"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
+                android:layout_below="@id/creditsLayout">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@id/Signout_textView"
-                android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginLeft="@dimen/margin_16"
-                android:layout_marginEnd="@dimen/margin_48"
-                android:layout_marginRight="@dimen/margin_48"
-                android:alpha="0.2"
-                android:background="@android:color/white" />
+                <ImageView
+                    android:id="@+id/signOutIV"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/margin_16"
+
+                    android:layout_marginRight="@dimen/margin_16"
+                    android:foregroundGravity="center"
+                    android:src="@drawable/ic_exit_to_app_black_24dp" />
+
+                <TextView
+                    android:id="@+id/Signout_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/margin_4"
+                    android:layout_toStartOf="@id/signOutIV"
+                    android:layout_toLeftOf="@id/signOutIV"
+                    android:gravity="end"
+
+                    android:padding="@dimen/padding_16"
+                    android:text="@string/Signout"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_below="@id/Signout_textView"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:layout_marginLeft="@dimen/margin_16"
+                    android:layout_marginEnd="@dimen/margin_48"
+                    android:layout_marginRight="@dimen/margin_48"
+                    android:visibility="visible"
+                    />
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

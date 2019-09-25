@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_8"
     android:clipToPadding="true"
-    app:cardCornerRadius="@dimen/margin_8">
+    app:cardCornerRadius="@dimen/margin_8"
+    android:layoutAnimation="@anim/layout_anim_climb_up">
 
 
     <ImageView

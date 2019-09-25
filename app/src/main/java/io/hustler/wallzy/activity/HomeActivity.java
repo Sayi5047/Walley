@@ -16,6 +16,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -37,12 +38,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.gson.Gson;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.WallZyConstants;
+import io.hustler.wallzy.model.base.BaseResponse;
+import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
+import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
+import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
 import io.hustler.wallzy.utils.DimenUtils;
 import io.hustler.wallzy.utils.MessageUtils;
@@ -67,7 +78,6 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.jelly_frame)
     FrameLayout jellyFrame;
 
-    int jellyViewDynamicWidth;
     @BindView(R.id.menu_icon)
     ImageView menuIcon;
     @BindView(R.id.app_name)
@@ -102,7 +112,7 @@ public class HomeActivity extends AppCompatActivity {
     private int previousPosition = 0;
     boolean shown = false;
     private int previosOffsetPixel = 0;
-    private int height = 0;
+    private int bottomViewHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         setStatubar();
-        height = jellyView.getHeight();
+        int height = jellyView.getHeight();
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -133,8 +143,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         viewPager.setOffscreenPageLimit(2);
         viewPager.setCurrentItem(0, true);
-
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -145,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
                         int width = (int) (tabView.getWidth() + ((tabView.getWidth() / 100) * (positionOffset * 100)));
                         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
                         layoutParams.width = (width);
-                        Log.i(TAG, "onPageScrolled: Calculated Value " + width);
+                        //Log.i(TAG, "onPageScrolled: Calculated Value " + width);
                         if (layoutParams.height > tabView.getHeight() / 2) {
                             layoutParams.height = (int) (layoutParams.height - 0.1);
                         }
@@ -202,6 +210,7 @@ public class HomeActivity extends AppCompatActivity {
 
                                 }
                             });
+                            animatorSet.setDuration(300);
                             animatorSet.start();
 
 
@@ -220,21 +229,7 @@ public class HomeActivity extends AppCompatActivity {
                                 jellyView.setX(x);
                             });
                             xpositionAnimator.start();
-                            final ValueAnimator insideWidthAnimtor = ValueAnimator.ofInt(jellyView.getWidth(), tabView.getWidth());
-                            insideWidthAnimtor.addUpdateListener(valueAnimator -> {
-                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
-                                params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
-                                jellyView.setLayoutParams(params);
-                            });
-                            insideWidthAnimtor.start();
-                            final ValueAnimator insideheightAnimtor = ValueAnimator.ofInt(jellyView.getHeight(), (int) DimenUtils.convertDptoPixels(32, getResources()));
-
-                            insideheightAnimtor.addUpdateListener(valueAnimator -> {
-                                ViewGroup.LayoutParams params = jellyView.getLayoutParams();
-                                params.height = (Integer) insideheightAnimtor.getAnimatedValue();
-                                jellyView.setLayoutParams(params);
-                            });
-                            insideheightAnimtor.start();
+                            revertHeigtandWeight(tabView);
                             selectedPosition = position;
 
                         }
@@ -245,24 +240,57 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(0);
 
+                //Log.i(TAG, "onPageScrollStateChanged: " + state);
+                if (state == 0 && jellyView.getWidth() != tabView.getWidth()) {
+                    revertHeigtandWeight(tabView);
+                }
             }
         });
 
         appName.setLongClickable(true);
-        appName.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                startActivity(new Intent(HomeActivity.this, AdminActivity.class));
-                return false;
-            }
+        appName.setOnLongClickListener(view -> {
+            startActivity(new Intent(HomeActivity.this, AdminActivity.class));
+            return false;
         });
 
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         setWidth();
-        hideBottom();
+        ViewTreeObserver viewTreeObserver = bottomLayout.getViewTreeObserver();
+        viewTreeObserver
+                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        bottomViewHeight = bottomLayout.getMeasuredHeight();
+                        hideBottom();
+                        bottomLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    }
+                });
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
 
+    }
+
+    private void revertHeigtandWeight(View tabView) {
+        final ValueAnimator insideWidthAnimtor = ValueAnimator.ofInt(jellyView.getWidth(), tabView.getWidth());
+        insideWidthAnimtor.addUpdateListener(valueAnimator -> {
+            ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+            params.width = (Integer) insideWidthAnimtor.getAnimatedValue();
+            jellyView.setLayoutParams(params);
+        });
+        insideWidthAnimtor.start();
+        final ValueAnimator insideheightAnimtor = ValueAnimator.ofInt(jellyView.getHeight(), (int) DimenUtils.convertDptoPixels(32, getResources()));
+
+        insideheightAnimtor.addUpdateListener(valueAnimator -> {
+            ViewGroup.LayoutParams params = jellyView.getLayoutParams();
+            params.height = (Integer) insideheightAnimtor.getAnimatedValue();
+            jellyView.setLayoutParams(params);
+        });
+        insideheightAnimtor.start();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(insideheightAnimtor, insideWidthAnimtor);
+        animatorSet.start();
     }
 
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {
@@ -279,11 +307,12 @@ public class HomeActivity extends AppCompatActivity {
     private void setWidth() {
         tabLayout.post(() -> {
             View tabView = ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(0);
-
-            jellyViewDynamicWidth = tabView.getWidth();
-            FrameLayout.LayoutParams jellyViewParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
-            jellyViewParams.width = jellyViewDynamicWidth;
-            jellyView.setLayoutParams(jellyViewParams);
+            revertHeigtandWeight(tabView);
+//            jellyViewDynamicWidth = tabView.getWidth();
+//            FrameLayout.LayoutParams jellyViewParams = (FrameLayout.LayoutParams) jellyView.getLayoutParams();
+//            jellyViewParams.width = jellyViewDynamicWidth;
+//            jellyView.setLayoutParams(jellyViewParams);
+//            jellyView.requestLayout();
         });
     }
 
@@ -292,7 +321,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.menu_icon:
-                if (bottomLayout.getHeight() == (int) convertDptoPixels(180, getResources())) {
+                if (bottomLayout.getHeight() == bottomViewHeight) {
                     hideBottom();
                 } else {
                     showBottom();
@@ -361,7 +390,7 @@ public class HomeActivity extends AppCompatActivity {
             case Configuration.UI_MODE_NIGHT_NO:
                 // Night mode is not active, we're in day time
                 setLightStatusbar();
-                Log.i(TAG, "setStatubar: Daymode foun");
+                //Log.i(TAG, "setStatubar: Daymode foun");
             case Configuration.UI_MODE_NIGHT_YES:
                 // Night mode is active, we're at night!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -369,7 +398,7 @@ public class HomeActivity extends AppCompatActivity {
                     flags = flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags
                     this.getWindow().getDecorView().setSystemUiVisibility(flags);
                     this.getWindow().setStatusBarColor(Color.TRANSPARENT);
-                    Log.i(TAG, "setStatubar: NightMode Found");
+                    //Log.i(TAG, "setStatubar: NightMode Found");
 
 
                 }
@@ -389,7 +418,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void hideBottom() {
 
-        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(180, getResources()), (int) convertDptoPixels(0, getResources()));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(bottomViewHeight, (int) convertDptoPixels(0, getResources()));
         valueAnimator.addUpdateListener(valueAnimator1 -> {
             ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
             layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
@@ -401,7 +430,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showBottom() {
 
-        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), (int) convertDptoPixels(180, getResources()));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), bottomViewHeight);
         valueAnimator.addUpdateListener(valueAnimator1 -> {
             ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
             layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
@@ -414,5 +443,52 @@ public class HomeActivity extends AppCompatActivity {
     public float convertDptoPixels(float dp, Resources resources) {
 
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "getInstanceId failed", task.getException());
+                }
+                // Get new Instance ID token
+
+                String token = Objects.requireNonNull(task.getResult()).getToken();
+                ReqUpdateFcmToken reqUpdateFcmToken = new ReqUpdateFcmToken();
+                reqUpdateFcmToken.setFmcToken(token);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "onComplete: TOKEN " + token);
+                }
+                if (!new SharedPrefsUtils(HomeActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
+                    ResLoginUser resLoginUser = new SharedPrefsUtils(getApplicationContext()).getUserData();
+                    if (null != resLoginUser) {
+                        reqUpdateFcmToken.setUserId(resLoginUser.getId());
+                        new RestUtilities().update_fcm_token(getApplicationContext(), reqUpdateFcmToken, new RestUtilities.OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object onSuccessResponse) {
+                                BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
+                                if (baseResponse.isApiSuccess()) {
+                                    Log.i(TAG, "onSuccess: UPDATE FCM TOKEN");
+
+                                    mSharedPrefs.putString(WallZyConstants.SHARED_PREFS_USER_FCM_TOKEN, token);
+
+                                }
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.i(TAG, "onFailure: UPDATE FCM TOKEN " + error);
+
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
     }
 }

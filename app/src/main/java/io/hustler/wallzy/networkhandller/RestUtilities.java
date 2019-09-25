@@ -38,12 +38,13 @@ import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailSignup;
 import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
+import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
 import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.0.178:8080/private";
+    private final String ROOT_IP = "http://192.168.1.4:8080/private";
 
     /**
      * AUTH API PATHS
@@ -52,6 +53,8 @@ public class RestUtilities {
     private final String EMAIL_LOGIN = AUTH + "signUpUser";
     private final String GMAIL_LOGIN = AUTH + "googleAuth";
     private final String EMAIL_SIGNUP = AUTH + "signUpUser";
+    private final String GUEST_LOGIN = AUTH + "guestLoginUser";
+    private final String UPDATE_FCM_TOKEN = AUTH + "updateFcmToken";
 
     /**
      * CATEGORY API PATHS
@@ -169,10 +172,19 @@ public class RestUtilities {
         postJsonObjectApi(context, onSuccessListener, getJSONObject(reqEmailSignuo), EMAIL_SIGNUP);
     }
 
-    public void EmailLogin(Context context, ReqEmailLogin reqEmailLogin, OnSuccessListener onSuccessListener) {
+    public void EmailLogin(Context context, ReqEmailLogin reqEmailLogin,
+                           OnSuccessListener onSuccessListener) {
         postJsonObjectApi(context, onSuccessListener, getJSONObject(reqEmailLogin), EMAIL_LOGIN);
     }
 
+    public void guestLogin(Context context, ReqEmailLogin reqEmailLogin,
+                           OnSuccessListener onSuccessListener) {
+        postJsonObjectApi(context, onSuccessListener, getJSONObject(reqEmailLogin), GUEST_LOGIN);
+    }
+
+    public void update_fcm_token(Context context, ReqUpdateFcmToken reqUpdateFcmToken, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUpdateFcmToken), UPDATE_FCM_TOKEN);
+    }
 
     /**
      * COLLECTION METHODS

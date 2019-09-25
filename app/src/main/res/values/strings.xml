@@ -43,5 +43,6 @@
     <string name="_504_images">504 Images</string>
     <string name="positive">Positive</string>
     <string name="negative">Negative</string>
+    <string name="guest_login">Guest login</string>
 
 </resources>

@@ -123,6 +123,7 @@ public class ImageActivity extends AppCompatActivity {
     ResLoginUser resLoginUser;
     boolean isLiked = false;
     SharedPrefsUtils sharedPrefsUtils;
+    boolean guest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,15 +135,23 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
 
         ButterKnife.bind(this);
+
         optionsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 255, getResources().getDisplayMetrics());
         infoHeaight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
         backWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics());
         TextUtils.findText_and_applyTypeface(constraintLayout, ImageActivity.this);
         url = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
         sharedPrefsUtils = new SharedPrefsUtils(getApplicationContext());
+        guest = sharedPrefsUtils.getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT);
+
         String serialisedObject = getIntent().getStringExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE);
         responseImageClass = new Gson().fromJson(serialisedObject, ResponseImageClass.class);
-        resLoginUser = new Gson().fromJson(sharedPrefsUtils.getString(WallZyConstants.SP_USERDATA_KEY), ResLoginUser.class);
+        if (guest) {
+            resLoginUser = null;
+        } else {
+            resLoginUser = new Gson().fromJson(sharedPrefsUtils.getString(WallZyConstants.SP_USERDATA_KEY), ResLoginUser.class);
+
+        }
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +181,9 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void fillViews(String url) {
-        getisUserLikd();
+        if (!guest) {
+            isUserLiked();
+        }
         Glide.with(this).asBitmap().load(url).into(image);
         AppExecutor.getInstance().getDiskExecutor().execute(new Runnable() {
             @Override
@@ -288,7 +299,7 @@ public class ImageActivity extends AppCompatActivity {
 
                 );
                 downloadImage(responseImageClass.getUrl());
-                callDownlaodApi();
+                callDownloadApi();
                 break;
             case R.id.wallpaper:
                 new MessageUtils().showBinaryAlertDialog(ImageActivity.this,
@@ -365,7 +376,7 @@ public class ImageActivity extends AppCompatActivity {
         }
     }
 
-    private void getisUserLikd() {
+    private void isUserLiked() {
         ReqUserImage reqUserImage = new ReqUserImage();
         reqUserImage.setImageId(responseImageClass.getId());
         reqUserImage.setUserId(resLoginUser.getId());
@@ -407,7 +418,14 @@ public class ImageActivity extends AppCompatActivity {
     private void callLikeApi() {
         ReqUserImage reqUserImage = new ReqUserImage();
         reqUserImage.setImageId(responseImageClass.getId());
-        reqUserImage.setUserId(resLoginUser.getId());
+
+        if (guest) {
+            reqUserImage.setGuest(true);
+        } else {
+            reqUserImage.setUserId(resLoginUser.getId());
+            reqUserImage.setGuest(false);
+
+        }
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
@@ -437,10 +455,17 @@ public class ImageActivity extends AppCompatActivity {
         });
     }
 
-    private void callDownlaodApi() {
+    private void callDownloadApi() {
         ReqUserImage reqUserImage = new ReqUserImage();
         reqUserImage.setImageId(responseImageClass.getId());
-        reqUserImage.setUserId(resLoginUser.getId());
+        if (guest) {
+            reqUserImage.setGuest(true);
+        } else {
+            reqUserImage.setUserId(resLoginUser.getId());
+            reqUserImage.setGuest(false);
+
+        }
+
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
@@ -473,7 +498,15 @@ public class ImageActivity extends AppCompatActivity {
     private void callWallApi() {
         ReqUserImage reqUserImage = new ReqUserImage();
         reqUserImage.setImageId(responseImageClass.getId());
-        reqUserImage.setUserId(resLoginUser.getId());
+        if (guest) {
+            reqUserImage.setGuest(true);
+        } else {
+            reqUserImage.setUserId(resLoginUser.getId());
+            reqUserImage.setGuest(false);
+
+        }
+
+
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
@@ -506,7 +539,13 @@ public class ImageActivity extends AppCompatActivity {
     private void callreportApi() {
         ReqUserImage reqUserImage = new ReqUserImage();
         reqUserImage.setImageId(responseImageClass.getId());
-        reqUserImage.setUserId(resLoginUser.getId());
+        if (guest) {
+            reqUserImage.setGuest(true);
+        } else {
+            reqUserImage.setUserId(resLoginUser.getId());
+            reqUserImage.setGuest(false);
+
+        }
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 

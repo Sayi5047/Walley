@@ -2,175 +2,228 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     android:clipChildren="true">
 
     <RelativeLayout
-        android:id="@+id/root"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/profileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Allison Woods"
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/text_32"
-        android:textStyle="bold"
-        android:layout_marginTop="@dimen/margin_16"
-        android:layout_marginStart="@dimen/margin_16"
-        android:layout_marginLeft="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/margin_16" />
-
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_below="@id/profileName"
-        android:layout_width="170dp"
-        android:layout_height="200dp"
-        android:background="@drawable/rounded_rect_bbg"
-        android:layout_marginStart="@dimen/margin_16"
-        android:src="@drawable/ic_wallpaper"
-        android:layout_marginLeft="@dimen/margin_16" />
-
-    <RelativeLayout
+        android:id="@+id/topRoot"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_toEndOf="@id/profileImage"
-        android:layout_below="@id/profileName"
-        android:gravity="center"
-        android:layout_marginStart="@dimen/margin_4"
-        android:layout_marginEnd="@dimen/margin_4"
-        android:layout_toRightOf="@id/profileImage"
-        >
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/donwload_tv"
+        <RelativeLayout
+            android:id="@+id/signinLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Downloads"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_14"
-            android:padding="@dimen/padding_4"
-            android:textColor="@color/text_color"
-            android:alpha="0.5"
-            android:layout_marginTop="@dimen/margin_8" />
+            android:layout_height="350dp"
+            android:visibility="gone"
+            android:background="@color/bg">
 
-        <TextView
-            android:id="@+id/downlaod_val"
+            <TextView
+                android:id="@+id/text_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="Login to enjoy all features"
+                android:textColor="@color/text_color"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/margin_16"
+                android:textSize="@dimen/text_32" />
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Signup/login"
+                android:layout_margin="@dimen/margin_32"
+                android:background="@drawable/rounded_rect_blue"
+                android:textColor="@color/white"
+                android:layout_below="@id/text_head" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="visible"
+            android:id="@+id/root"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_below="@id/donwload_tv"
-            android:textSize="@dimen/text_18"
-            android:textColor="@color/text_color"
-            android:layout_marginBottom="@dimen/margin_16" />
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/favs_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Favourites"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_14"
-            android:textColor="@color/text_color"
-            android:alpha="0.5"
-            android:padding="@dimen/padding_4"
-            android:layout_below="@id/downlaod_val" />
+            <TextView
+                android:id="@+id/profileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Allison Woods"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_32"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/margin_16" />
 
-        <TextView
-            android:id="@+id/favs_val"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_below="@id/favs_tv"
-            android:textSize="@dimen/text_18"
-            android:textColor="@color/text_color"
-            android:layout_marginBottom="@dimen/margin_16" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_rounded_rect_top"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginEnd="@dimen/margin_16"
+                android:src="@drawable/ic_wallpaper"
+                android:layout_marginLeft="@dimen/margin_16"
+                android:layout_below="@id/profileName"
+                app:cardCornerRadius="@dimen/margin_8">
 
-        <TextView
-            android:id="@+id/walls_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Walls"
-            android:textAlignment="center"
-            android:textColor="@color/text_color"
-            android:alpha="0.5"
-            android:textSize="@dimen/text_14"
-            android:padding="@dimen/padding_4"
-            android:layout_below="@id/favs_val" />
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="130dp"
+                    android:layout_height="150dp" />
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/walls_val"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_below="@id/walls_tv"
-            android:textSize="@dimen/text_18"
 
-            android:textColor="@color/text_color"
-            android:layout_marginBottom="@dimen/margin_16" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@id/profileName"
+                android:padding="@dimen/padding_8"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/margin_4"
+                android:layout_marginEnd="@dimen/margin_4"
+                android:layout_toEndOf="@id/profile_card"
+                android:layout_toRightOf="@id/profile_card">
 
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:layout_below="@id/profileImage"
-        android:layout_marginTop="@dimen/margin_8">
+                <TextView
+                    android:id="@+id/downlaod_val"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textStyle="bold"
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/text_18"
+                    android:textColor="@color/text_color"
+                    android:gravity="start" />
 
-        <ImageView
-            android:id="@+id/likes"
-            android:layout_width="@dimen/margin_32"
-            android:layout_height="@dimen/margin_32"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/ic_heart"
-            android:layout_alignParentLeft="true"
-            android:padding="@dimen/padding_4"
-            android:layout_marginStart="@dimen/margin_48"
-            android:layout_marginLeft="@dimen/margin_48" />
+                <TextView
+                    android:id="@+id/donwload_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Downloads"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"
+                    android:layout_marginBottom="@dimen/margin_4"
+                    android:textSize="@dimen/text_14"
+                    android:textColor="@color/text_color"
+                    android:layout_below="@id/downlaod_val"
+                    android:textStyle="italic"
+                    android:alpha="0.5" />
 
-        <ImageView
-            android:id="@+id/downlaods"
-            android:layout_width="@dimen/margin_32"
-            android:layout_height="@dimen/margin_32"
-            android:layout_centerHorizontal="true"
-            android:padding="@dimen/padding_4"
+                <TextView
+                    android:id="@+id/favs_val"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textStyle="bold"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"
+                    android:layout_below="@id/donwload_tv"
+                    android:textSize="@dimen/text_18"
+                    android:textColor="@color/text_color" />
 
-            android:src="@drawable/ic_inbox"
-           />
+                <TextView
+                    android:id="@+id/favs_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Favourites"
+                    android:gravity="start"
+                    android:layout_marginBottom="@dimen/margin_4"
+                    android:textAlignment="viewStart"
+                    android:textSize="@dimen/text_14"
+                    android:textColor="@color/text_color"
+                    android:alpha="0.5"
+                    android:textStyle="italic"
+                    android:layout_below="@id/favs_val" />
 
-        <ImageView
-            android:id="@+id/walls"
-            android:layout_width="@dimen/margin_32"
-            android:layout_height="@dimen/margin_32"
-            android:layout_alignParentEnd="true"
-            android:padding="@dimen/padding_4"
+                <TextView
+                    android:id="@+id/walls_val"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textStyle="bold"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"
+                    android:layout_below="@id/favs_tv"
+                    android:textSize="@dimen/text_18"
 
-            android:src="@drawable/ic_image"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="@dimen/margin_48"
-            android:layout_marginRight="@dimen/margin_48" />
+                    android:textColor="@color/text_color" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/walls_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Walls"
+                    android:gravity="start"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/text_color"
+                    android:alpha="0.5"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="italic"
+                    android:layout_below="@id/walls_val" />
 
-    <androidx.recyclerview.widget.RecyclerView
 
-        android:id="@+id/verticalRv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout"
-        android:layout_marginTop="@dimen/margin_4"
-       android:layout_marginStart="@dimen/margin_4"
-        android:layout_marginLeft="@dimen/margin_4" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                android:layout_below="@id/profile_card"
+                android:layout_marginTop="@dimen/margin_8">
+
+                <ImageView
+                    android:id="@+id/likes"
+                    android:layout_width="@dimen/margin_32"
+                    android:layout_height="@dimen/margin_32"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_heart"
+                    android:layout_alignParentLeft="true"
+                    android:padding="@dimen/padding_4"
+                    android:layout_marginStart="@dimen/margin_48"
+                    android:layout_marginLeft="@dimen/margin_48" />
+
+                <ImageView
+                    android:id="@+id/downlaods"
+                    android:layout_width="@dimen/margin_32"
+                    android:layout_height="@dimen/margin_32"
+                    android:layout_centerHorizontal="true"
+                    android:padding="@dimen/padding_4"
+
+                    android:src="@drawable/ic_inbox" />
+
+                <ImageView
+                    android:id="@+id/walls"
+                    android:layout_width="@dimen/margin_32"
+                    android:layout_height="@dimen/margin_32"
+                    android:layout_alignParentEnd="true"
+                    android:padding="@dimen/padding_4"
+
+                    android:src="@drawable/ic_image"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/margin_48"
+                    android:layout_marginRight="@dimen/margin_48" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+
+                android:id="@+id/verticalRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tabLayout"
+                android:layout_marginTop="@dimen/margin_4"
+                android:layout_marginStart="@dimen/margin_4"
+                android:layout_marginLeft="@dimen/margin_4" />
+        </RelativeLayout>
+
     </RelativeLayout>
 </androidx.core.widget.NestedScrollView>

@@ -14,6 +14,8 @@ public class WallZyConstants {
 
     public static final String SHARED_PREFS_SYSTEM_AUTH_KEY = "SHARED_PREFS_SYSTEM_AUTH_KEY";
     public static final String INTENT_SERIALIZED_IMAGE = "INTENT_SERIALISED_IMAGE_OBJECT";
+    public static final String SHARED_PREFS_USER_FCM_TOKEN = "SHARED_PREFS_USER_FCM_TOKEN";
+    public static final String SHARED_PREFS_GUEST_ACCOUNT ="SHARED_PREFS_GUEST_ACCOUNT" ;
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
 

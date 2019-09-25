@@ -1,17 +1,18 @@
 package io.hustler.wallzy.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,13 +30,16 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
-import io.hustler.wallzy.constants.WallZyConstants;
+import io.hustler.wallzy.adapters.OnBoardAdapter;
 import io.hustler.wallzy.constants.ServerConstants;
+import io.hustler.wallzy.constants.WallZyConstants;
+import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
 import io.hustler.wallzy.networkhandller.RestUtilities;
@@ -50,22 +54,15 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();
     @BindView(R.id.header)
     TextView mHeader;
-    @BindView(R.id.username)
-    EditText mUsername;
-    @BindView(R.id.password)
-    EditText mPassword;
-    @BindView(R.id.login)
-    Button mEmail_login;
-    @BindView(R.id.or_text)
-    TextView mOrText;
+    @BindView(R.id.guest_login)
+    Button guest_account;
     @BindView(R.id.google_signin)
     SignInButton mGoogleSignin;
-    @BindView(R.id.loading)
-    ProgressBar mLoadingBar;
-    @BindView(R.id.signin_form)
-    ConstraintLayout mSigninForm;
+
     @BindView(R.id.container)
     RelativeLayout mRootContainer;
+    @BindView(R.id.onBoardRv)
+    RecyclerView bgRv;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSigninClient;
     private GoogleSignInOptions gso;
@@ -82,7 +79,47 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
         TextUtils.findText_and_applyTypeface(mRootContainer, LoginActivity.this);
-        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        bgRv.setLayoutManager(new LinearLayoutManager(LoginActivity.this, RecyclerView.HORIZONTAL, false));
+        bgRv.setAdapter(new OnBoardAdapter(getApplicationContext(), null));
+        guest_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog.setMessage("Logging in as guest");
+                progressDialog.setTitle("Guest Login");
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+
+                ReqEmailLogin reqEmailLogin = new ReqEmailLogin();
+                reqEmailLogin.setEmail("guestUser" + System.currentTimeMillis() + "@wallzyguest.com");
+                reqEmailLogin.setPassword(UUID.randomUUID().toString());
+                new RestUtilities().guestLogin(getApplicationContext(), reqEmailLogin, new RestUtilities.OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object onSuccessResponse) {
+                        progressDialog.cancel();
+                        ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
+                        if (resLoginUser.isApiSuccess()) {
+                            new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
+                            new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
+                            new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, true);
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+
+                        } else {
+                            MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, resLoginUser.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        progressDialog.cancel();
+                        MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, error);
+
+                    }
+                });
+            }
+        });
 
     }
 
@@ -132,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (resLoginUser.getStatuscode() == ServerConstants.API_SUCCESS) {
                         new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
                         new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
+                        new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, false);
                         updateUI(account);
 
                     } else {
@@ -157,14 +195,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
     }
 
     private void updateUI(GoogleSignInAccount account) {
         if (account == null) {
             /*USER NOT SIGNED IN*/
+            if (new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, false)) {
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            }
         } else {
             /*USER SIGNED IN*/
-            Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Succeessfully Signed In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Successfully Signed In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
         }

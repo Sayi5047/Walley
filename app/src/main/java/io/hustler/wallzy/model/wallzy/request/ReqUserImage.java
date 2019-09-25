@@ -6,6 +6,7 @@ import io.hustler.wallzy.model.base.BaseRequest;
 public class ReqUserImage extends BaseRequest {
     private long imageId;
     private long userId;
+    private boolean guest;
 
     public long getImageId() {
         return imageId;
@@ -21,5 +22,13 @@ public class ReqUserImage extends BaseRequest {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public boolean isGuest() {
+        return guest;
+    }
+
+    public void setGuest(boolean guest) {
+        this.guest = guest;
     }
 }

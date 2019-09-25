@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     @BindView(R.id.bayaditoImage)
-    ImageView bayaditoImage;
+    ImageView wallzyImage;
     @BindView(R.id.appName)
     TextView appName;
     @BindView(R.id.root)
@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-        bayaditoImage.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this,
+        wallzyImage.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this,
                 R.anim.slideup));
         mAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(getApplicationContext());
@@ -73,8 +73,13 @@ public class SplashActivity extends AppCompatActivity {
     private void updateUI(GoogleSignInAccount account) {
         if (account == null) {
             /*USER NOT SIGNED IN*/
-            Toast.makeText(getApplicationContext(), "User Not signed in", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            if (new SharedPrefsUtils(SplashActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
+                Toast.makeText(getApplicationContext(), "Logged in as Guest", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            }else {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+
+            }
 
         } else {
             /*USER SIGNED IN*/
