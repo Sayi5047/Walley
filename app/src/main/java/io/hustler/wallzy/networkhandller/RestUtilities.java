@@ -32,6 +32,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.model.wallzy.request.ReqAaddTag;
 import io.hustler.wallzy.model.wallzy.request.ReqAddCategory;
 import io.hustler.wallzy.model.wallzy.request.ReqAddCollection;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
@@ -79,8 +80,10 @@ public class RestUtilities {
      * IMAGE APIS
      */
     private final String IMAGEPATH = ROOT_IP + "/image";
+    private final String SEARCHPATH = IMAGEPATH + "/search";
     private final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
     private final String GET_IMAGES = IMAGEPATH + "/getAllImages";
+    private final String SEARCH_BY_TAG = SEARCHPATH + "/searchImagesByTag/tagId/pageId";
 
     /**
      * USER APIS
@@ -92,6 +95,8 @@ public class RestUtilities {
     private final String REPORT_IMAGES = USERPATH + "/reportImage";
     private final String GET_USER_FAVS = USERPATH + "/getUserFavs";
     private final String IS_LIKED = USERPATH + "/isLiked";
+    private final String ADD_TAG = USERPATH + "/addTag";
+
 
     /**
      * IMAGE KIT APIS
@@ -228,6 +233,11 @@ public class RestUtilities {
         getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_LATEST_CATS + "/" + id);
     }
 
+    public void searchImegesByTag(Context context, String query, long pageId, OnSuccessListener onSuccessListener) {
+        String Query = SEARCH_BY_TAG.replace("tagId", query).replace("pageId", pageId + "");
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, Query);
+    }
+
     /**
      * IMAGE METHODS
      */
@@ -267,6 +277,10 @@ public class RestUtilities {
     public void isImageLiked(Context context, ReqUserImage reqUserImage, OnSuccessListener onSuccessListener) {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqUserImage), IS_LIKED);
 
+    }
+
+    public void addTag(Context context, ReqAaddTag reqAaddTag, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqAaddTag), ADD_TAG);
     }
 
     /**
