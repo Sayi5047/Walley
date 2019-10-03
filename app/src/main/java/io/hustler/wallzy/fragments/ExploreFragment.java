@@ -132,7 +132,9 @@ public class ExploreFragment extends Fragment {
                                             public void onItemClick(ResponseImageClass responseImageClass) {
                                                 Intent intent = new Intent(getActivity(), ImageActivity.class);
                                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
+                                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
+                                                intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
+
                                                 startActivity(intent); }
                                         }, resGetCategoryImages.getImages());
                                         latestImagesAdapter.setHasStableIds(true);

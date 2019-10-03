@@ -231,8 +231,8 @@ public class ImagesActivity extends AppCompatActivity {
                             public void onItemClick(ResponseImageClass responseImageClass) {
                                 Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
-
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
+                                intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
                                 startActivity(intent);
                             }
                         }, resGetCategoryImages.getImages());
@@ -273,7 +273,7 @@ public class ImagesActivity extends AppCompatActivity {
                                 // TODO: 06-09-2019 SHOW IMAGE
                                 Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE,new Gson().toJson(responseImageClass));
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
 
                                 startActivity(intent);
                             }

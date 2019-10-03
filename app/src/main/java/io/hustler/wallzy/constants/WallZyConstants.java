@@ -13,9 +13,11 @@ public class WallZyConstants {
     public static final String INTENT_IS_CAT = "INTENT_IS_CAT";
 
     public static final String SHARED_PREFS_SYSTEM_AUTH_KEY = "SHARED_PREFS_SYSTEM_AUTH_KEY";
-    public static final String INTENT_SERIALIZED_IMAGE = "INTENT_SERIALISED_IMAGE_OBJECT";
+    public static final String INTENT_SERIALIZED_IMAGE_CLASS = "INTENT_SERIALISED_IMAGE_OBJECT";
     public static final String SHARED_PREFS_USER_FCM_TOKEN = "SHARED_PREFS_USER_FCM_TOKEN";
-    public static final String SHARED_PREFS_GUEST_ACCOUNT ="SHARED_PREFS_GUEST_ACCOUNT" ;
+    public static final String SHARED_PREFS_GUEST_ACCOUNT = "SHARED_PREFS_GUEST_ACCOUNT";
+    public static final String INTENT_IS_FROM_SEARCH = "INTENT_IS_FROM_SEARCH";
+    public static final String INTENT_SEARCH_IMAGE_ID = "INTENT_SEARCH_IMAGE_ID";
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
 
@@ -40,4 +42,9 @@ public class WallZyConstants {
     public static String ImageUrl_to_download = "INTENT_IMAGE_TO_DOWNLOAD_KEY";
     public static String Image_Name_to_save_key = "INTENT_IMAGE_NAME_TO_SAVE_KEY";
     public static String is_to_setWallpaper_fromActivity = "INTENT_IS_TO_SET_WALLPAPER_KEY";
+
+    private static class CREDITS {
+        private static final String BURGER_BTN = "https://lottiefiles.com/bjorn";
+        private static final String SEARCH_BTN = "https://lottiefiles.com/user/2932";
+    }
 }

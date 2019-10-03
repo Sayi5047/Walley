@@ -14,11 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,10 +31,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -49,9 +56,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.adapters.SearchImagesAdapter;
+import io.hustler.wallzy.constants.ServerConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.BaseResponse;
 import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
+import io.hustler.wallzy.model.wallzy.response.ResImageSearch;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
@@ -79,11 +89,11 @@ public class HomeActivity extends AppCompatActivity {
     FrameLayout jellyFrame;
 
     @BindView(R.id.menu_icon)
-    ImageView menuIcon;
+    LottieAnimationView menuIcon;
     @BindView(R.id.app_name)
     TextView appName;
     @BindView(R.id.search_icon)
-    ImageView searchIcon;
+    LottieAnimationView searchIcon;
     @BindView(R.id.footer)
     LinearLayout footer;
     @BindView(R.id.imageView)
@@ -106,13 +116,31 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout SignoutLayout;
     @BindView(R.id.bottom_layout)
     RelativeLayout bottomLayout;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
+    @BindView(R.id.search_et)
+    EditText searchEt;
+    @BindView(R.id.search_images_rv)
+    RecyclerView searchImagesRv;
+    @BindView(R.id.image_search_layout)
+    RelativeLayout imageSearchLayout;
+    @BindView(R.id.message_icon)
+    LottieAnimationView messageIcon;
+    @BindView(R.id.messageView)
+    TextView messageView;
+    @BindView(R.id.search_message_layout)
+    RelativeLayout searchMessageLayout;
+    @BindView(R.id.search_layout)
+    RelativeLayout searchLayout;
+    @BindView(R.id.footer_rl)
+    RelativeLayout footerRl;
 
 
     private int selectedPosition = 0;
     private int previousPosition = 0;
     boolean shown = false;
     private int previosOffsetPixel = 0;
-    private int bottomViewHeight = 0;
+    private int bottomViewHeight, searchViewHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,12 +291,15 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onGlobalLayout() {
                         bottomViewHeight = bottomLayout.getMeasuredHeight();
-                        hideBottom();
+                        searchViewHeight = searchLayout.getMeasuredHeight();
+                        hideBottom(bottomViewHeight, bottomLayout);
+                        hideBottom(searchViewHeight, searchLayout);
                         bottomLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                     }
                 });
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
+        searchIcon.setFrame(29);
 
     }
 
@@ -322,13 +353,31 @@ public class HomeActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.menu_icon:
                 if (bottomLayout.getHeight() == bottomViewHeight) {
-                    hideBottom();
+                    menuIcon.setMinAndMaxFrame(99, 124);
+                    menuIcon.playAnimation();
+                    hideBottom(bottomViewHeight, bottomLayout);
+                    Log.i(TAG, "onViewClicked: HIDE BOTTOM");
                 } else {
-                    showBottom();
+                    menuIcon.setMinAndMaxFrame(31, 99);
+                    menuIcon.playAnimation();
+                    showBottom(bottomViewHeight, bottomLayout);
+                    Log.i(TAG, "onViewClicked: SHOW BOTTOM");
                 }
                 break;
             case R.id.search_icon:
                 MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
+                if (searchLayout.getHeight() == searchViewHeight) {
+                    searchIcon.setFrame(48);
+                    hideBottom(searchViewHeight, searchLayout);
+
+                } else {
+                    searchIcon.setFrame(48);
+                    searchIcon.setMinAndMaxFrame(48, 68);
+                    searchIcon.playAnimation();
+                    showBottom(searchViewHeight, searchLayout);
+                    handleSearch();
+
+                }
                 break;
             case R.id.themeLayout:
                 int currentNightMode = getCurrentNightMode();
@@ -355,6 +404,53 @@ public class HomeActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    private void handleSearch() {
+        searchImagesRv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        searchEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    callSearchAPi(textView.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void callSearchAPi(String toString) {
+        new RestUtilities().searchImegesByTag(getApplicationContext(), toString, 0, new RestUtilities.OnSuccessListener() {
+            @Override
+            public void onSuccess(Object onSuccessResponse) {
+                ResImageSearch resImageSearch = new Gson().fromJson(onSuccessResponse.toString(), ResImageSearch.class);
+
+                if (resImageSearch.getStatuscode() == ServerConstants.API_SUCCESS) {
+                    SearchImagesAdapter imagesAdapter = new SearchImagesAdapter(HomeActivity.this, new SearchImagesAdapter.OnItemClcikListener() {
+                        @Override
+                        public void onItemClick(ResImageSearch.TagImage position) {
+                            Intent intent = new Intent(HomeActivity.this, ImageActivity.class);
+                            intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, position.getRawUrl());
+                            intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, "");
+                            intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, true);
+                            intent.putExtra(WallZyConstants.INTENT_SEARCH_IMAGE_ID, position.getId());
+                            startActivity(intent);
+                        }
+                    }, resImageSearch.getTagImages());
+
+                } else if (resImageSearch.getStatuscode() == ServerConstants.IMAGE_UNAVAILABLE) {
+
+                } else if (resImageSearch.getStatuscode() == ServerConstants.API_FAILURE) {
+
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
 
@@ -416,25 +512,25 @@ public class HomeActivity extends AppCompatActivity {
         mSharedPrefs.putInt(WallZyConstants.SP_IS_NIGHT_MODEA_ACTIVATED_KEY, newNightMode);
     }
 
-    private void hideBottom() {
+    private void hideBottom(int height, RelativeLayout relativeLayout) {
 
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(bottomViewHeight, (int) convertDptoPixels(0, getResources()));
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(height, (int) convertDptoPixels(0, getResources()));
         valueAnimator.addUpdateListener(valueAnimator1 -> {
-            ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = relativeLayout.getLayoutParams();
             layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
-            bottomLayout.requestLayout();
+            relativeLayout.requestLayout();
         });
         valueAnimator.setDuration(300).start();
 
     }
 
-    private void showBottom() {
+    private void showBottom(int height, RelativeLayout relativeLayout) {
 
-        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), bottomViewHeight);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), height);
         valueAnimator.addUpdateListener(valueAnimator1 -> {
-            ViewGroup.LayoutParams layoutParams = bottomLayout.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = relativeLayout.getLayoutParams();
             layoutParams.height = ((Integer) valueAnimator1.getAnimatedValue());
-            bottomLayout.requestLayout();
+            relativeLayout.requestLayout();
         });
         valueAnimator.setDuration(300).start();
 

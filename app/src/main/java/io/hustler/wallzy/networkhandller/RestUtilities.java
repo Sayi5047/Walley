@@ -45,7 +45,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.4:8080/private";
+    private final String ROOT_IP = "http://192.168.0.177:8080/private";
 
     /**
      * AUTH API PATHS
@@ -96,6 +96,7 @@ public class RestUtilities {
     private final String GET_USER_FAVS = USERPATH + "/getUserFavs";
     private final String IS_LIKED = USERPATH + "/isLiked";
     private final String ADD_TAG = USERPATH + "/addTag";
+    private final String GET_IMAGE_BY_ID = USERPATH + "/getImageById";
 
 
     /**
@@ -281,6 +282,11 @@ public class RestUtilities {
 
     public void addTag(Context context, ReqAaddTag reqAaddTag, OnSuccessListener onSuccessListener) {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqAaddTag), ADD_TAG);
+    }
+
+    public void getImageMetaData(Context context, OnSuccessListener onSuccessListener, long id) {
+
+        getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_IMAGE_BY_ID + "/" + id);
     }
 
     /**

@@ -2,7 +2,7 @@ package io.hustler.wallzy.model.base;
 
 import java.io.Serializable;
 
-public class ResponseImageClass implements Serializable {
+public class ResponseImageClass extends BaseResponse implements Serializable {
     private String url;
     private String name;
     private String fileType;

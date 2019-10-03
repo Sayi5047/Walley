@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -144,8 +147,54 @@ public class ImageActivity extends AppCompatActivity {
         sharedPrefsUtils = new SharedPrefsUtils(getApplicationContext());
         guest = sharedPrefsUtils.getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT);
 
-        String serialisedObject = getIntent().getStringExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE);
-        responseImageClass = new Gson().fromJson(serialisedObject, ResponseImageClass.class);
+        boolean isFromSearch = getIntent().getBooleanExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, false);
+
+        if (isFromSearch) {
+            ProgressDialog progressDialog = new ProgressDialog(ImageActivity.this);
+            progressDialog.setMessage("Loading Image from Server");
+            progressDialog.setTitle("Please,Wait");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        MessageUtils.showShortToast(ImageActivity.this, "Loading. Please, Wait");
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            progressDialog.show();
+            long id = getIntent().getLongExtra(WallZyConstants.INTENT_SEARCH_IMAGE_ID, 0);
+            new RestUtilities().getImageMetaData(getApplicationContext(), new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    progressDialog.cancel();
+                    responseImageClass = new Gson().fromJson(onSuccessResponse.toString(), ResponseImageClass.class);
+                    if (responseImageClass.getStatuscode() == ServerConstants.API_SUCCESS) {
+
+                    } else if (responseImageClass.getStatuscode() == ServerConstants.IMAGE_UNAVAILABLE) {
+                        MessageUtils.showShortToast(ImageActivity.this, "Image Currently unavailable");
+                        onBackPressed();
+                    } else {
+                        MessageUtils.showShortToast(ImageActivity.this, "Oops.. Something went wrong");
+                        onBackPressed();
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    progressDialog.cancel();
+                    MessageUtils.showShortToast(ImageActivity.this, "Oops.. Something went wrong" + " " + error);
+                    onBackPressed();
+                }
+            }, id);
+        } else {
+            String serialisedObject = getIntent().getStringExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS);
+            responseImageClass = new Gson().fromJson(serialisedObject, ResponseImageClass.class);
+        }
+
         if (guest) {
             resLoginUser = null;
         } else {

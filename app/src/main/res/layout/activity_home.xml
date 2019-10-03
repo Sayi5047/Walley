@@ -65,6 +65,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
     <RelativeLayout
         android:id="@+id/footer_rl"
         android:layout_width="match_parent"
@@ -79,13 +80,13 @@
             android:background="@android:color/black"
             android:layout_alignParentBottom="true">
 
-            <ImageView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/menu_icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="@dimen/paddin_12"
-                android:src="@drawable/ic_menu_black_24dp"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/lottie_side_menu"
                 android:tint="@android:color/white" />
 
 
@@ -104,16 +105,77 @@
                 android:textSize="@dimen/text_18"
                 android:tint="@android:color/white" />
 
-            <ImageView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/search_icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="@dimen/paddin_12"
-                android:src="@drawable/ic_search_black_24dp"
+                app:lottie_rawRes="@raw/lottie_search_icon"
+                app:lottie_loop="false"
                 android:tint="@android:color/white" />
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/footer"
+            android:background="@color/bg"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@+id/image_search_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/search_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_transparent_rounded_rect_right"
+                    android:padding="@dimen/padding_20"
+                    android:text="Search here"
+                    android:layout_marginEnd="@dimen/margin_32"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/margin_32"
+                    android:layout_marginRight="@dimen/margin_32"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textAutoComplete"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/search_images_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/search_et"
+                    android:layout_margin="@dimen/margin_4" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/search_message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/message_icon"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:layout_centerInParent="true" />
+
+                <TextView
+                    android:id="@+id/messageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Opps ... Thats a bummer"
+                    android:layout_below="@id/message_icon"
+
+                    android:textColor="@android:color/white"
+                    android:textAlignment="center"
+                    android:layout_margin="@dimen/margin_4" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/bottom_layout"
@@ -149,7 +211,7 @@
                     android:layout_margin="@dimen/margin_4"
                     android:layout_toStartOf="@id/imageView"
                     android:layout_toLeftOf="@id/imageView"
-                    android:gravity="center"
+                    android:gravity="end"
                     android:padding="@dimen/padding_20"
                     android:text="@string/toggle_theme"
 
@@ -258,9 +320,9 @@
                     android:layout_marginLeft="@dimen/margin_16"
                     android:layout_marginEnd="@dimen/margin_48"
                     android:layout_marginRight="@dimen/margin_48"
-                    android:visibility="visible"
-                    />
+                    android:visibility="visible" />
             </RelativeLayout>
         </RelativeLayout>
+
     </RelativeLayout>
 </RelativeLayout>
