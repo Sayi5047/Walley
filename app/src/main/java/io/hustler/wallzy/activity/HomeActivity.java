@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -94,6 +95,9 @@ public class HomeActivity extends AppCompatActivity {
     TextView appName;
     @BindView(R.id.search_icon)
     LottieAnimationView searchIcon;
+
+
+    /*OPTIONS FOOTER*/
     @BindView(R.id.footer)
     LinearLayout footer;
     @BindView(R.id.imageView)
@@ -118,20 +122,25 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout bottomLayout;
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinator;
+
+
+    /*SEARCH VIEWS*/
     @BindView(R.id.search_et)
     EditText searchEt;
     @BindView(R.id.search_images_rv)
     RecyclerView searchImagesRv;
     @BindView(R.id.image_search_layout)
-    RelativeLayout imageSearchLayout;
+    RelativeLayout innerImageSearchLayout;
     @BindView(R.id.message_icon)
-    LottieAnimationView messageIcon;
+    LottieAnimationView searchErrorMessageLottieIcon;
     @BindView(R.id.messageView)
-    TextView messageView;
+    TextView searchErrorMessage;
     @BindView(R.id.search_message_layout)
     RelativeLayout searchMessageLayout;
     @BindView(R.id.search_layout)
     RelativeLayout searchLayout;
+
+    /*BOTTOM VIEW*/
     @BindView(R.id.footer_rl)
     RelativeLayout footerRl;
 
@@ -141,6 +150,8 @@ public class HomeActivity extends AppCompatActivity {
     boolean shown = false;
     private int previosOffsetPixel = 0;
     private int bottomViewHeight, searchViewHeight = 0;
+
+    private boolean isMenuShowing, isSearchShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,8 +376,10 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.search_icon:
-                MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
-                if (searchLayout.getHeight() == searchViewHeight) {
+                if (isSearchShowing) {
+                    searchIcon.setFrame(48);
+                    hideBottom(searchViewHeight, searchLayout);
+                } else if (searchLayout.getHeight() == searchViewHeight) {
                     searchIcon.setFrame(48);
                     hideBottom(searchViewHeight, searchLayout);
 
@@ -427,22 +440,33 @@ public class HomeActivity extends AppCompatActivity {
                 ResImageSearch resImageSearch = new Gson().fromJson(onSuccessResponse.toString(), ResImageSearch.class);
 
                 if (resImageSearch.getStatuscode() == ServerConstants.API_SUCCESS) {
-                    SearchImagesAdapter imagesAdapter = new SearchImagesAdapter(HomeActivity.this, new SearchImagesAdapter.OnItemClcikListener() {
-                        @Override
-                        public void onItemClick(ResImageSearch.TagImage position) {
-                            Intent intent = new Intent(HomeActivity.this, ImageActivity.class);
-                            intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, position.getRawUrl());
-                            intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, "");
-                            intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, true);
-                            intent.putExtra(WallZyConstants.INTENT_SEARCH_IMAGE_ID, position.getId());
-                            startActivity(intent);
-                        }
-                    }, resImageSearch.getTagImages());
+                    if (resImageSearch.getTagImages().size() <= 0) {
+                        hideViewAndShowErrorMessage(R.string.error_msg_no_data_found);
+
+
+                    } else {
+                        searchMessageLayout.setVisibility(View.GONE);
+                        searchImagesRv.setVisibility(View.VISIBLE);
+                        SearchImagesAdapter imagesAdapter = new SearchImagesAdapter(HomeActivity.this, new SearchImagesAdapter.OnItemClcikListener() {
+                            @Override
+                            public void onItemClick(ResImageSearch.TagImage position) {
+                                Intent intent = new Intent(HomeActivity.this, ImageActivity.class);
+                                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, position.getRawUrl());
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, "");
+                                intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, true);
+                                intent.putExtra(WallZyConstants.INTENT_SEARCH_IMAGE_ID, position.getId());
+                                startActivity(intent);
+                            }
+                        }, resImageSearch.getTagImages());
+                        searchImagesRv.setAdapter(imagesAdapter);
+
+                    }
+
 
                 } else if (resImageSearch.getStatuscode() == ServerConstants.IMAGE_UNAVAILABLE) {
-
+                    hideViewAndShowErrorMessage(R.string.error_msg_no_data_found);
                 } else if (resImageSearch.getStatuscode() == ServerConstants.API_FAILURE) {
-
+                    hideViewAndShowErrorMessage(R.string.error_msg_something_went_wrong);
                 }
             }
 
@@ -453,10 +477,36 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void hideViewAndShowErrorMessage(int p) {
+        searchImagesRv.setVisibility(View.GONE);
+        searchMessageLayout.setVisibility(View.VISIBLE);
+        searchErrorMessageLottieIcon.setAnimation(R.raw.lottie_not_fount_error);
+        searchErrorMessageLottieIcon.playAnimation();
+        searchErrorMessageLottieIcon.setRepeatCount(LottieDrawable.INFINITE);
+        searchErrorMessage.setText(p);
+    }
+
 
     private int getCurrentNightMode() {
         return getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;
+    }
+
+    private void setSearchIcon() {
+        int nightMode = getCurrentNightMode();
+        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+            searchEt.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search_white_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_white_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_white_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_white_24dp));
+        } else {
+            searchEt.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search_black_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_black_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_black_24dp),
+                    getResources().getDrawable(R.drawable.ic_search_black_24dp));
+
+        }
+
     }
 
     private void changeBetweenDayandNightMode(int currentNightMode) {
@@ -513,7 +563,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void hideBottom(int height, RelativeLayout relativeLayout) {
-
+        if (relativeLayout.getId() == R.id.bottom_layout) {
+            isMenuShowing = false;
+        } else {
+            isSearchShowing = false;
+        }
         ValueAnimator valueAnimator = ValueAnimator.ofInt(height, (int) convertDptoPixels(0, getResources()));
         valueAnimator.addUpdateListener(valueAnimator1 -> {
             ViewGroup.LayoutParams layoutParams = relativeLayout.getLayoutParams();
@@ -525,6 +579,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showBottom(int height, RelativeLayout relativeLayout) {
+        if (relativeLayout.getId() == R.id.bottom_layout) {
+            isMenuShowing = true;
+        } else {
+            isSearchShowing = true;
+        }
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt((int) convertDptoPixels(0, getResources()), height);
         valueAnimator.addUpdateListener(valueAnimator1 -> {
@@ -533,7 +592,6 @@ public class HomeActivity extends AppCompatActivity {
             relativeLayout.requestLayout();
         });
         valueAnimator.setDuration(300).start();
-
     }
 
     public float convertDptoPixels(float dp, Resources resources) {
@@ -586,5 +644,21 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isMenuShowing) {
+            menuIcon.performClick();
+        } else if (isSearchShowing) {
+            searchIcon.performClick();
+
+        } else if (isMenuShowing && isSearchShowing) {
+            menuIcon.performClick();
+            searchIcon.performClick();
+
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -133,15 +133,18 @@
                     android:id="@+id/search_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_transparent_rounded_rect_right"
+                    android:background="@drawable/rounded_rect_white"
                     android:padding="@dimen/padding_20"
-                    android:text="Search here"
-                    android:layout_marginEnd="@dimen/margin_32"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/margin_32"
-                    android:layout_marginRight="@dimen/margin_32"
+                    android:hint="@string/search_here"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/text_color"
+                    android:drawableRight="@drawable/ic_search_white_24dp"
+                    android:layout_marginTop="@dimen/margin_48"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:layout_marginEnd="@dimen/margin_16"
                     android:imeOptions="actionSearch"
-                    android:inputType="textAutoComplete"/>
+                    android:inputType="textAutoComplete"
+                    android:drawableEnd="@drawable/ic_search_white_24dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/search_images_rv"
@@ -168,10 +171,11 @@
                     android:id="@+id/messageView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Opps ... Thats a bummer"
+                    android:text="Oops ... That's a bummer"
                     android:layout_below="@id/message_icon"
-
-                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_32"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color"
                     android:textAlignment="center"
                     android:layout_margin="@dimen/margin_4" />
             </RelativeLayout>

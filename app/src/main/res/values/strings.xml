@@ -44,5 +44,8 @@
     <string name="positive">Positive</string>
     <string name="negative">Negative</string>
     <string name="guest_login">Guest login</string>
+    <string name="error_msg_something_went_wrong">Oops.. Something Went wrong</string>
+    <string name="error_msg_no_data_found">Oops.. No Data Found</string>
+    <string name="search_here">Search here</string>
 
 </resources>

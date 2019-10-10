@@ -45,7 +45,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.0.177:8080/private";
+    private final String ROOT_IP = "http://192.168.1.8:8080/private";
 
     /**
      * AUTH API PATHS
