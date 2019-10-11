@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
@@ -50,6 +51,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -57,6 +61,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.adapters.BottomFeaturesAdapter;
 import io.hustler.wallzy.adapters.SearchImagesAdapter;
 import io.hustler.wallzy.constants.ServerConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
@@ -98,26 +103,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
     /*OPTIONS FOOTER*/
-    @BindView(R.id.footer)
-    LinearLayout footer;
-    @BindView(R.id.imageView)
-    ImageView imageView;
-    @BindView(R.id.toggle_theme_textView)
-    TextView toggleThemeTextView;
-    @BindView(R.id.themeLayout)
-    RelativeLayout themeLayout;
-    @BindView(R.id.CreditsimageView)
-    ImageView CreditsimageView;
-    @BindView(R.id.Credits_textView)
-    TextView CreditsTextView;
-    @BindView(R.id.creditsLayout)
-    RelativeLayout creditsLayout;
-    @BindView(R.id.signOutIV)
-    ImageView signOutIV;
-    @BindView(R.id.Signout_textView)
-    TextView SignoutTextView;
-    @BindView(R.id.Signout_layout)
-    RelativeLayout SignoutLayout;
+    @BindView(R.id.bottom_app_bar)
+    LinearLayout bottom_app_bar;
     @BindView(R.id.bottom_layout)
     RelativeLayout bottomLayout;
     @BindView(R.id.coordinator)
@@ -145,9 +132,11 @@ public class HomeActivity extends AppCompatActivity {
     RelativeLayout footerRl;
 
 
+    @BindView(R.id.bottom_features_rv)
+    RecyclerView bottomFeaturesRv;
+
+
     private int selectedPosition = 0;
-    private int previousPosition = 0;
-    boolean shown = false;
     private int previosOffsetPixel = 0;
     private int bottomViewHeight, searchViewHeight = 0;
 
@@ -160,20 +149,19 @@ public class HomeActivity extends AppCompatActivity {
 
 
         /*Translates content to above nav bar*/
-        ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(android.R.id.content), (v, insets) -> {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-                    params.bottomMargin = insets.getSystemWindowInsetBottom();
-                    return insets.consumeSystemWindowInsets();
-                });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            params.bottomMargin = insets.getSystemWindowInsetBottom();
+            return insets.consumeSystemWindowInsets();
+        });
         this.getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         }
         ButterKnife.bind(this);
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
-        setStatubar();
-        int height = jellyView.getHeight();
+        setStatusBar();
+
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -288,6 +276,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
         appName.setLongClickable(true);
         appName.setOnLongClickListener(view -> {
             startActivity(new Intent(HomeActivity.this, AdminActivity.class));
@@ -297,18 +286,63 @@ public class HomeActivity extends AppCompatActivity {
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         setWidth();
         ViewTreeObserver viewTreeObserver = bottomLayout.getViewTreeObserver();
-        viewTreeObserver
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        bottomViewHeight = bottomLayout.getMeasuredHeight();
-                        searchViewHeight = searchLayout.getMeasuredHeight();
-                        hideBottom(bottomViewHeight, bottomLayout);
-                        hideBottom(searchViewHeight, searchLayout);
-                        bottomLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                bottomViewHeight = bottomLayout.getMeasuredHeight();
+                searchViewHeight = searchLayout.getMeasuredHeight();
+                hideBottom(bottomViewHeight, bottomLayout);
+                hideBottom(searchViewHeight, searchLayout);
+                bottomLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                    }
-                });
+            }
+        });
+
+        bottomFeaturesRv.setLayoutManager(new LinearLayoutManager(HomeActivity.this, RecyclerView.VERTICAL, false));
+        List<String> namesArray;
+        TypedArray imagesArray;
+        namesArray =  Arrays.asList(getResources().getStringArray(R.array.footer_features_array));
+        imagesArray = (getResources().obtainTypedArray(R.array.footer_features_images));
+        bottomFeaturesRv.setAdapter(new BottomFeaturesAdapter(HomeActivity.this,  namesArray,
+                imagesArray, featureName -> {
+            switch (featureName) {
+
+                case "Toggle Theme": {
+                    int currentNightMode = getCurrentNightMode();
+                    changeBetweenDayandNightMode(currentNightMode);
+                }
+                break;
+
+                case "Settings": {
+                    MessageUtils.showShortToast(HomeActivity.this, getString(R.string.coming_soon));
+
+                }
+                break;
+
+                case "About": {
+                    MessageUtils.showShortToast(HomeActivity.this, getString(R.string.coming_soon));
+                }
+                break;
+
+                case "SignOut": {
+                    GoogleSignInClient mGoogleSigninClient;
+                    GoogleSignInOptions gso;
+                    gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+
+                    mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
+                    mGoogleSigninClient.signOut()
+                            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
+                                    saveNightModeToPreferences(getCurrentNightMode());
+                                    startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                                }
+                            });
+                }
+                break;
+            }
+        }));
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         searchIcon.setFrame(29);
 
@@ -359,7 +393,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.menu_icon, R.id.search_icon, R.id.themeLayout, R.id.creditsLayout, R.id.Signout_layout})
+    @OnClick({R.id.menu_icon, R.id.search_icon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.menu_icon:
@@ -391,30 +425,6 @@ public class HomeActivity extends AppCompatActivity {
                     handleSearch();
 
                 }
-                break;
-            case R.id.themeLayout:
-                int currentNightMode = getCurrentNightMode();
-                changeBetweenDayandNightMode(currentNightMode);
-                break;
-            case R.id.creditsLayout:
-                MessageUtils.showShortToast(HomeActivity.this, "Coming Soon..!");
-                break;
-            case R.id.Signout_layout:
-                GoogleSignInClient mGoogleSigninClient;
-                GoogleSignInOptions gso;
-                gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
-                mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
-                mGoogleSigninClient.signOut()
-                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
-                                saveNightModeToPreferences(getCurrentNightMode());
-                                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
-                            }
-                        });
-
                 break;
         }
     }
@@ -492,22 +502,6 @@ public class HomeActivity extends AppCompatActivity {
                 & Configuration.UI_MODE_NIGHT_MASK;
     }
 
-    private void setSearchIcon() {
-        int nightMode = getCurrentNightMode();
-        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
-            searchEt.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search_white_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_white_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_white_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_white_24dp));
-        } else {
-            searchEt.setCompoundDrawables(getResources().getDrawable(R.drawable.ic_search_black_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_black_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_black_24dp),
-                    getResources().getDrawable(R.drawable.ic_search_black_24dp));
-
-        }
-
-    }
 
     private void changeBetweenDayandNightMode(int currentNightMode) {
         int newNightMode;
@@ -530,13 +524,13 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void setStatubar() {
+    private void setStatusBar() {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (currentNightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
                 // Night mode is not active, we're in day time
                 setLightStatusbar();
-                //Log.i(TAG, "setStatubar: Daymode foun");
+                //Log.i(TAG, "setStatusBar: Daymode foun");
             case Configuration.UI_MODE_NIGHT_YES:
                 // Night mode is active, we're at night!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -544,7 +538,7 @@ public class HomeActivity extends AppCompatActivity {
                     flags = flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags
                     this.getWindow().getDecorView().setSystemUiVisibility(flags);
                     this.getWindow().setStatusBarColor(Color.TRANSPARENT);
-                    //Log.i(TAG, "setStatubar: NightMode Found");
+                    //Log.i(TAG, "setStatusBar: NightMode Found");
 
 
                 }
@@ -581,6 +575,7 @@ public class HomeActivity extends AppCompatActivity {
     private void showBottom(int height, RelativeLayout relativeLayout) {
         if (relativeLayout.getId() == R.id.bottom_layout) {
             isMenuShowing = true;
+
         } else {
             isSearchShowing = true;
         }

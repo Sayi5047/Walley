@@ -65,7 +65,7 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
+    <!--FOOTER-->
     <RelativeLayout
         android:id="@+id/footer_rl"
         android:layout_width="match_parent"
@@ -74,7 +74,7 @@
 
 
         <LinearLayout
-            android:id="@+id/footer"
+            android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@android:color/black"
@@ -115,12 +115,12 @@
                 android:tint="@android:color/white" />
 
         </LinearLayout>
-
+        <!--SEARCH LAYOUT-->
         <RelativeLayout
             android:id="@+id/search_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/footer"
+            android:layout_above="@id/bottom_app_bar"
             android:background="@color/bg"
             android:visibility="visible">
 
@@ -180,152 +180,22 @@
                     android:layout_margin="@dimen/margin_4" />
             </RelativeLayout>
         </RelativeLayout>
-
+        <!--FEATURES LAYOUT-->
         <RelativeLayout
             android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_8"
-            android:layout_above="@id/footer"
+            android:layout_above="@id/bottom_app_bar"
             android:background="@android:color/black"
             android:visibility="visible">
 
-            <RelativeLayout
-                android:id="@+id/themeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/margin_16"
-                    android:layout_marginRight="@dimen/margin_16"
-                    android:foregroundGravity="center"
-                    android:src="@drawable/ic_night_mode_24dp" />
-
-                <TextView
-                    android:id="@+id/toggle_theme_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_4"
-                    android:layout_toStartOf="@id/imageView"
-                    android:layout_toLeftOf="@id/imageView"
-                    android:gravity="end"
-                    android:padding="@dimen/padding_20"
-                    android:text="@string/toggle_theme"
-
-                    android:textAlignment="textEnd"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/toggle_theme_textView"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_48"
-                    android:layout_marginRight="@dimen/margin_32"
-                    android:alpha="0.2"
-                    android:background="@android:color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/creditsLayout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bottom_features_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/themeLayout">
+                android:layout_marginBottom="@dimen/margin_4" />
 
-                <ImageView
-                    android:id="@+id/CreditsimageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/margin_16"
-
-                    android:layout_marginRight="@dimen/margin_16"
-                    android:foregroundGravity="center"
-                    android:src="@drawable/ic_info_black_24dp" />
-
-                <TextView
-                    android:id="@+id/Credits_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_4"
-                    android:layout_toStartOf="@id/CreditsimageView"
-                    android:layout_toLeftOf="@id/CreditsimageView"
-                    android:gravity="end"
-                    android:padding="@dimen/padding_16"
-                    android:text="@string/About"
-                    android:textAlignment="textEnd"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_below="@id/Credits_textView"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_48"
-                    android:layout_marginRight="@dimen/margin_48"
-                    android:alpha="0.2"
-                    android:background="@android:color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/Signout_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/creditsLayout">
-
-                <ImageView
-                    android:id="@+id/signOutIV"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/margin_16"
-
-                    android:layout_marginRight="@dimen/margin_16"
-                    android:foregroundGravity="center"
-                    android:src="@drawable/ic_exit_to_app_black_24dp" />
-
-                <TextView
-                    android:id="@+id/Signout_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_4"
-                    android:layout_toStartOf="@id/signOutIV"
-                    android:layout_toLeftOf="@id/signOutIV"
-                    android:gravity="end"
-
-                    android:padding="@dimen/padding_16"
-                    android:text="@string/Signout"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_below="@id/Signout_textView"
-                    android:layout_marginStart="@dimen/margin_16"
-                    android:layout_marginLeft="@dimen/margin_16"
-                    android:layout_marginEnd="@dimen/margin_48"
-                    android:layout_marginRight="@dimen/margin_48"
-                    android:visibility="visible" />
-            </RelativeLayout>
         </RelativeLayout>
 
     </RelativeLayout>
