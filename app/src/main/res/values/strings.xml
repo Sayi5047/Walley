@@ -48,5 +48,15 @@
     <string name="error_msg_no_data_found">Oops.. No Data Found</string>
     <string name="search_here">Search here</string>
     <string name="coming_soon">Coming Soon</string>
+    <string name="changes_wallpaper_automatically">Changes Wallpaper Automatically</string>
+    <string name="daily_wallpaper">Daily Wallpaper</string>
+    <string name="Time_interval">Choose Time Gap</string>
+    <string name="TImegap_message">Time gap between Each Wallpaper change</string>
+    <string name="_12_hrs">12 Hrs</string>
+    <string name="Love">Love</string>
+    <string name="wall_cat_message">Shows Wallpapers From chosen Category</string>
+    <string name="Category">Choose Category</string>
+    <string name="only_on_wifi">Show on Wifi</string>
+    <string name="shows_only_on_wifi">Chnages Images Only On Wifi</string>
 
 </resources>

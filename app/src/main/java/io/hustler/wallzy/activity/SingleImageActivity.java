@@ -70,7 +70,7 @@ import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
-public class ImageActivity extends AppCompatActivity {
+public class SingleImageActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -142,7 +142,7 @@ public class ImageActivity extends AppCompatActivity {
         optionsWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 255, getResources().getDisplayMetrics());
         infoHeaight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
         backWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics());
-        TextUtils.findText_and_applyTypeface(constraintLayout, ImageActivity.this);
+        TextUtils.findText_and_applyTypeface(constraintLayout, SingleImageActivity.this);
         url = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
         sharedPrefsUtils = new SharedPrefsUtils(getApplicationContext());
         guest = sharedPrefsUtils.getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT);
@@ -150,7 +150,7 @@ public class ImageActivity extends AppCompatActivity {
         boolean isFromSearch = getIntent().getBooleanExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, false);
 
         if (isFromSearch) {
-            ProgressDialog progressDialog = new ProgressDialog(ImageActivity.this);
+            ProgressDialog progressDialog = new ProgressDialog(SingleImageActivity.this);
             progressDialog.setMessage("Loading Image from Server");
             progressDialog.setTitle("Please,Wait");
             progressDialog.setCancelable(false);
@@ -159,7 +159,7 @@ public class ImageActivity extends AppCompatActivity {
                 @Override
                 public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                     if (i == KeyEvent.KEYCODE_BACK) {
-                        MessageUtils.showShortToast(ImageActivity.this, "Loading. Please, Wait");
+                        MessageUtils.showShortToast(SingleImageActivity.this, "Loading. Please, Wait");
                         return true;
                     }
                     return false;
@@ -175,10 +175,10 @@ public class ImageActivity extends AppCompatActivity {
                     if (responseImageClass.getStatuscode() == ServerConstants.API_SUCCESS) {
 
                     } else if (responseImageClass.getStatuscode() == ServerConstants.IMAGE_UNAVAILABLE) {
-                        MessageUtils.showShortToast(ImageActivity.this, "Image Currently unavailable");
+                        MessageUtils.showShortToast(SingleImageActivity.this, "Image Currently unavailable");
                         onBackPressed();
                     } else {
-                        MessageUtils.showShortToast(ImageActivity.this, "Oops.. Something went wrong");
+                        MessageUtils.showShortToast(SingleImageActivity.this, "Oops.. Something went wrong");
                         onBackPressed();
                     }
                 }
@@ -186,7 +186,7 @@ public class ImageActivity extends AppCompatActivity {
                 @Override
                 public void onError(String error) {
                     progressDialog.cancel();
-                    MessageUtils.showShortToast(ImageActivity.this, "Oops.. Something went wrong" + " " + error);
+                    MessageUtils.showShortToast(SingleImageActivity.this, "Oops.. Something went wrong" + " " + error);
                     onBackPressed();
                 }
             }, id);
@@ -239,7 +239,7 @@ public class ImageActivity extends AppCompatActivity {
             public void run() {
                 Bitmap bitchef = null;
                 try {
-                    bitchef = Glide.with(ImageActivity.this).asBitmap().load(url).submit().get();
+                    bitchef = Glide.with(SingleImageActivity.this).asBitmap().load(url).submit().get();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -249,7 +249,7 @@ public class ImageActivity extends AppCompatActivity {
                 AppExecutor.getInstance().getMainThreadExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
-                        applyBlur(finalChecfBitMap, ImageActivity.this);
+                        applyBlur(finalChecfBitMap, SingleImageActivity.this);
 
                     }
                 });
@@ -272,7 +272,7 @@ public class ImageActivity extends AppCompatActivity {
                     Intent insta = new Intent(Intent.ACTION_VIEW, uri);
                     insta.setPackage("com.instagram.android");
 
-                    if (isIntentAvailable(ImageActivity.this, insta)) {
+                    if (isIntentAvailable(SingleImageActivity.this, insta)) {
                         startActivity(insta);
                     } else {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(responseImageClass.getArtistBackLink())));
@@ -326,7 +326,7 @@ public class ImageActivity extends AppCompatActivity {
                 });
                 break;
             case R.id.download:
-                new MessageUtils().showBinaryAlertDialog(ImageActivity.this,
+                new MessageUtils().showBinaryAlertDialog(SingleImageActivity.this,
                         "Downloading",
                         "Wallpaper will be downloaded in the background. Meanwhile why don't you watch an ad and do us favour",
                         R.raw.lottie_download,
@@ -336,12 +336,12 @@ public class ImageActivity extends AppCompatActivity {
                         new MessageUtils.BinaryClickListener() {
                             @Override
                             public void onPositiveClick() {
-                                MessageUtils.showShortToast(ImageActivity.this, "Ad is Shown");
+                                MessageUtils.showShortToast(SingleImageActivity.this, "Ad is Shown");
                             }
 
                             @Override
                             public void onNegativeClick() {
-                                MessageUtils.showShortToast(ImageActivity.this, "Dialog dismissed");
+                                MessageUtils.showShortToast(SingleImageActivity.this, "Dialog dismissed");
 
                             }
                         }
@@ -351,7 +351,7 @@ public class ImageActivity extends AppCompatActivity {
                 callDownloadApi();
                 break;
             case R.id.wallpaper:
-                new MessageUtils().showBinaryAlertDialog(ImageActivity.this,
+                new MessageUtils().showBinaryAlertDialog(SingleImageActivity.this,
                         "Applying Wallpaper",
                         "Wallpaper will be downloaded and applied in the background. Meanwhile why don't you watch an ad and do us favour",
                         R.raw.lottie_download,
@@ -361,12 +361,12 @@ public class ImageActivity extends AppCompatActivity {
                         new MessageUtils.BinaryClickListener() {
                             @Override
                             public void onPositiveClick() {
-                                MessageUtils.showShortToast(ImageActivity.this, "Ad is Shown");
+                                MessageUtils.showShortToast(SingleImageActivity.this, "Ad is Shown");
                             }
 
                             @Override
                             public void onNegativeClick() {
-                                MessageUtils.showShortToast(ImageActivity.this, "Dialog dismissed");
+                                MessageUtils.showShortToast(SingleImageActivity.this, "Dialog dismissed");
 
                             }
                         }
@@ -376,7 +376,7 @@ public class ImageActivity extends AppCompatActivity {
                 callWallApi();
                 break;
             case R.id.report:
-                new MessageUtils().showBinaryAlertDialog(ImageActivity.this,
+                new MessageUtils().showBinaryAlertDialog(SingleImageActivity.this,
                         "Report Image",
                         "If you think this image violates copyrights law in any manner.Please, Email us with full details \nReported image will be removed upon review \nAre sure you want to report this Image.",
                         R.raw.lottie_report,
@@ -431,7 +431,7 @@ public class ImageActivity extends AppCompatActivity {
         reqUserImage.setUserId(resLoginUser.getId());
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
-        new RestUtilities().isImageLiked(ImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
+        new RestUtilities().isImageLiked(SingleImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
             @Override
             public void onSuccess(Object onSuccessResponse) {
                 BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
@@ -457,7 +457,7 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                MessageUtils.showDismissableSnackBar(ImageActivity.this, image, error);
+                MessageUtils.showDismissableSnackBar(SingleImageActivity.this, image, error);
                 Log.i(TAG, "onSuccess: Image like Failed due to" + error);
             }
         });
@@ -478,7 +478,7 @@ public class ImageActivity extends AppCompatActivity {
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
-        new RestUtilities().likeImage(ImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
+        new RestUtilities().likeImage(SingleImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
             @Override
             public void onSuccess(Object onSuccessResponse) {
                 BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
@@ -498,7 +498,7 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                MessageUtils.showDismissableSnackBar(ImageActivity.this, image, error);
+                MessageUtils.showDismissableSnackBar(SingleImageActivity.this, image, error);
                 Log.i(TAG, "onSuccess: Image like Failed due to" + error);
             }
         });
@@ -518,7 +518,7 @@ public class ImageActivity extends AppCompatActivity {
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
-        new RestUtilities().downloadImage(ImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
+        new RestUtilities().downloadImage(SingleImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
             @Override
             public void onSuccess(Object onSuccessResponse) {
                 BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
@@ -538,7 +538,7 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                MessageUtils.showDismissableSnackBar(ImageActivity.this, image, error);
+                MessageUtils.showDismissableSnackBar(SingleImageActivity.this, image, error);
                 Log.i(TAG, "onSuccess: Image Download Failed due to" + error);
             }
         });
@@ -559,7 +559,7 @@ public class ImageActivity extends AppCompatActivity {
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
-        new RestUtilities().setWall(ImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
+        new RestUtilities().setWall(SingleImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
             @Override
             public void onSuccess(Object onSuccessResponse) {
                 BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
@@ -579,7 +579,7 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                MessageUtils.showDismissableSnackBar(ImageActivity.this, image, error);
+                MessageUtils.showDismissableSnackBar(SingleImageActivity.this, image, error);
                 Log.i(TAG, "onSuccess: Image Set wall Failed due to" + error);
             }
         });
@@ -598,7 +598,7 @@ public class ImageActivity extends AppCompatActivity {
         reqUserImage.setOrigin("ANDROID");
         reqUserImage.setVersion("1.0");
 
-        new RestUtilities().reportImage(ImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
+        new RestUtilities().reportImage(SingleImageActivity.this.getApplicationContext(), reqUserImage, new RestUtilities.OnSuccessListener() {
             @Override
             public void onSuccess(Object onSuccessResponse) {
                 BaseResponse baseResponse = new Gson().fromJson(onSuccessResponse.toString(), BaseResponse.class);
@@ -611,7 +611,7 @@ public class ImageActivity extends AppCompatActivity {
                     Log.i(TAG, "onSuccess: Image report Failed due to" + baseResponse.getMessage());
 
                 } else {
-                    MessageUtils.showShortToast(ImageActivity.this, "Image Reported Successfully.");
+                    MessageUtils.showShortToast(SingleImageActivity.this, "Image Reported Successfully.");
                     Log.i(TAG, "onSuccess: Image report successful");
                 }
 
@@ -619,7 +619,7 @@ public class ImageActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                MessageUtils.showDismissableSnackBar(ImageActivity.this, image, error);
+                MessageUtils.showDismissableSnackBar(SingleImageActivity.this, image, error);
                 Log.i(TAG, "onSuccess: Image report Failed due to" + error);
             }
         });
@@ -627,7 +627,7 @@ public class ImageActivity extends AppCompatActivity {
 
     private void showErrorFromAPi(BaseResponse baseResponse) {
         if (BuildConfig.DEBUG) {
-            MessageUtils.showShortToast(ImageActivity.this, baseResponse.getMessage());
+            MessageUtils.showShortToast(SingleImageActivity.this, baseResponse.getMessage());
         }
     }
 
@@ -811,7 +811,7 @@ public class ImageActivity extends AppCompatActivity {
         bundle.putString(WallZyConstants.ImageUrl_to_download, url);
         bundle.putString(WallZyConstants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
         bundle.putBoolean(WallZyConstants.is_to_setWallpaper_fromActivity, false);
-        driver = new GooglePlayDriver(Objects.requireNonNull(ImageActivity.this));
+        driver = new GooglePlayDriver(Objects.requireNonNull(SingleImageActivity.this));
         firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
         firebaseJobDispatcher.cancel(WallZyConstants.DONWLOADIMAGE_IMAGE_JOB_TAG);
         Job downloadJob = firebaseJobDispatcher.
@@ -834,7 +834,7 @@ public class ImageActivity extends AppCompatActivity {
         bundle.putString(WallZyConstants.ImageUrl_to_download, url);
         bundle.putString(WallZyConstants.Image_Name_to_save_key, UUID.randomUUID().toString().substring(0, 9));
         bundle.putBoolean(WallZyConstants.is_to_setWallpaper_fromActivity, true);
-        driver = new GooglePlayDriver(Objects.requireNonNull(ImageActivity.this));
+        driver = new GooglePlayDriver(Objects.requireNonNull(SingleImageActivity.this));
         firebaseJobDispatcher = new FirebaseJobDispatcher(driver);
         firebaseJobDispatcher.cancel(WallZyConstants.SETWALLPAPER_IMAGE_TAG);
         Job downloadJob = firebaseJobDispatcher

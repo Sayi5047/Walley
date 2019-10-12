@@ -17,9 +17,11 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="o">
         <activity
-            android:name=".activity.ImageActivity"
+            android:name=".activity.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.SingleImageActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.AdminActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -44,6 +46,7 @@
             android:name=".activity.HomeActivity"
             android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".activity.BaseActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider_authority"
@@ -57,8 +60,7 @@
         <service
             android:name=".FirebaseMessagingService"
             android:enabled="true"
-            android:exported="true"></service>
-
+            android:exported="true" />
         <service
             android:name=".Services.DownloadImageJobService"
             android:exported="false" />
@@ -67,11 +69,12 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <dist:module dist:instant="true" />
 

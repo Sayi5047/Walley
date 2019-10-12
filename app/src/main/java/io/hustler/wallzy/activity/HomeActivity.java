@@ -51,7 +51,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -301,9 +300,9 @@ public class HomeActivity extends AppCompatActivity {
         bottomFeaturesRv.setLayoutManager(new LinearLayoutManager(HomeActivity.this, RecyclerView.VERTICAL, false));
         List<String> namesArray;
         TypedArray imagesArray;
-        namesArray =  Arrays.asList(getResources().getStringArray(R.array.footer_features_array));
+        namesArray = Arrays.asList(getResources().getStringArray(R.array.footer_features_array));
         imagesArray = (getResources().obtainTypedArray(R.array.footer_features_images));
-        bottomFeaturesRv.setAdapter(new BottomFeaturesAdapter(HomeActivity.this,  namesArray,
+        bottomFeaturesRv.setAdapter(new BottomFeaturesAdapter(HomeActivity.this, namesArray,
                 imagesArray, featureName -> {
             switch (featureName) {
 
@@ -314,7 +313,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
 
                 case "Settings": {
-                    MessageUtils.showShortToast(HomeActivity.this, getString(R.string.coming_soon));
+                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 
                 }
                 break;
@@ -460,7 +459,7 @@ public class HomeActivity extends AppCompatActivity {
                         SearchImagesAdapter imagesAdapter = new SearchImagesAdapter(HomeActivity.this, new SearchImagesAdapter.OnItemClcikListener() {
                             @Override
                             public void onItemClick(ResImageSearch.TagImage position) {
-                                Intent intent = new Intent(HomeActivity.this, ImageActivity.class);
+                                Intent intent = new Intent(HomeActivity.this, SingleImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, position.getRawUrl());
                                 intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, "");
                                 intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, true);

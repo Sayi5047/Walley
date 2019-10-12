@@ -16,8 +16,16 @@ public class WallZyConstants {
     public static final String INTENT_SERIALIZED_IMAGE_CLASS = "INTENT_SERIALISED_IMAGE_OBJECT";
     public static final String SHARED_PREFS_USER_FCM_TOKEN = "SHARED_PREFS_USER_FCM_TOKEN";
     public static final String SHARED_PREFS_GUEST_ACCOUNT = "SHARED_PREFS_GUEST_ACCOUNT";
+    /*DAILY WALLS CONSTANTS*/
+    public static final String SHARED_PREFS_DAILE_WALLS_ENABLED = "SHARED_PREFS_DAILE_WALLS_ENABLED";
+    public static final String SHARED_PREFS_DAILE_WALLS_TIMEGAP = "SHARED_PREFS_DAILE_WALLS_TIMEGAP";
+    public static final String SHARED_PREFS_DAILE_WALLS_CAT = "SHARED_PREFS_DAILE_WALLS_CAT";
+    public static final String SHARED_PREFS_DAILE_WALLS_WIFI_ENABLED = "SHARED_PREFS_DAILE_WALLS_WIFI_ENABLED";
+    /**/
+
     public static final String INTENT_IS_FROM_SEARCH = "INTENT_IS_FROM_SEARCH";
     public static final String INTENT_SEARCH_IMAGE_ID = "INTENT_SEARCH_IMAGE_ID";
+
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
 

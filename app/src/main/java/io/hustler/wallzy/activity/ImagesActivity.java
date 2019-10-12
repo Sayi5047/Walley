@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -85,6 +86,12 @@ public class ImagesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         imagesRv.setLayoutManager(gridLayoutManager);
         String catName = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_NAME);
@@ -229,7 +236,7 @@ public class ImagesActivity extends AppCompatActivity {
                         imagesAdapter = new ImagesAdapter(ImagesActivity.this, new ImagesAdapter.OnItemClcikListener() {
                             @Override
                             public void onItemClick(ResponseImageClass responseImageClass) {
-                                Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
+                                Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
                                 intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
                                 intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
@@ -271,7 +278,7 @@ public class ImagesActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(ResponseImageClass responseImageClass) {
                                 // TODO: 06-09-2019 SHOW IMAGE
-                                Intent intent = new Intent(ImagesActivity.this, ImageActivity.class);
+                                Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
                                 intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
 
