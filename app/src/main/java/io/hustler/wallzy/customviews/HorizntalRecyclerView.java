@@ -50,7 +50,7 @@ public class HorizntalRecyclerView extends RecyclerView {
         }
         scrollToPosition(0);
         onScrollSchanged(is_Vertical);
-        int resId = R.anim.layout_anim_fall_down;
+        int resId = R.anim.layout_anim_climb_up;
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         setLayoutAnimation(animation);
 //        adapter.registerAdapterDataObserver(new AdapterDataObserver() {

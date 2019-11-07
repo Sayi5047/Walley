@@ -196,7 +196,9 @@ public class AdminCatCollFragment extends Fragment {
                                             if (baseResponse.isApiSuccess()) {
                                                 MessageUtils.showShortToast(getActivity(), "Category Successfully Added");
                                                 selectedImagesArrayList.clear();
-                                                uploadedImagesUrl.clear();
+                                                if (null != uploadedImagesUrl) {
+                                                    uploadedImagesUrl.clear();
+                                                }
                                                 nameInputLayout.setText("");
                                                 image1.setImageBitmap(null);
                                                 image2.setImageBitmap(null);
@@ -225,18 +227,21 @@ public class AdminCatCollFragment extends Fragment {
                             });
                 } else {
                     uploadedImagesUrl = new ArrayList<>();
-                    AppExecutor.getInstance().getNetworkExecutor().execute(() -> new TaskCollector()
-                            .putTaskCount(isArtistCheckBox.isChecked() ? 4 : 3).
-                                    callBack(() -> {
-                                        uploadCollection(restUtilities);
-                                        AppExecutor.getInstance().getMainThreadExecutor().execute(() -> {
-                                            progressDialog.cancel();
-                                            MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
+                    AppExecutor.
+                            getInstance().
+                            getNetworkExecutor().
+                            execute(() -> new TaskCollector()
+                                    .putTaskCount(isArtistCheckBox.isChecked() ? 4 : 3).
+                                            callBack(() -> {
+                                                uploadCollection(restUtilities);
+                                                AppExecutor.getInstance().getMainThreadExecutor().execute(() -> {
+                                                    progressDialog.cancel();
+                                                    MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
 
-                                        });
+                                                });
 
-                                    }).
-                                    sendToTaskManager().execute());
+                                            }).
+                                            sendToTaskManager().execute());
                 }
                 break;
             case R.id.imagesLayout:
@@ -291,7 +296,7 @@ public class AdminCatCollFragment extends Fragment {
         }
         resCollectionClass.setCovers(coverMap);
         if (isArtistCheckBox.getVisibility() == View.VISIBLE && isArtistCheckBox.isChecked()) {
-            resCollectionClass.setArtistImage(uploadedImagesUrl.get(uploadedImagesUrl.size()-1));
+            resCollectionClass.setArtistImage(uploadedImagesUrl.get(uploadedImagesUrl.size() - 1));
             resCollectionClass.setArtistLink(linkInputLayout.getText().toString());
             resCollectionClass.setCurated(true);
             resCollectionClass.setArtistName(nameInputLayout.getText().toString());
@@ -437,6 +442,7 @@ public class AdminCatCollFragment extends Fragment {
         }
 
     }
+
 
     public class TaskManager extends Thread {
         private Callback callback;

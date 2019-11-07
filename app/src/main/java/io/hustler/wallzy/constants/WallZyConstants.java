@@ -25,6 +25,8 @@ public class WallZyConstants {
 
     public static final String INTENT_IS_FROM_SEARCH = "INTENT_IS_FROM_SEARCH";
     public static final String INTENT_SEARCH_IMAGE_ID = "INTENT_SEARCH_IMAGE_ID";
+    public static final String INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER = "INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER";
+    public static final String DEFAULT_TOPIC_FOR_ALL_USERS = "DEFAULT_ALL_NOTIFICATION_TOPIC";
 
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";

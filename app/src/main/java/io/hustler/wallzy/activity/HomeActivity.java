@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -38,6 +39,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.Constraints;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
@@ -54,10 +60,12 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.hustler.wallzy.ArComponents.BaseWorker;
 import io.hustler.wallzy.BuildConfig;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.adapters.BottomFeaturesAdapter;
@@ -72,6 +80,7 @@ import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
 import io.hustler.wallzy.utils.DimenUtils;
 import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.utils.PermissionUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
@@ -311,6 +320,12 @@ public class HomeActivity extends AppCompatActivity {
                     changeBetweenDayandNightMode(currentNightMode);
                 }
                 break;
+                case "Profile": {
+                    Intent intent = new Intent(HomeActivity.this, FragmentActivity.class);
+                    intent.putExtra(WallZyConstants.INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER, 0);
+                    startActivity(intent);
+                }
+                break;
 
                 case "Settings": {
                     startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
@@ -344,6 +359,11 @@ public class HomeActivity extends AppCompatActivity {
         }));
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
         searchIcon.setFrame(29);
+
+
+        if (!PermissionUtils.isStoragePermissionAvailable(Objects.requireNonNull(HomeActivity.this))) {
+            PermissionUtils.requestStoragrPermissions(HomeActivity.this, WallZyConstants.MY_PERMISSION_REQUEST_STORAGE);
+        }
 
     }
 
@@ -392,7 +412,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.menu_icon, R.id.search_icon})
+    @OnClick({R.id.menu_icon, R.id.search_icon, R.id.app_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.menu_icon:
@@ -425,6 +445,32 @@ public class HomeActivity extends AppCompatActivity {
 
                 }
                 break;
+            case R.id.app_name: {
+                WorkManager workManager = WorkManager.getInstance(HomeActivity.this);
+                OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(BaseWorker.class).build();
+                Constraints constraints = new Constraints.Builder().setRequiresCharging(false).build();
+
+                PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BaseWorker.class, 15, TimeUnit.MINUTES, 10, TimeUnit.MINUTES).build();
+//                workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.getId()).observe(HomeActivity.this, workInfo -> {
+//                    if (null != workInfo) {
+//                        WorkInfo.State state = workInfo.getState();
+//                        MessageUtils.showShortToast(HomeActivity.this, state.toString());
+//                    }
+//                });
+                workManager.getWorkInfoByIdLiveData(periodicWorkRequest.getId()).observe(HomeActivity.this, workInfo -> {
+                    if (null != workInfo) {
+                        WorkInfo.State state = workInfo.getState();
+                        MessageUtils.showShortToast(HomeActivity.this, state.toString());
+                        Log.i("WORKER", "ON WORKER EXECUTED " + state.toString());
+                    }
+                });
+                workManager.enqueue(periodicWorkRequest);
+
+                MessageUtils.showShortToast(HomeActivity.this, "Started");
+//                workManager.enqueue(oneTimeWorkRequest);
+
+            }
+            break;
         }
     }
 
@@ -654,5 +700,42 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE: {
+                if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    showStorageErrorMessage();
+                }
+            }
+            break;
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_DOWNLOAD_WALLPAPER: {
+                handlePermissionRsult(grantResults);
+
+            }
+            break;
+            case WallZyConstants.MY_PERMISSION_REQUEST_STORAGE_FOR_SETWALLPAPER: {
+                handlePermissionRsult(grantResults);
+            }
+            break;
+        }
+
+    }
+
+    private void handlePermissionRsult(@NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "onRequestPermissionsResult: STORAGE PERMISSION GRANTED");
+
+
+        } else {
+            showStorageErrorMessage();
+        }
+    }
+
+    private void showStorageErrorMessage() {
+        MessageUtils.showDismissableSnackBar(Objects.requireNonNull(HomeActivity.this), viewPager, getString(R.string.storage_permission_rejected_message));
     }
 }

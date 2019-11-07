@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -343,9 +344,6 @@ public class AdminImageUploadFragment extends Fragment {
     }
 
 
-    /**
-     * REST API CALL TO SAVE THE DATA TO OUR DATABASE
-     */
     private void uploadImagestoDatabase(RestUtilities restUtilities) {
         final ProgressDialog[] progressDialog = new ProgressDialog[1];
 
@@ -637,6 +635,8 @@ public class AdminImageUploadFragment extends Fragment {
 
             }
 
+            String finalFileLocation = fileLocation;
+            String finalFileLocation1 = fileLocation;
             restUtilities.uploadImageToIK(fileLocation, fileName, Objects.requireNonNull(getActivity()).getApplicationContext(), new RestUtilities.OnSuccessListener() {
                 @Override
                 public void onSuccess(Object onSuccessResponse) {
@@ -661,6 +661,9 @@ public class AdminImageUploadFragment extends Fragment {
 
 
                     countDownLatch.countDown();
+                    new File(finalFileLocation1).delete();
+
+
                     Log.i("THREAD", "REDUCED");
 
                 }

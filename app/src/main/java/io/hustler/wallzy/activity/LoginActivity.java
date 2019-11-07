@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,9 +22,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.text.MessageFormat;
@@ -170,6 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                         new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
                         new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
                         new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, false);
+
                         updateUI(account);
 
                     } else {
@@ -206,6 +210,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         } else {
             /*USER SIGNED IN*/
+            FirebaseMessaging.getInstance().subscribeToTopic(WallZyConstants.DEFAULT_TOPIC_FOR_ALL_USERS).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "onComplete: User SuccessFully Subscribed to " + WallZyConstants.DEFAULT_TOPIC_FOR_ALL_USERS);
+                    }
+                }
+            });
             Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Successfully Signed In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 

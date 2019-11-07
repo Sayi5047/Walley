@@ -1,19 +1,19 @@
 package io.hustler.wallzy.adapters;
 
 import android.app.Activity;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.model.base.ResponseImageClass;
@@ -23,11 +23,13 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
     private Activity activity;
     private OnItemClcikListener onItemClcikListener;
     private ArrayList<ResponseImageClass> imagesList;
+    private HashMap<String, ArrayList<Integer>> sizeList;
 
     public ImagesAdapter(Activity activity, OnItemClcikListener onItemClcikListener, ArrayList<ResponseImageClass> imagesList) {
         this.activity = activity;
         this.onItemClcikListener = onItemClcikListener;
         this.imagesList = imagesList;
+        sizeList = new HashMap<>();
     }
 
     public interface OnItemClcikListener {
@@ -43,7 +45,8 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
     public void AddAllData(ArrayList<ResponseImageClass> resGetCategoryImages) {
         int lastPosition = imagesList.size();
         imagesList.addAll(resGetCategoryImages);
-        notifyItemRangeChanged(lastPosition - 1, resGetCategoryImages.size());
+        notifyItemRangeInserted(lastPosition - 1, resGetCategoryImages.size());
+
     }
 
     public void addOne(ResponseImageClass resGetCategoryImages) {
@@ -77,15 +80,18 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-//        Picasso.get().load(imagesList.get(position).getUrl() + "?tr=w-400,h-400").into(holder.imageView);
-//        ););+ "?tr=w-200,h-200"
-        Glide.with(activity).load(imagesList.get(position).getUrl() ).fitCenter().into(holder.imageView);
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onItemClcikListener.onItemClick(imagesList.get(position));
-            }
-        });
+
+
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) holder.imageView.getLayoutParams();
+        layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        int heightRatio = (int) (imagesList.get(position).getWidth() * (imagesList.get(position).getHeight() / imagesList.get(position).getWidth()));
+        layoutParams.height = (int) (heightRatio / activity.getResources().getDisplayMetrics().density);
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
+        holder.imageView.setLayoutParams(layoutParams);
+        holder.imageView.requestLayout();
+        Glide.with(activity).load(imagesList.get(position).getUrl()).into(holder.imageView);
+
+        holder.imageView.setOnClickListener(view -> onItemClcikListener.onItemClick(imagesList.get(position)));
     }
 
     @Override

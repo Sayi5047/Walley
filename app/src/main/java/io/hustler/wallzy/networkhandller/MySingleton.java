@@ -52,6 +52,7 @@ public class MySingleton {
     }
 
     public static void addJsonObjRequest(Context context, JsonObjectRequest jsObjRequest) {
+        
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 10,
                 VOLLEY_MAX_RETRIES,

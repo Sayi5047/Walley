@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/cdl"
             android:background="@color/bg"
-            android:layoutAnimation="@anim/layout_anim_fall_down"
+            android:layoutAnimation="@anim/layout_anim_climb_up"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
             />

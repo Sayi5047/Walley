@@ -1,7 +1,6 @@
 package io.hustler.wallzy.customviews;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -9,8 +8,10 @@ public abstract class StaggeredGridPaginationScrollListener extends RecyclerView
 
     StaggeredGridLayoutManager gridLayoutManager;
 
-    public StaggeredGridPaginationScrollListener(StaggeredGridLayoutManager linearLayoutManager) {
+    protected StaggeredGridPaginationScrollListener(StaggeredGridLayoutManager linearLayoutManager) {
         this.gridLayoutManager = linearLayoutManager;
+//        gridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
     }
 
     @Override
@@ -21,7 +22,7 @@ public abstract class StaggeredGridPaginationScrollListener extends RecyclerView
         /*TOTAL AVAILABLE ITEM COUNT*/
         int totalIteCount = gridLayoutManager.getItemCount();
         /*CURRENTLY ON THE SCREEN FIRST VISIBLE ITEM POSITION NUMBER*/
-        int[] array=new int[10];
+        int[] array = new int[10];
         int firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPositions(array)[0];
 
         if (!isLoading() && !isLastPage()) {
@@ -31,6 +32,12 @@ public abstract class StaggeredGridPaginationScrollListener extends RecyclerView
         }
 
 
+    }
+
+    @Override
+    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+//        gridLayoutManager.invalidateSpanAssignments();
     }
 
     protected abstract void loadMoreItems();

@@ -92,7 +92,8 @@ public class ImagesActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+
         imagesRv.setLayoutManager(gridLayoutManager);
         String catName = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_NAME);
         catImage = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
@@ -166,7 +167,7 @@ public class ImagesActivity extends AppCompatActivity {
                     TOTAL_PAGES = resGetCategoryImages.getTotalPages();
                     if (resGetCategoryImages.isApiSuccess()) {
                         if (null != imagesAdapter) {
-                            imagesAdapter.AddData(resGetCategoryImages.getImages());
+                            imagesAdapter.AddAllData(resGetCategoryImages.getImages());
                         }
                         if (currentPage >= TOTAL_PAGES) {
                             isLastPage = true;
@@ -233,20 +234,17 @@ public class ImagesActivity extends AppCompatActivity {
                     ResGetCategoryImages resGetCategoryImages = new Gson().fromJson(onSuccessResponse.toString(), ResGetCategoryImages.class);
                     TOTAL_PAGES = resGetCategoryImages.getTotalPages();
                     if (resGetCategoryImages.isApiSuccess()) {
-                        imagesAdapter = new ImagesAdapter(ImagesActivity.this, new ImagesAdapter.OnItemClcikListener() {
-                            @Override
-                            public void onItemClick(ResponseImageClass responseImageClass) {
-                                Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
-                                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
-                                intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
-                                startActivity(intent);
-                            }
+                        imagesAdapter = new ImagesAdapter(ImagesActivity.this, responseImageClass -> {
+                            Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
+                            intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
+                            intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
+                            intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
+                            startActivity(intent);
                         }, resGetCategoryImages.getImages());
                         imagesRv.setAdapter(imagesAdapter);
-                        int resId = R.anim.layout_anim_fall_down;
-                        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
-                        imagesRv.setLayoutAnimation(animation);
+                        int resId = R.anim.layout_anim_climb_up;
+//                        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
+//                        imagesRv.setLayoutAnimation(animation);
                         if (currentPage >= TOTAL_PAGES) {
                             isLastPage = true;
                             MessageUtils.showShortToast(ImagesActivity.this, "REACHED END");
@@ -286,7 +284,7 @@ public class ImagesActivity extends AppCompatActivity {
                             }
                         }, resGetCollectionIMages.getImages());
                         imagesRv.setAdapter(imagesAdapter);
-                        int resId = R.anim.layout_anim_fall_down;
+                        int resId = R.anim.layout_anim_climb_up;
                         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(ImagesActivity.this, resId);
                         imagesRv.setLayoutAnimation(animation);
                         if (currentPage >= TOTAL_PAGES) {

@@ -118,7 +118,7 @@ public class CollectionsFragment extends Fragment {
     private void runLayoutAnimation(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
         final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down);
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_climb_up);
 
         recyclerView.setLayoutAnimation(controller);
         Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();

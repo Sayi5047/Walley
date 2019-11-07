@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-
+    android:layoutAnimation="@anim/layout_anim_climb_up"
     tools:context=".activity.ImagesActivity">
 
 
@@ -40,7 +40,6 @@
                     android:id="@+id/bg_blur_image"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:background="@drawable/ic_wallpaper"
                     android:fitsSystemWindows="true"
                     android:transitionName="@string/transistion_blur_image"
                     android:visibility="visible"
@@ -85,7 +84,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/cdl"
             android:background="@color/colorPrimary"
-            android:layoutAnimation="@anim/layout_anim_fall_down"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
             />

@@ -129,7 +129,7 @@ public class CategoriesFragment extends Fragment {
                 intent.putExtra(WallZyConstants.INTENT_CAT_ID, category.getId());
                 intent.putExtra(WallZyConstants.INTENT_IS_CAT, true);
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
-                getActivity().startActivity(intent, optionsCompat.toBundle());
+                getActivity().startActivity(intent);
                 MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), getView(), category.getName());
             }
         });
@@ -141,7 +141,7 @@ public class CategoriesFragment extends Fragment {
     private void runLayoutAnimation(final RecyclerView recyclerView) {
         final Context context = recyclerView.getContext();
         final LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_fall_down);
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_climb_up);
 
         recyclerView.setLayoutAnimation(controller);
         recyclerView.getAdapter().notifyDataSetChanged();

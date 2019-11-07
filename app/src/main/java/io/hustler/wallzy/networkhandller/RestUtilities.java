@@ -45,7 +45,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
 
 public class RestUtilities {
     private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://192.168.1.8:8080/private";
+    private final String ROOT_IP = "http://172.105.56.124:8080/private";
 
     /**
      * AUTH API PATHS
@@ -55,7 +55,6 @@ public class RestUtilities {
     private final String GMAIL_LOGIN = AUTH + "googleAuth";
     private final String EMAIL_SIGNUP = AUTH + "signUpUser";
     private final String GUEST_LOGIN = AUTH + "guestLoginUser";
-    private final String UPDATE_FCM_TOKEN = AUTH + "updateFcmToken";
 
     /**
      * CATEGORY API PATHS
@@ -97,6 +96,7 @@ public class RestUtilities {
     private final String IS_LIKED = USERPATH + "/isLiked";
     private final String ADD_TAG = USERPATH + "/addTag";
     private final String GET_IMAGE_BY_ID = USERPATH + "/getImageById";
+    private final String UPDATE_FCM_TOKEN = USERPATH + "/updateFcmToken";
 
 
     /**
@@ -324,6 +324,7 @@ public class RestUtilities {
                             onSuccessListener.onError(getRelevantVolleyErrorMessage(context, error));
                         });
 
+        jsonObjectRequest.setShouldCache(false);
         MySingleton.addJsonObjRequest(context, jsonObjectRequest);
     }
 
