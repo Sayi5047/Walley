@@ -5,23 +5,35 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 
+import java.util.Random;
+
+import io.hustler.wallzy.constants.NotificationConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.BaseResponse;
 import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
 import io.hustler.wallzy.networkhandller.RestUtilities;
+import io.hustler.wallzy.utils.NotificationUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 
-public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FCMService extends com.google.firebase.messaging.FirebaseMessagingService {
     private final String TAG = this.getClass().getSimpleName();
 
-    public FirebaseMessagingService() {
+    public FCMService() {
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.i(TAG, "onMessageReceived: " + remoteMessage.toString());
+        NotificationUtils notificationUtils = new NotificationUtils();
+        notificationUtils.createNotification(getApplicationContext(),
+                "Testing Title",
+                "Testing Message",
+                NotificationConstants.getCloudNotificationAnnouncementChannelId(),
+                NotificationConstants.getCloudNotificationGroupId()
+                , new Random(5400).nextInt());
+
 
     }
 

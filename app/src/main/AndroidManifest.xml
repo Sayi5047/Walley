@@ -70,7 +70,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
         <service
-            android:name=".FirebaseMessagingService"
+            android:name=".FCMService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

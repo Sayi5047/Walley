@@ -50,7 +50,7 @@ public class BaseWorker extends Worker {
         NotificationChannel groupNotificationChannel;
         /*NOTIFICATION CHANNEL*/
         assert notificationManager != null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O ) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notificationChannel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             groupNotificationChannel = new NotificationChannel(groupChannelId, groupChannelName, NotificationManager.IMPORTANCE_LOW);
             notificationManager.createNotificationChannel(notificationChannel);

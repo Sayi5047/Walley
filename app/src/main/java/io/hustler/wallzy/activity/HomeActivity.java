@@ -80,6 +80,7 @@ import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
 import io.hustler.wallzy.utils.DimenUtils;
 import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.utils.NotificationUtils;
 import io.hustler.wallzy.utils.PermissionUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
@@ -364,6 +365,10 @@ public class HomeActivity extends AppCompatActivity {
         if (!PermissionUtils.isStoragePermissionAvailable(Objects.requireNonNull(HomeActivity.this))) {
             PermissionUtils.requestStoragrPermissions(HomeActivity.this, WallZyConstants.MY_PERMISSION_REQUEST_STORAGE);
         }
+
+        NotificationUtils notificationUtils=new NotificationUtils();
+        notificationUtils.createAllNotificationGroups(this.getApplicationContext());
+        notificationUtils.createAllNotificationChannels(this.getApplicationContext());
 
     }
 

@@ -95,4 +95,5 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
     implementation "androidx.work:work-runtime:2.2.0"
+    implementation 'org.jetbrains:annotations:15.0'
 }
