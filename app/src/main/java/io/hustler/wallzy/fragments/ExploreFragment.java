@@ -174,23 +174,24 @@ public class ExploreFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ValueAnimator valueAnimator = ValueAnimator.ofInt((int) DimenUtils.convertDptoPixels(64, getResources()), 0);
-                valueAnimator.addUpdateListener(valueAnimator1 -> {
-                    ViewGroup.LayoutParams layoutParams = loadingAnimation.getLayoutParams();
-                    layoutParams.height = (int) valueAnimator1.getAnimatedValue();
-                    loadingAnimation.requestLayout();
-                });
-                valueAnimator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        loadingAnimation.setVisibility(View.GONE);
-                        loadingAnimation.pauseAnimation();
-                    }
-                });
-                valueAnimator.setDuration(300);
-                valueAnimator.start();
-
+                if (isAdded()) {
+                    ValueAnimator valueAnimator = ValueAnimator.ofInt((int) DimenUtils.convertDptoPixels(64, Objects.requireNonNull(getActivity()).getResources()), 0);
+                    valueAnimator.addUpdateListener(valueAnimator1 -> {
+                        ViewGroup.LayoutParams layoutParams = loadingAnimation.getLayoutParams();
+                        layoutParams.height = (int) valueAnimator1.getAnimatedValue();
+                        loadingAnimation.requestLayout();
+                    });
+                    valueAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            loadingAnimation.setVisibility(View.GONE);
+                            loadingAnimation.pauseAnimation();
+                        }
+                    });
+                    valueAnimator.setDuration(300);
+                    valueAnimator.start();
+                }
             }
         }, 2000);
     }

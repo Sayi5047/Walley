@@ -22,6 +22,11 @@ public class WallZyConstants {
     public static final String SHARED_PREFS_DAILE_WALLS_CAT = "SHARED_PREFS_DAILE_WALLS_CAT";
     public static final String SHARED_PREFS_DAILE_WALLS_WIFI_ENABLED = "SHARED_PREFS_DAILE_WALLS_WIFI_ENABLED";
     /**/
+    /**
+     * DAILY NOTIFS CONSTANTS
+     */
+    public static final String SHARED_PREFS_DAILY_NOTIFS_ENABLED = "SHARED_PREFS_DAILY_NOTIFS_ENABLED";
+    public static final String SHARED_PREFS_DAILY_NOTIFS_USER_DISABLED = "SHARED_PREFS_DAILY_NOTIFS_USER_DISABLED";
 
     public static final String INTENT_IS_FROM_SEARCH = "INTENT_IS_FROM_SEARCH";
     public static final String INTENT_SEARCH_IMAGE_ID = "INTENT_SEARCH_IMAGE_ID";

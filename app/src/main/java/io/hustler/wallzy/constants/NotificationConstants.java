@@ -4,6 +4,18 @@ import java.util.ArrayList;
 
 public class NotificationConstants {
 
+    private static final int DAILY_NOTIFICATION_MORNING_ID = 200;
+    private static final int DAILY_NOTIFICATION_EVENING_ID = 200;
+    private static final int DAILY_NOTIFICATION_HOME_PENDING_INTENT_REQUEST_CODE = 100;
+
+    /**
+     * GROUP MOT KEYS
+     */
+    private static final String CLOUD_NOTIFICATION_KEY = "io.hustler.wallzy.CLOUD_NOTIFICATION_KEY";
+    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_KEY = "io.hustler.wallzy.CLOUD_NOTIFICATION_ANNOUNCEMENT_KEY";
+    private static final String LOCAL_NOTIFICATION_DAILY_GROUP_KEY = "io.hustler.wallzy.LOCAL_NOTIFICATION_KEY";
+    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.DOWNLOAD_NOTIFICATION_KEY";
+
     /*GROUP IDS*/
     private static final String CLOUD_NOTIFICATION_GROUP_ID = "CLOUD_NOTIFICATION_GROUP_ID";
     private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID = "CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID";
@@ -69,41 +81,17 @@ public class NotificationConstants {
     }
 
 
-    public static String getCloudNotificationGroupId() {
-        return CLOUD_NOTIFICATION_GROUP_ID;
+    /*GETTERS AND SETTERS*/
+
+    public static String getCloudNotificationKey() {
+        return CLOUD_NOTIFICATION_KEY;
     }
 
-    public static String getCloudNotificationAnnouncementGroupId() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID;
-    }
 
     public static String getLocalNotificationDailyGroupId() {
         return LOCAL_NOTIFICATION_DAILY_GROUP_ID;
     }
 
-    public static String getImageDownloadNotificationsGroupId() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID;
-    }
-
-    public static String getCloudNotificationGroupName() {
-        return CLOUD_NOTIFICATION_GROUP_NAME;
-    }
-
-    public static String getCloudNotificationAnnouncementName() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_NAME;
-    }
-
-    public static String getLocalNotificationDailyName() {
-        return LOCAL_NOTIFICATION_DAILY_NAME;
-    }
-
-    public static String getImageDownloadNotificationsName() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_NAME;
-    }
-
-    public static String getCloudNotificationChannelId() {
-        return CLOUD_NOTIFICATION_CHANNEL_ID;
-    }
 
     public static String getCloudNotificationAnnouncementChannelId() {
         return CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_ID;
@@ -113,23 +101,47 @@ public class NotificationConstants {
         return LOCAL_NOTIFICATION_DAILY_CHANNEL_ID;
     }
 
+    public static int getDailyNotificationMorningId() {
+        return DAILY_NOTIFICATION_MORNING_ID;
+    }
+
+    public static int getDailyNotificationEveningId() {
+        return DAILY_NOTIFICATION_EVENING_ID;
+    }
+
+    public static String getCloudNotificationAnnouncementGroupKey() {
+        return CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_KEY;
+    }
+
+    public static String getLocalNotificationDailyGroupKey() {
+        return LOCAL_NOTIFICATION_DAILY_GROUP_KEY;
+    }
+
+    public static String getImageDownloadNotificationsGroupKey() {
+        return IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_KEY;
+    }
+
+    public static String getCloudNotificationGroupId() {
+        return CLOUD_NOTIFICATION_GROUP_ID;
+    }
+
+    public static String getCloudNotificationAnnouncementGroupId() {
+        return CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID;
+    }
+
+    public static String getImageDownloadNotificationsGroupId() {
+        return IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID;
+    }
+
+    public static String getCloudNotificationChannelId() {
+        return CLOUD_NOTIFICATION_CHANNEL_ID;
+    }
+
     public static String getImageDownloadNotificationsChannelId() {
         return IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_ID;
     }
 
-    public static String getCloudNotificationChannelName() {
-        return CLOUD_NOTIFICATION_CHANNEL_NAME;
-    }
-
-    public static String getCloudNotificationAnnouncementChannelName() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_NAME;
-    }
-
-    public static String getLocalNotificationDailyChannelName() {
-        return LOCAL_NOTIFICATION_DAILY_CHANNEL_NAME;
-    }
-
-    public static String getImageDownloadNotificationsChannelName() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME;
+    public static int getDailyNotificationHomePendingIntentRequestCode() {
+        return DAILY_NOTIFICATION_HOME_PENDING_INTENT_REQUEST_CODE;
     }
 }

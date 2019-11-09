@@ -78,6 +78,7 @@ import io.hustler.wallzy.model.wallzy.response.ResImageSearch;
 import io.hustler.wallzy.model.wallzy.response.ResLoginUser;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.pagerAdapters.MainPagerAdapter;
+import io.hustler.wallzy.utils.BackGroundServiceUtils;
 import io.hustler.wallzy.utils.DimenUtils;
 import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.NotificationUtils;
@@ -170,6 +171,7 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         setStatusBar();
+        enableDailyNotifications();
 
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
@@ -366,10 +368,20 @@ public class HomeActivity extends AppCompatActivity {
             PermissionUtils.requestStoragrPermissions(HomeActivity.this, WallZyConstants.MY_PERMISSION_REQUEST_STORAGE);
         }
 
-        NotificationUtils notificationUtils=new NotificationUtils();
+        NotificationUtils notificationUtils = new NotificationUtils();
         notificationUtils.createAllNotificationGroups(this.getApplicationContext());
         notificationUtils.createAllNotificationChannels(this.getApplicationContext());
 
+    }
+
+    private void enableDailyNotifications() {
+        int isNotifsEnabled = mSharedPrefs.getInt(WallZyConstants.SHARED_PREFS_DAILY_NOTIFS_ENABLED);
+        if (isNotifsEnabled == -1) {
+            mSharedPrefs.putInt(WallZyConstants.SHARED_PREFS_DAILY_NOTIFS_ENABLED, 1);
+            BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
+            dailyNotifications.startMorningAlarm(getApplicationContext());
+            dailyNotifications.startEveningAlarm(getApplicationContext());
+        }
     }
 
     private void revertHeigtandWeight(View tabView) {
@@ -451,32 +463,36 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.app_name: {
-                WorkManager workManager = WorkManager.getInstance(HomeActivity.this);
-                OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(BaseWorker.class).build();
-                Constraints constraints = new Constraints.Builder().setRequiresCharging(false).build();
+                BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
+                dailyNotifications.startMorningAlarm(this.getApplicationContext());
+            }
+            break;
+        }
+    }
 
-                PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BaseWorker.class, 15, TimeUnit.MINUTES, 10, TimeUnit.MINUTES).build();
+    private void startWorker() {
+        WorkManager workManager = WorkManager.getInstance(HomeActivity.this);
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(BaseWorker.class).build();
+        Constraints constraints = new Constraints.Builder().setRequiresCharging(false).build();
+
+        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(BaseWorker.class, 15, TimeUnit.MINUTES, 10, TimeUnit.MINUTES).build();
 //                workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.getId()).observe(HomeActivity.this, workInfo -> {
 //                    if (null != workInfo) {
 //                        WorkInfo.State state = workInfo.getState();
 //                        MessageUtils.showShortToast(HomeActivity.this, state.toString());
 //                    }
 //                });
-                workManager.getWorkInfoByIdLiveData(periodicWorkRequest.getId()).observe(HomeActivity.this, workInfo -> {
-                    if (null != workInfo) {
-                        WorkInfo.State state = workInfo.getState();
-                        MessageUtils.showShortToast(HomeActivity.this, state.toString());
-                        Log.i("WORKER", "ON WORKER EXECUTED " + state.toString());
-                    }
-                });
-                workManager.enqueue(periodicWorkRequest);
-
-                MessageUtils.showShortToast(HomeActivity.this, "Started");
-//                workManager.enqueue(oneTimeWorkRequest);
-
+        workManager.getWorkInfoByIdLiveData(periodicWorkRequest.getId()).observe(HomeActivity.this, workInfo -> {
+            if (null != workInfo) {
+                WorkInfo.State state = workInfo.getState();
+                MessageUtils.showShortToast(HomeActivity.this, state.toString());
+                Log.i("WORKER", "ON WORKER EXECUTED " + state.toString());
             }
-            break;
-        }
+        });
+        workManager.enqueue(periodicWorkRequest);
+
+        MessageUtils.showShortToast(HomeActivity.this, "Started");
+//                workManager.enqueue(oneTimeWorkRequest);
     }
 
     private void handleSearch() {

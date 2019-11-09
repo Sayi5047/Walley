@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.WallZyConstants;
+import io.hustler.wallzy.utils.BackGroundServiceUtils;
 import io.hustler.wallzy.utils.MessageUtils;
 import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
@@ -64,6 +65,17 @@ public class SettingsActivity extends AppCompatActivity {
     int dailyTimegap;
     @BindView(R.id.root)
     RelativeLayout root;
+    @BindView(R.id.space1)
+    View space1;
+    @BindView(R.id.Daily_notification_title)
+    TextView DailyNotificationTitle;
+    @BindView(R.id.Daily_notification_message)
+    TextView DailyNotificationMessage;
+    @BindView(R.id.daily_notification_switch)
+    Switch dailyNotificationSwitch;
+    @BindView(R.id.layout5)
+    RelativeLayout layout5;
+    int isDailyNotifsEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +90,24 @@ public class SettingsActivity extends AppCompatActivity {
         isWifiEnabled = sharedPrefsUtils.getBoolean(WallZyConstants.SHARED_PREFS_DAILE_WALLS_WIFI_ENABLED);
         dailyCat = sharedPrefsUtils.getString(WallZyConstants.SHARED_PREFS_DAILE_WALLS_CAT);
         dailyTimegap = sharedPrefsUtils.getInt(WallZyConstants.SHARED_PREFS_DAILE_WALLS_TIMEGAP);
+        isDailyNotifsEnabled = sharedPrefsUtils.getInt(WallZyConstants.SHARED_PREFS_DAILY_NOTIFS_ENABLED);
         TextUtils.findText_and_applyTypeface(root, SettingsActivity.this);
 
         dailyWallSwitch.setChecked(isEnabled);
 
         if (isEnabled) {
-            changeViewStae(true, 1f);
+            changeAutoWallpaperViewStates(true, 1f);
         } else {
-            changeViewStae(false, 0.3f);
+            changeAutoWallpaperViewStates(false, 0.3f);
         }
 
+        if (isDailyNotifsEnabled == 1) {
+            changeDailyNotifsViewStates(true, 1f);
+        } else {
+            changeDailyNotifsViewStates(true, 0.3f);
+            dailyNotificationSwitch.setChecked(false);
+
+        }
     }
 
     private void setLightStatusbar() {
@@ -121,7 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void changeViewStae(boolean isClickable, float v) {
+    private void changeAutoWallpaperViewStates(boolean isClickable, float v) {
         layout2.setClickable(isClickable);
         layout3.setClickable((isClickable));
         layout4.setClickable((isClickable));
@@ -132,22 +152,44 @@ public class SettingsActivity extends AppCompatActivity {
         layout4.setAlpha(v);
     }
 
-    @OnClick({R.id.daily_wall_switch, R.id.layout2, R.id.layout3, R.id.on_wifi_tv_checkbox})
+    private void changeDailyNotifsViewStates(boolean isClickale, float alpha) {
+        space1.setAlpha(alpha);
+        layout5.setAlpha(alpha);
+        layout5.setClickable(isClickale);
+        dailyNotificationSwitch.setChecked(isClickale);
+
+    }
+
+    @OnClick({R.id.daily_wall_switch, R.id.layout2, R.id.layout3, R.id.on_wifi_tv_checkbox, R.id.daily_notification_switch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.daily_wall_switch:
                 sharedPrefsUtils.putBoolean(WallZyConstants.SHARED_PREFS_DAILE_WALLS_ENABLED, dailyWallSwitch.isChecked());
                 if (dailyWallSwitch.isChecked()) {
-                    changeViewStae(true, 1f);
+                    changeAutoWallpaperViewStates(true, 1f);
                 } else {
-                    changeViewStae(false, 0.3f);
+                    changeAutoWallpaperViewStates(false, 0.3f);
+                }
+                break;
+            case R.id.daily_notification_switch:
+                sharedPrefsUtils.putInt(WallZyConstants.SHARED_PREFS_DAILY_NOTIFS_ENABLED, dailyNotificationSwitch.isChecked() ? 1 : 0);
+                BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
+
+                if (dailyNotificationSwitch.isChecked()) {
+                    changeDailyNotifsViewStates(true, 1f);
+                    dailyNotifications.startMorningAlarm(getApplicationContext());
+                    dailyNotifications.startEveningAlarm(getApplicationContext());
+                } else {
+                    changeDailyNotifsViewStates(false, 0.3f);
+                    dailyNotifications.cancelMorningAlarm(getApplicationContext(), true);
+                    dailyNotifications.cancelMorningAlarm(getApplicationContext(), false);
                 }
                 break;
             case R.id.layout2:
-                MessageUtils.showShortToast(SettingsActivity.this,"Clicked");
+                MessageUtils.showShortToast(SettingsActivity.this, "Clicked");
                 break;
             case R.id.layout3:
-                MessageUtils.showShortToast(SettingsActivity.this,"Clicked");
+                MessageUtils.showShortToast(SettingsActivity.this, "Clicked");
 
                 break;
             case R.id.on_wifi_tv_checkbox:

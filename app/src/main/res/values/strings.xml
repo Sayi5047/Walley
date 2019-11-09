@@ -58,5 +58,7 @@
     <string name="Category">Choose Category</string>
     <string name="only_on_wifi">Show on Wifi</string>
     <string name="shows_only_on_wifi">Chnages Images Only On Wifi</string>
+    <string name="Daily_notifications">Daily Notifications</string>
+    <string name="wallpaper_reminder">Reminds you to change wallpaper daily twice.</string>
 
 </resources>

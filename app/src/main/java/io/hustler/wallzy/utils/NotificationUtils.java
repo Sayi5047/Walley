@@ -4,8 +4,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.provider.Settings;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.activity.HomeActivity;
 import io.hustler.wallzy.constants.NotificationConstants;
 
 public class NotificationUtils {
@@ -104,22 +108,59 @@ public class NotificationUtils {
     /**
      * Method to create Notification on specific Group and Channel
      *
-     * @param groupId        This Param tells us to merge the current channel in the given group
+     * @param groupKey       This Param tells us to merge the current channel in the given group
      * @param context        context to get the system service can be activity
      * @param channelId      Channel unique id as string to identify the specific group to post notifications
      * @param title          Notification Title Message
      * @param message        Notification Message Body
      * @param notificationId Unique Notification identifier for Notifications.
      */
-    public void createNotification(Context context, String title, String message, String channelId, String groupId, int notificationId) {
+    public void createSimpleNotification(Context context, String title, String message, String channelId, String groupKey, int notificationId) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, NotificationConstants.getDailyNotificationHomePendingIntentRequestCode(),
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder notificationBuilder = new Notification.Builder(context)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.mipmap.ic_launcher_round);
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_launcher);
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notificationBuilder.setChannelId(channelId).setGroup(groupId);
+            notificationBuilder.setChannelId(channelId).setGroup(groupKey);
         }
-        getNotificationManager(context).notify(notificationId, notificationBuilder.build());
+        createGroupNotification(context, title, message, channelId, groupKey, notificationId);
+        for (int i = 0; i < 2; i++) {
+            getNotificationManager(context).notify(groupKey, notificationId + i, notificationBuilder.build());
+        }
+
+
+    }
+
+    public void createSingleImageNotification(Context context, String title, String message, String channelId, String groupKey, int notificationId, Bitmap bitmap) {
+        Notification.Builder notificationBuilder = new Notification.Builder(context)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_launcher).setLargeIcon(bitmap).setStyle(new Notification.BigPictureStyle().bigPicture(bitmap));
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationBuilder.setChannelId(channelId).setGroup(groupKey);
+        }
+        createGroupNotification(context, title, message, channelId, groupKey, notificationId);
+        for (int i = 0; i < 2; i++) {
+            getNotificationManager(context).notify(groupKey, notificationId + i, notificationBuilder.build());
+        }
+    }
+
+    private void createGroupNotification(Context context, String title, String message, String channelId, String groupId, int notificationId) {
+        Notification.Builder notificationBuilder = new Notification.Builder(context)
+                .setContentTitle("BUNDLE TITLE")
+                .setContentText("BUNDLE MESSAGE")
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationBuilder.setGroup(groupId).setGroupSummary(true).setChannelId(channelId);
+        }
+        getNotificationManager(context).notify(0, notificationBuilder.build());
     }
 
     private NotificationManager getNotificationManager(Context context) {

@@ -1,11 +1,19 @@
 package io.hustler.wallzy;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import io.hustler.wallzy.constants.NotificationConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
@@ -23,16 +31,37 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.i(TAG, "onMessageReceived: " + remoteMessage.toString());
         NotificationUtils notificationUtils = new NotificationUtils();
-        notificationUtils.createNotification(getApplicationContext(),
-                "Testing Title",
-                "Testing Message",
-                NotificationConstants.getCloudNotificationAnnouncementChannelId(),
-                NotificationConstants.getCloudNotificationGroupId()
-                , new Random(5400).nextInt());
+        Map<String, String> data = remoteMessage.getData();
+
+        LocalNotificationData localNotificationData = new Gson().fromJson(new Gson().toJson(data, new TypeToken<HashMap<String, String>>() {
+        }.getType()), LocalNotificationData.class);
+        try {
+            Bitmap bitmap;
+            bitmap = Glide.with(getApplicationContext()).asBitmap().load(localNotificationData.getImage()).submit().get();
+            if (null == localNotificationData.image || localNotificationData.getImage().length() <= 0) {
+                notificationUtils.createSimpleNotification(getApplicationContext(),
+                        localNotificationData.getTitle(),
+                        localNotificationData.getMessage(),
+                        NotificationConstants.getCloudNotificationAnnouncementChannelId(),
+                        NotificationConstants.getCloudNotificationKey()
+                        , new Random(5400).nextInt());
+            } else {
+                notificationUtils.createSingleImageNotification(getApplicationContext(),
+                        localNotificationData.getTitle(),
+                        localNotificationData.getMessage(),
+                        NotificationConstants.getCloudNotificationAnnouncementChannelId(),
+                        NotificationConstants.getCloudNotificationKey()
+                        , new Random(5400).nextInt(), bitmap);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -65,5 +94,42 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
 
         }
 
+    }
+
+    public static class LocalNotificationData {
+
+        String title, message, launchActivity, image;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getLaunchActivity() {
+            return launchActivity;
+        }
+
+        public void setLaunchActivity(String launchActivity) {
+            this.launchActivity = launchActivity;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
     }
 }
