@@ -85,7 +85,11 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) holder.imageView.getLayoutParams();
         layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
         int heightRatio = (int) (imagesList.get(position).getWidth() * (imagesList.get(position).getHeight() / imagesList.get(position).getWidth()));
-        layoutParams.height = (int) (heightRatio / activity.getResources().getDisplayMetrics().density);
+        int height = (int) (heightRatio / activity.getResources().getDisplayMetrics().density);
+        if (height > 640) {
+            height = 640;
+        }
+        layoutParams.height =height;
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
         holder.imageView.setLayoutParams(layoutParams);
         holder.imageView.requestLayout();
