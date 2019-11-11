@@ -44,8 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.bind(this);
-        wallzyImage.setAnimation(AnimationUtils.loadAnimation(SplashActivity.this,
-                R.anim.slideup));
+
         mAuth = FirebaseAuth.getInstance();
         mSharedPrefs = new SharedPrefsUtils(getApplicationContext());
         initNightMode();
@@ -73,13 +72,19 @@ public class SplashActivity extends AppCompatActivity {
     private void updateUI(GoogleSignInAccount account) {
         if (account == null) {
             /*USER NOT SIGNED IN*/
-            if (new SharedPrefsUtils(SplashActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
-                Toast.makeText(getApplicationContext(), "Logged in as Guest", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-            }else {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (new SharedPrefsUtils(SplashActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
+                        Toast.makeText(getApplicationContext(), "Logged in as Guest", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                    }else {
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
 
-            }
+                    }
+                }
+            },4000);
+
 
         } else {
             /*USER SIGNED IN*/

@@ -89,7 +89,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ImageViewH
         if (height > 640) {
             height = 640;
         }
-        layoutParams.height =height;
+        layoutParams.height = height;
         holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
         holder.imageView.setLayoutParams(layoutParams);
         holder.imageView.requestLayout();

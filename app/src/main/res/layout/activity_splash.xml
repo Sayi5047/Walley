@@ -5,7 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".activity.SplashActivity">
+    tools:context=".activity.SplashActivity"
+    android:layoutAnimation="@anim/layout_anim_climb_up">
 
     <ImageView
         android:id="@+id/bayaditoImage"
@@ -14,7 +15,7 @@
         android:layout_gravity="center"
         android:background="@color/bg"
         android:padding="44dp"
-        android:src="@drawable/ic_wallpaper" />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/appName"

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!--    <color name="colorPrimary">#243447</color>-->
-    <color name="colorPrimary">#141d26</color>
-    <color name="colorPrimaryDark">#141d26</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#c51f5d</color>
     <color name="text_color">#ffffff</color>
-    <color name="bg">#141d26</color>
+    <color name="bg">#212121</color>
     <color name="white">#ffffff</color>
     <color name="bt_color">#24292E</color>
 
@@ -14,6 +14,6 @@
     <color name="tab_selected_color">#24292E</color>
 
     <color name="image_border_color">#40ffffff</color>
-    <color name="blur_bg_color">#90141d26</color>
+    <color name="blur_bg_color">#90212121</color>
 
 </resources>
