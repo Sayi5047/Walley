@@ -110,7 +110,7 @@ public class RestUtilities {
     /**
      * NOTIFICATION APIS
      */
-    private static final String API_PATH = "/private/fcm/v0";
+    private  final String API_PATH = new StringBuilder().append(ROOT_IP).append("/fcm/v0").toString();
     private final String SEND_ADMIN_NOTIFICATIONS = API_PATH + "/sendAdminNotifications";
 
     /**

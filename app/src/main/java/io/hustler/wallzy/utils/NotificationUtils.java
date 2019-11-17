@@ -130,7 +130,13 @@ public class NotificationUtils {
      * @param message        Notification Message Body
      * @param notificationId Unique Notification identifier for Notifications.
      */
-    public void createSimpleNotification(Context context, String title, String message, String channelId, String groupKey, int notificationId) {
+    public void createSimpleNotification(Context context,
+                                         String title,
+                                         String message,
+                                         String channelId,
+                                         String groupKey,
+                                         int notificationId,
+                                         int groupNotificationId) {
         Intent intent = new Intent(context, HomeActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 NotificationConstants.getDailyNotificationHomePendingIntentRequestCode(),
@@ -144,14 +150,15 @@ public class NotificationUtils {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notificationBuilder.setChannelId(channelId).setGroup(groupKey);
         }
-        notificationId++;
-        createGroupNotification(context, title, message, channelId, groupKey, notificationId);
+        createGroupNotification(context, title, message, channelId, groupKey, groupNotificationId);
         getNotificationManager(context).notify(groupKey, notificationId, notificationBuilder.build());
 
 
     }
 
-    public void createSingleImageNotification(Context context, String title, String message, String channelId, String groupKey, int notificationId, Bitmap bitmap) {
+    public void createSingleImageNotification(Context context, String title, String message,
+                                              String channelId, String groupKey,
+                                              int notificationId, Bitmap bitmap) {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
@@ -169,14 +176,13 @@ public class NotificationUtils {
             notificationBuilder.setChannelId(channelId).setGroup(groupKey);
         }
         createGroupNotification(context, title, message, channelId, groupKey, notificationId);
-        notificationId++;
         getNotificationManager(context).notify(groupKey, notificationId, notificationBuilder.build());
 
 
     }
 
     private void createGroupNotification(Context context, String title, String message, String channelId, String groupId,
-                                         int notificationId) {
+                                         int groupNotificationId) {
 
         Notification.Builder notificationBuilder = new Notification.Builder(context)
                 .setContentTitle(title)
@@ -186,7 +192,7 @@ public class NotificationUtils {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notificationBuilder.setGroup(groupId).setGroupSummary(true).setChannelId(channelId);
         }
-        getNotificationManager(context).notify(0, notificationBuilder.build());
+        getNotificationManager(context).notify(groupNotificationId, notificationBuilder.build());
     }
 
     public NotificationManager getNotificationManager(Context context) {

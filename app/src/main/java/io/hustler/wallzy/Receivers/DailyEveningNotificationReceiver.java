@@ -3,6 +3,7 @@ package io.hustler.wallzy.Receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -22,11 +23,14 @@ public class DailyEveningNotificationReceiver extends BroadcastReceiver {
                     "Lets Refresh Your Home Screen With New Wallpapers",
                     NotificationConstants.getAdminDailyNotificationsChannelId(),
                     NotificationConstants.getAdminDailyNotificationsGroupId(),
-                    NotificationConstants.getDailyNotificationEveningId());
-        } else if (Objects.requireNonNull(intent.getAction()).equals("android.intent.action.BOOT_COMPLETED")) {
-            // Set the alarm here.
-            BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
-            dailyNotifications.startEveningAlarm(context);
+                    (int) System.currentTimeMillis(),
+                    NotificationConstants.getAllGroupUniqueIds().get(0));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && null != intent.getAction()) {
+            if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
+                // Set the alarm here.
+                BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
+                dailyNotifications.startEveningAlarm(context);
+            }
         }
 
     }

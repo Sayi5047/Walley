@@ -15,7 +15,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.constants.FcmConstants;
@@ -23,6 +26,7 @@ import io.hustler.wallzy.model.base.BaseResponse;
 import io.hustler.wallzy.model.wallzy.request.ReqSendAdminNotifications;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.utils.TextUtils;
 
 
 public class AdminNotificationFragment extends Fragment {
@@ -91,6 +95,8 @@ public class AdminNotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_notification, container, false);
+        ButterKnife.bind(this, view);
+        TextUtils.findText_and_applyTypeface(root, Objects.requireNonNull(getActivity()));
         return view;
     }
 

@@ -8,6 +8,13 @@ public class NotificationConstants {
     private static final int DAILY_NOTIFICATION_EVENING_ID = 200;
     private static final int DAILY_NOTIFICATION_HOME_PENDING_INTENT_REQUEST_CODE = 100;
 
+    /*GROUP NOTIFICATION IDS*/
+    private static final int TEST_NOTIFICATION_GROUP_UNIQUE_ID = 200;
+    private static final int ADMIN_ANNOUNCEMENTS_NOTIFICATIONS_GROUP_UNIQUE_ID = 201;
+    private static final int ADMIN_UPDATES_NOTIFICATIONS_GROUP_UNIQUE_ID = 202;
+    private static final int ADMIN_DAILY_NOTIFICATIONS_GROUP_UNIQUE_ID = 203;
+    private static final int DOWNLOAD_NOTIFICATIONS_GROUP_UNIQUE_ID = 204;
+
     /**
      * GROUP MOT KEYS
      */
@@ -87,6 +94,16 @@ public class NotificationConstants {
         channelNamesList.add(DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME);
         channelNamesList.add(ADMIN_UPDATES_NOTIFICATIONS_CHANNEL_NAME);
         return channelNamesList;
+    }
+
+    public static ArrayList<Integer> getAllGroupUniqueIds() {
+        ArrayList<Integer> channelUnqiueIdsList = new ArrayList<>();
+        channelUnqiueIdsList.add(TEST_NOTIFICATION_GROUP_UNIQUE_ID);
+        channelUnqiueIdsList.add(ADMIN_ANNOUNCEMENTS_NOTIFICATIONS_GROUP_UNIQUE_ID);
+        channelUnqiueIdsList.add(ADMIN_UPDATES_NOTIFICATIONS_GROUP_UNIQUE_ID);
+        channelUnqiueIdsList.add(ADMIN_DAILY_NOTIFICATIONS_GROUP_UNIQUE_ID);
+        channelUnqiueIdsList.add(DOWNLOAD_NOTIFICATIONS_GROUP_UNIQUE_ID);
+        return channelUnqiueIdsList;
     }
 
 

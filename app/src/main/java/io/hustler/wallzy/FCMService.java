@@ -10,9 +10,9 @@ import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import io.hustler.wallzy.constants.FcmConstants;
@@ -41,51 +41,60 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
         LocalNotificationData localNotificationData = new Gson().fromJson(new Gson().toJson(data, new TypeToken<HashMap<String, String>>() {}.getType()), LocalNotificationData.class);
         try {
             Bitmap bitmap;
-            String groupKey = NotificationConstants.getAdminAnnouncementsNotificationChannelId();
-            String channelid = NotificationConstants.getTestNotificationGroupKey();
+            String groupKey;
+            String channelId;
+            int groupNotificationId;
+            ArrayList<Integer> groupIdsList = NotificationConstants.getAllGroupUniqueIds();
             switch (localNotificationData.getType()) {
                 case FcmConstants.ANNOUNCEMENTS_TOPIC_TYPE: {
                     groupKey = NotificationConstants.getAdminAnnouncementsNotificationsGroupKey();
-                    channelid = NotificationConstants.getAdminAnnouncementsNotificationChannelId();
+                    channelId = NotificationConstants.getAdminAnnouncementsNotificationChannelId();
+                    groupNotificationId = groupIdsList.get(1);
                 }
                 break;
 
                 case FcmConstants.UPDATES_TOPIC_TYPE: {
                     groupKey = NotificationConstants.getAdminUpdatesNotificationsGroupKey();
-                    channelid = NotificationConstants.getAdminUpdatesNotificationChannelId();
+                    channelId = NotificationConstants.getAdminUpdatesNotificationChannelId();
+                    groupNotificationId = groupIdsList.get(2);
 
                 }
                 break;
 
                 case FcmConstants.DAILY_NOTIFICATIONS_TOPIC_TYPE: {
                     groupKey = NotificationConstants.getAdminDailyNotificationsGroupKey();
-                    channelid = NotificationConstants.getAdminDailyNotificationsChannelId();
+                    channelId = NotificationConstants.getAdminDailyNotificationsChannelId();
+                    groupNotificationId = groupIdsList.get(3);
 
                 }
                 break;
 
                 case FcmConstants.TEST_TOPIC_TYPE: {
                     groupKey = NotificationConstants.getTestNotificationGroupKey();
-                    channelid = NotificationConstants.getTestNotificationChannelId();
+                    channelId = NotificationConstants.getTestNotificationChannelId();
+                    groupNotificationId = groupIdsList.get(0);
 
                 }
                 break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + localNotificationData.getType());
             }
             if (null == localNotificationData.Image || localNotificationData.getImage().length() <= 0) {
                 notificationUtils.createSimpleNotification(getApplicationContext(),
                         localNotificationData.getTitle(),
                         localNotificationData.getMessage(),
-                        channelid,
+                        channelId,
                         groupKey,
-                        new Random(5400).nextInt());
+                        (int) System.currentTimeMillis(),
+                        groupNotificationId);
             } else {
                 bitmap = Glide.with(getApplicationContext()).asBitmap().load(localNotificationData.getImage()).submit().get();
                 notificationUtils.createSingleImageNotification(getApplicationContext(),
                         localNotificationData.getTitle(),
                         localNotificationData.getMessage(),
-                        channelid,
+                        channelId,
                         groupKey,
-                        new Random(5400).nextInt(), bitmap);
+                        (int) System.currentTimeMillis(), bitmap);
             }
         } catch (ExecutionException e) {
             e.printStackTrace();

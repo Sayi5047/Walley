@@ -22,7 +22,8 @@ public class DailyMorningNotificationReceivers extends BroadcastReceiver {
                     "Lets Refresh Your Home Screen With New Wallpapers",
                     NotificationConstants.getAdminDailyNotificationsChannelId(),
                     NotificationConstants.getAdminDailyNotificationsGroupId(),
-                    NotificationConstants.getDailyNotificationMorningId());
+                    (int) System.currentTimeMillis(),
+                    NotificationConstants.getAllGroupUniqueIds().get(0));
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && null != intent.getAction()
         ) {
             if (Objects.equals(intent.getAction(), "android.intent.action.BOOT_COMPLETED")) {
