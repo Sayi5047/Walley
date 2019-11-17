@@ -60,5 +60,16 @@
     <string name="shows_only_on_wifi">Chnages Images Only On Wifi</string>
     <string name="Daily_notifications">Daily Notifications</string>
     <string name="wallpaper_reminder">Reminds you to change wallpaper daily twice.</string>
+    <string name="subscribe">Subscribe</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="send">Send</string>
+    <string name="Message">Message</string>
+    <string name="Title">Title</string>
+    <string name="Announcement_notifications">Announcements</string>
+    <string name="Update_notifications">Updates</string>
+    <string name="Wishes_notifications">Wishes</string>
+    <string name="manula_notifications">Manual Notifications</string>
 
 </resources>

@@ -26,5 +26,7 @@
     <dimen name="paddin_12">12dp</dimen>
     <dimen name="text_20">20sp</dimen>
     <dimen name="text_12">12sp</dimen>
+    <dimen name="margin_64">64dp</dimen>
+    <dimen name="margin_72">72dp</dimen>
 
 </resources>

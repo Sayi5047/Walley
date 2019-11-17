@@ -11,94 +11,103 @@ public class NotificationConstants {
     /**
      * GROUP MOT KEYS
      */
-    private static final String CLOUD_NOTIFICATION_KEY = "io.hustler.wallzy.CLOUD_NOTIFICATION_KEY";
-    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_KEY = "io.hustler.wallzy.CLOUD_NOTIFICATION_ANNOUNCEMENT_KEY";
-    private static final String LOCAL_NOTIFICATION_DAILY_GROUP_KEY = "io.hustler.wallzy.LOCAL_NOTIFICATION_KEY";
-    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.DOWNLOAD_NOTIFICATION_KEY";
+    private static final String TEST_NOTIFICATION_GROUP_KEY = "io.hustler.wallzy.TEST_NOTIFICATION_GROUP_KEY";
+    private static final String ADMIN_ANNOUNCEMENTS_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.ADMIN_ANNOUNCEMENTS_NOTIFICATIONS_GROUP_KEY";
+    private static final String ADMIN_UPDATES_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.ADMIN_UPDATES_NOTIFICATIONS_GROUP_KEY";
+    private static final String ADMIN_DAILY_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.ADMIN_DAILY_NOTIFICATIONS_GROUP_KEY";
+    private static final String DOWNLOAD_NOTIFICATIONS_GROUP_KEY = "io.hustler.wallzy.DOWNLOAD_NOTIFICATIONS_GROUP_KEY";
 
     /*GROUP IDS*/
-    private static final String CLOUD_NOTIFICATION_GROUP_ID = "CLOUD_NOTIFICATION_GROUP_ID";
-    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID = "CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID";
-    private static final String LOCAL_NOTIFICATION_DAILY_GROUP_ID = "LOCAL_NOTIFICATION_DAILY_GROUP_ID";
-    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID = "IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID";
+    private static final String TEST_NOTIFICATIONS_GROUP_ID = "TEST_NOTIFICATIONS_GROUP_ID";
+    private static final String ADMIN_NOTIFICATION_ANNOUNCEMENT_GROUP_ID = "ADMIN_NOTIFICATION_ANNOUNCEMENT_GROUP_ID";
+    private static final String ADMIN_UPDATES_NOTIFICATIONS_GROUP_ID = "ADMIN_UPDATES_NOTIFICATIONS_GROUP_ID";
+    private static final String ADMIN_DAILY_NOTIFICATIONS_GROUP_ID = "ADMIN_DAILY_NOTIFICATIONS_GROUP_ID";
+    private static final String DOWNLOAD_NOTIFICATIONS_GROUP_ID = "DOWNLOAD_NOTIFICATIONS_GROUP_ID";
 
     /*GROUP NAMES*/
-    private static final String CLOUD_NOTIFICATION_GROUP_NAME = "Latest Updates Group";
-    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_NAME = "Latest Announcements Group";
-    private static final String LOCAL_NOTIFICATION_DAILY_NAME = "Daily Local Notifications Group";
-    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_NAME = "Image Download Group";
+    private static final String TEST_NOTIFICATIONS_GROUP_NAME = "Latest Updates Group";
+    private static final String ADMIN_ANNOUNCEMENT_NOTIFICATIONS_GROUP_NAME = "Latest Announcements Group";
+    private static final String ADMIN_UPDATES_NOTIFICATIONS_GROUP_NAME = "Latest Updates Group";
+    private static final String ADMIN_DAILY_NOTIFICATIONS_GROUP_NAME = "Daily Local Notifications Group";
+    private static final String DOWNLOAD_NOTIFICATIONS_GROUP_NAME = "Image Download Group";
 
 
     /*CHANNEL IDS*/
-    private static final String CLOUD_NOTIFICATION_CHANNEL_ID = "CLOUD_NOTIFICATION_CHANNEL_ID";
-    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_ID = "CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_ID";
-    private static final String LOCAL_NOTIFICATION_DAILY_CHANNEL_ID = "LOCAL_NOTIFICATION_DAILY_CHANNEL_ID";
-    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_ID = "IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_ID";
+    private static final String TEST_NOTIFICATION_CHANNEL_ID = "TEST_NOTIFICATION_CHANNEL_ID";
+    private static final String ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_ID = "ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_ID";
+    private static final String ADMIN_UPDATES_NOTIFICATION_CHANNEL_ID = "ADMIN_UPDATES_NOTIFICATION_CHANNEL_ID";
+    private static final String ADMIN_DAILY_NOTIFICATIONS_CHANNEL_ID = "ADMIN_DAILY_NOTIFICATIONS_CHANNEL_ID";
+    private static final String DOWNLOAD_NOTIFICATIONS_CHANNEL_ID = "DOWNLOAD_NOTIFICATIONS_CHANNEL_ID";
 
     /*CHANNEL NAMES*/
 
-    private static final String CLOUD_NOTIFICATION_CHANNEL_NAME = "Latest Updates Channel";
-    private static final String CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_NAME = "Latest Announcements Channel";
-    private static final String LOCAL_NOTIFICATION_DAILY_CHANNEL_NAME = "Daily Local Notifications Channel";
-    private static final String IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME = "Image Download Channel";
+    private static final String TEST_NOTIFICATIONS_CHANNEL_NAME = "Test Notifications Channel";
+    private static final String ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_NAME = "Latest Announcements Channel";
+    private static final String ADMIN_UPDATES_NOTIFICATIONS_CHANNEL_NAME = "Latest Updates Channel";
+    private static final String ADMIN_DAILY_NOTIFICATIONS_CHANNEL_NAME = "Daily Local Notifications Channel";
+    private static final String DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME = "Image Download Channel";
 
 
     public static ArrayList<String> getAllGroupId() {
         ArrayList<String> groupIdList = new ArrayList<>();
-        groupIdList.add(CLOUD_NOTIFICATION_GROUP_ID);
-        groupIdList.add(CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID);
-        groupIdList.add(LOCAL_NOTIFICATION_DAILY_GROUP_ID);
-        groupIdList.add(IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID);
+        groupIdList.add(TEST_NOTIFICATIONS_GROUP_ID);
+        groupIdList.add(ADMIN_NOTIFICATION_ANNOUNCEMENT_GROUP_ID);
+        groupIdList.add(ADMIN_DAILY_NOTIFICATIONS_GROUP_ID);
+        groupIdList.add(DOWNLOAD_NOTIFICATIONS_GROUP_ID);
+        groupIdList.add(ADMIN_UPDATES_NOTIFICATIONS_GROUP_ID);
         return groupIdList;
     }
 
     public static ArrayList<String> getAllGroupNames() {
 
         ArrayList<String> groupNames = new ArrayList<>();
-        groupNames.add(CLOUD_NOTIFICATION_GROUP_NAME);
-        groupNames.add(CLOUD_NOTIFICATION_ANNOUNCEMENT_NAME);
-        groupNames.add(LOCAL_NOTIFICATION_DAILY_NAME);
-        groupNames.add(IMAGE_DOWNLOAD_NOTIFICATIONS_NAME);
+        groupNames.add(TEST_NOTIFICATIONS_GROUP_NAME);
+        groupNames.add(ADMIN_ANNOUNCEMENT_NOTIFICATIONS_GROUP_NAME);
+        groupNames.add(ADMIN_DAILY_NOTIFICATIONS_GROUP_NAME);
+        groupNames.add(DOWNLOAD_NOTIFICATIONS_GROUP_NAME);
+        groupNames.add(ADMIN_UPDATES_NOTIFICATIONS_GROUP_NAME);
         return groupNames;
     }
 
     public static ArrayList<String> getAllChannelIds() {
         ArrayList<String> channelIdList = new ArrayList<>();
-        channelIdList.add(CLOUD_NOTIFICATION_CHANNEL_ID);
-        channelIdList.add(CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_ID);
-        channelIdList.add(LOCAL_NOTIFICATION_DAILY_CHANNEL_ID);
-        channelIdList.add(IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_ID);
+        channelIdList.add(TEST_NOTIFICATION_CHANNEL_ID);
+        channelIdList.add(ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_ID);
+        channelIdList.add(ADMIN_DAILY_NOTIFICATIONS_CHANNEL_ID);
+        channelIdList.add(DOWNLOAD_NOTIFICATIONS_CHANNEL_ID);
+        channelIdList.add(ADMIN_UPDATES_NOTIFICATION_CHANNEL_ID);
         return channelIdList;
     }
 
     public static ArrayList<String> getAllChannelNames() {
         ArrayList<String> channelNamesList = new ArrayList<>();
-        channelNamesList.add(CLOUD_NOTIFICATION_CHANNEL_NAME);
-        channelNamesList.add(CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_NAME);
-        channelNamesList.add(LOCAL_NOTIFICATION_DAILY_CHANNEL_NAME);
-        channelNamesList.add(IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME);
+        channelNamesList.add(TEST_NOTIFICATIONS_CHANNEL_NAME);
+        channelNamesList.add(ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_NAME);
+        channelNamesList.add(ADMIN_DAILY_NOTIFICATIONS_CHANNEL_NAME);
+        channelNamesList.add(DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME);
+        channelNamesList.add(ADMIN_UPDATES_NOTIFICATIONS_CHANNEL_NAME);
         return channelNamesList;
     }
 
 
     /*GETTERS AND SETTERS*/
 
-    public static String getCloudNotificationKey() {
-        return CLOUD_NOTIFICATION_KEY;
+    public static String getTestNotificationGroupKey() {
+        return TEST_NOTIFICATION_GROUP_KEY;
     }
 
 
-    public static String getLocalNotificationDailyGroupId() {
-        return LOCAL_NOTIFICATION_DAILY_GROUP_ID;
+    public static String getAdminDailyNotificationsGroupId() {
+        return ADMIN_DAILY_NOTIFICATIONS_GROUP_ID;
     }
 
 
-    public static String getCloudNotificationAnnouncementChannelId() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_CHANNEL_ID;
+    public static String getAdminAnnouncementsNotificationChannelId() {
+        return ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_ID;
     }
 
-    public static String getLocalNotificationDailyChannelId() {
-        return LOCAL_NOTIFICATION_DAILY_CHANNEL_ID;
+    public static String getAdminDailyNotificationsChannelId() {
+        return ADMIN_DAILY_NOTIFICATIONS_CHANNEL_ID;
     }
 
     public static int getDailyNotificationMorningId() {
@@ -109,39 +118,91 @@ public class NotificationConstants {
         return DAILY_NOTIFICATION_EVENING_ID;
     }
 
-    public static String getCloudNotificationAnnouncementGroupKey() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_KEY;
+    public static String getAdminAnnouncementsNotificationsGroupKey() {
+        return ADMIN_ANNOUNCEMENTS_NOTIFICATIONS_GROUP_KEY;
     }
 
-    public static String getLocalNotificationDailyGroupKey() {
-        return LOCAL_NOTIFICATION_DAILY_GROUP_KEY;
+    public static String getAdminDailyNotificationsGroupKey() {
+        return ADMIN_DAILY_NOTIFICATIONS_GROUP_KEY;
     }
 
-    public static String getImageDownloadNotificationsGroupKey() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_KEY;
+    public static String getDownloadNotificationsGroupKey() {
+        return DOWNLOAD_NOTIFICATIONS_GROUP_KEY;
     }
 
-    public static String getCloudNotificationGroupId() {
-        return CLOUD_NOTIFICATION_GROUP_ID;
+    public static String getTestNotificationsGroupId() {
+        return TEST_NOTIFICATIONS_GROUP_ID;
     }
 
-    public static String getCloudNotificationAnnouncementGroupId() {
-        return CLOUD_NOTIFICATION_ANNOUNCEMENT_GROUP_ID;
+    public static String getAdminNotificationAnnouncementGroupId() {
+        return ADMIN_NOTIFICATION_ANNOUNCEMENT_GROUP_ID;
     }
 
-    public static String getImageDownloadNotificationsGroupId() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_GROUP_ID;
+    public static String getDownloadNotificationsGroupId() {
+        return DOWNLOAD_NOTIFICATIONS_GROUP_ID;
     }
 
-    public static String getCloudNotificationChannelId() {
-        return CLOUD_NOTIFICATION_CHANNEL_ID;
+    public static String getTestNotificationChannelId() {
+        return TEST_NOTIFICATION_CHANNEL_ID;
     }
 
-    public static String getImageDownloadNotificationsChannelId() {
-        return IMAGE_DOWNLOAD_NOTIFICATIONS_CHANNEL_ID;
+    public static String getDownloadNotificationsChannelId() {
+        return DOWNLOAD_NOTIFICATIONS_CHANNEL_ID;
     }
 
     public static int getDailyNotificationHomePendingIntentRequestCode() {
         return DAILY_NOTIFICATION_HOME_PENDING_INTENT_REQUEST_CODE;
+    }
+
+    public static String getAdminUpdatesNotificationsGroupKey() {
+        return ADMIN_UPDATES_NOTIFICATIONS_GROUP_KEY;
+    }
+
+    public static String getAdminUpdatesNotificationsGroupId() {
+        return ADMIN_UPDATES_NOTIFICATIONS_GROUP_ID;
+    }
+
+    public static String getTestNotificationsGroupName() {
+        return TEST_NOTIFICATIONS_GROUP_NAME;
+    }
+
+    public static String getAdminAnnouncementNotificationsGroupName() {
+        return ADMIN_ANNOUNCEMENT_NOTIFICATIONS_GROUP_NAME;
+    }
+
+    public static String getAdminUpdatesNotificationsGroupName() {
+        return ADMIN_UPDATES_NOTIFICATIONS_GROUP_NAME;
+    }
+
+    public static String getAdminDailyNotificationsGroupName() {
+        return ADMIN_DAILY_NOTIFICATIONS_GROUP_NAME;
+    }
+
+    public static String getDownloadNotificationsGroupName() {
+        return DOWNLOAD_NOTIFICATIONS_GROUP_NAME;
+    }
+
+    public static String getAdminUpdatesNotificationChannelId() {
+        return ADMIN_UPDATES_NOTIFICATION_CHANNEL_ID;
+    }
+
+    public static String getTestNotificationsChannelName() {
+        return TEST_NOTIFICATIONS_CHANNEL_NAME;
+    }
+
+    public static String getAdminAnnouncementsNotificationChannelName() {
+        return ADMIN_ANNOUNCEMENTS_NOTIFICATION_CHANNEL_NAME;
+    }
+
+    public static String getAdminUpdatesNotificationsChannelName() {
+        return ADMIN_UPDATES_NOTIFICATIONS_CHANNEL_NAME;
+    }
+
+    public static String getAdminDailyNotificationsChannelName() {
+        return ADMIN_DAILY_NOTIFICATIONS_CHANNEL_NAME;
+    }
+
+    public static String getDownloadNotificationsChannelName() {
+        return DOWNLOAD_NOTIFICATIONS_CHANNEL_NAME;
     }
 }

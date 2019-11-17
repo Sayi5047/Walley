@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: in.shadowfax:proswipebutton:1.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/abfa6ce7101cefe7cb30e4a8c16d7e8c/jetified-proswipebutton-1.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/abfa6ce7101cefe7cb30e4a8c16d7e8c/jetified-proswipebutton-1.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/in.shadowfax/proswipebutton/1.1/a8073fce7886d048e721e64e496fd6e89d9ed17f/proswipebutton-1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/in.shadowfax/proswipebutton/1.1/571d253fa5077087ee27585d3f7e132c1701da90/proswipebutton-1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

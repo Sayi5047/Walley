@@ -34,8 +34,8 @@ public class BackGroundServiceUtils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NotificationConstants.getDailyNotificationHomePendingIntentRequestCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 7);
-            calendar.set(Calendar.MINUTE, 5);
+            calendar.set(Calendar.HOUR_OF_DAY, 07);
+            calendar.set(Calendar.MINUTE, 00);
             Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             Log.i(TAG, "startMorningAlarm: Morning Alarm Started");
         }
@@ -46,7 +46,7 @@ public class BackGroundServiceUtils {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NotificationConstants.getDailyNotificationHomePendingIntentRequestCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 19);
-            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.MINUTE, 00);
             Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             Log.i(TAG, "startMorningAlarm: Evening Alarm Started");
 

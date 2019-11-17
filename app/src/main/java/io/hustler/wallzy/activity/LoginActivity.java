@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.hustler.wallzy.R;
 import io.hustler.wallzy.adapters.OnBoardAdapter;
+import io.hustler.wallzy.constants.FcmConstants;
 import io.hustler.wallzy.constants.ServerConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
@@ -210,17 +210,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         } else {
             /*USER SIGNED IN*/
-            FirebaseMessaging.getInstance().subscribeToTopic(WallZyConstants.DEFAULT_TOPIC_FOR_ALL_USERS).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.i(TAG, "onComplete: User SuccessFully Subscribed to " + WallZyConstants.DEFAULT_TOPIC_FOR_ALL_USERS);
-                    }
+            OnCompleteListener<Void> onCompleteListener = task -> {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "onComplete: User SuccessFully Subscribed ");
                 }
-            });
+            };
+            FirebaseMessaging.getInstance().subscribeToTopic(FcmConstants.TEST_TOPIC).addOnCompleteListener(onCompleteListener);
+            FirebaseMessaging.getInstance().subscribeToTopic(FcmConstants.ANNOUNCEMENTS_TOPIC).addOnCompleteListener(onCompleteListener);
+            FirebaseMessaging.getInstance().subscribeToTopic(FcmConstants.UPDATES_TOPIC).addOnCompleteListener(onCompleteListener);
+            FirebaseMessaging.getInstance().subscribeToTopic(FcmConstants.DAILY_NOTIFICATIONS_TOPIC).addOnCompleteListener(onCompleteListener);
             Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Successfully Signed In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
         }
     }
 

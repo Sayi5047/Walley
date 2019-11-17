@@ -39,6 +39,7 @@ import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailSignup;
 import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
+import io.hustler.wallzy.model.wallzy.request.ReqSendAdminNotifications;
 import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
 import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
@@ -106,6 +107,11 @@ public class RestUtilities {
     private final String PUBLIC_API_KEY = "C7OjVdkwf9vZKg4FktMTWuF+WRo=";
     private final String IMAGEKIT_UPLOAD_IMAGE = "https://api.imagekit.io/v1/files/upload";
 
+    /**
+     * NOTIFICATION APIS
+     */
+    private static final String API_PATH = "/private/fcm/v0";
+    private final String SEND_ADMIN_NOTIFICATIONS = API_PATH + "/sendAdminNotifications";
 
     /**
      * CALLBACK INTERFACE
@@ -287,6 +293,15 @@ public class RestUtilities {
     public void getImageMetaData(Context context, OnSuccessListener onSuccessListener, long id) {
 
         getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_IMAGE_BY_ID + "/" + id);
+    }
+
+    /* NOTIFICATION APIS*/
+
+    public void sendAdminNotifications(Context context, ReqSendAdminNotifications reqSendAdminNotifications, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context,
+                onSuccessListener,
+                getJSONObject(reqSendAdminNotifications),
+                SEND_ADMIN_NOTIFICATIONS);
     }
 
     /**

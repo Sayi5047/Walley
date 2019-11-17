@@ -151,6 +151,7 @@ public class HomeActivity extends AppCompatActivity {
     private int bottomViewHeight, searchViewHeight = 0;
 
     private boolean isMenuShowing, isSearchShowing = false;
+    NotificationUtils notificationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +173,8 @@ public class HomeActivity extends AppCompatActivity {
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         setStatusBar();
         enableDailyNotifications();
+        notificationUtils = NotificationUtils.getInstance();
+        notificationUtils.clearAll(this.getApplicationContext());
 
         mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mainPagerAdapter);
@@ -368,9 +371,18 @@ public class HomeActivity extends AppCompatActivity {
             PermissionUtils.requestStoragrPermissions(HomeActivity.this, WallZyConstants.MY_PERMISSION_REQUEST_STORAGE);
         }
 
-        NotificationUtils notificationUtils = new NotificationUtils();
-        notificationUtils.createAllNotificationGroups(this.getApplicationContext());
-        notificationUtils.createAllNotificationChannels(this.getApplicationContext());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationUtils.getNotificationManager(this.getApplicationContext()).getNotificationChannels().size() < 5) {
+                notificationUtils.createAllNotificationGroups(this.getApplicationContext());
+                notificationUtils.createAllNotificationChannels(this.getApplicationContext());
+                Log.i(TAG, "onCreate: ALL CHANNELS ARE CREATED");
+
+            } else {
+                Log.i(TAG, "onCreate: ALL CHANNELS ARE AVAILABLE");
+            }
+
+        }
+
 
     }
 

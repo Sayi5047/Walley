@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
@@ -23,8 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -49,11 +52,17 @@ public class ImagesActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.cdl)
-    CoordinatorLayout cdl;
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.images_rv)
     RecyclerView imagesRv;
     @BindView(R.id.bg_blur_image)
     ImageView bgBlurImage;
+
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+
+    @BindView((R.id.subscribeButton))
+    Button subScribeButton;
 
     private final int PAGE_START = 0;
     boolean isLoading = false;
@@ -99,7 +108,18 @@ public class ImagesActivity extends AppCompatActivity {
         catImage = getIntent().getStringExtra(WallZyConstants.INTENT_CAT_IMAGE);
         catId = getIntent().getLongExtra(WallZyConstants.INTENT_CAT_ID, 0l);
         isCat = getIntent().getBooleanExtra(WallZyConstants.INTENT_IS_CAT, false);
+        appBarLayout.addOnOffsetChangedListener((AppBarLayout appBarLayout1, int verticalOffset) -> {
 
+            if (Math.abs(verticalOffset) - appBarLayout.getTotalScrollRange() != 0) {
+                float alpha_Value = Float.parseFloat(new DecimalFormat("#.##").format(Math.abs((float) verticalOffset) / (float) appBarLayout.getTotalScrollRange()));
+                Log.i(TAG, "onCreate: ALPHA" + alpha_Value);
+                subScribeButton.setAlpha(1-alpha_Value);
+
+            } else {
+                subScribeButton.setAlpha(1.0f);
+
+            }
+        });
         gridPaginationScrollListener = new StaggeredGridPaginationScrollListener(gridLayoutManager) {
             @Override
             protected void loadMoreItems() {
@@ -127,7 +147,6 @@ public class ImagesActivity extends AppCompatActivity {
         };
         imagesRv.addOnScrollListener(gridPaginationScrollListener);
         loadDataForFirstTime();
-
 
         AppExecutor appExecutor = AppExecutor.getInstance();
         appExecutor.getDiskExecutor().execute(() -> {
@@ -237,8 +256,8 @@ public class ImagesActivity extends AppCompatActivity {
                         imagesAdapter = new ImagesAdapter(ImagesActivity.this, responseImageClass -> {
                             Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
                             intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                            intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
-                            intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH,false);
+                            intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, new Gson().toJson(responseImageClass));
+                            intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, false);
                             startActivity(intent);
                         }, resGetCategoryImages.getImages());
                         imagesRv.setAdapter(imagesAdapter);
@@ -278,7 +297,7 @@ public class ImagesActivity extends AppCompatActivity {
                                 // TODO: 06-09-2019 SHOW IMAGE
                                 Intent intent = new Intent(ImagesActivity.this, SingleImageActivity.class);
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
-                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS,new Gson().toJson(responseImageClass));
+                                intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, new Gson().toJson(responseImageClass));
 
                                 startActivity(intent);
                             }

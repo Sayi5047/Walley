@@ -17,11 +17,11 @@ public class DailyEveningNotificationReceiver extends BroadcastReceiver {
 
         if (null == intent) {
             Toast.makeText(context, "Evening Alarm Triggered", Toast.LENGTH_SHORT).show();
-            NotificationUtils notificationUtils = new NotificationUtils();
+            NotificationUtils notificationUtils = NotificationUtils.getInstance();
             notificationUtils.createSimpleNotification(context, "Good Evening",
                     "Lets Refresh Your Home Screen With New Wallpapers",
-                    NotificationConstants.getLocalNotificationDailyChannelId(),
-                    NotificationConstants.getLocalNotificationDailyGroupId(),
+                    NotificationConstants.getAdminDailyNotificationsChannelId(),
+                    NotificationConstants.getAdminDailyNotificationsGroupId(),
                     NotificationConstants.getDailyNotificationEveningId());
         } else if (Objects.requireNonNull(intent.getAction()).equals("android.intent.action.BOOT_COMPLETED")) {
             // Set the alarm here.

@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import io.hustler.wallzy.fragments.AdminCatCollFragment;
 import io.hustler.wallzy.fragments.AdminImageUploadFragment;
+import io.hustler.wallzy.fragments.AdminNotificationFragment;
 
 public class AdminPagerAdapter extends FragmentPagerAdapter {
     public AdminPagerAdapter(@NonNull FragmentManager fm) {
@@ -21,23 +22,21 @@ public class AdminPagerAdapter extends FragmentPagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return AdminCatCollFragment.newInstance();
-        }
-        return AdminImageUploadFragment.newInstance();
+        if (position == 0) return AdminCatCollFragment.newInstance();
+        else if (position == 2) return AdminNotificationFragment.newInstance();
+        else return AdminImageUploadFragment.newInstance();
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return "Category";
-        }
-        return "Images";
+        if (position == 0) return "Category";
+        else if (position == 2) return "Notifications";
+        else return "Images";
     }
 }

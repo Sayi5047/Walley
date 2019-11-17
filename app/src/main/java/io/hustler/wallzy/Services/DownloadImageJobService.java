@@ -1,9 +1,9 @@
 package io.hustler.wallzy.Services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import io.hustler.wallzy.Executors.AppExecutor;
 import io.hustler.wallzy.R;
+import io.hustler.wallzy.constants.NotificationConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.utils.FileUtils;
 
@@ -100,23 +101,22 @@ public class DownloadImageJobService extends JobService {
                     mNotificationManager = (NotificationManager) downloadImageJobService.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     if (Build.VERSION.SDK_INT >= O) {
-                        CharSequence name = "Image Downloader";
-                        String description = downloadImageJobService.getString(R.string.notication_channel_desc);
-                        int importance = NotificationManager.IMPORTANCE_HIGH;
-                        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-                        channel.setDescription(description);
-                        channel.setSound(null, null);
-                        assert mNotificationManager != null;
-                        mNotificationManager.createNotificationChannel(channel);
-                        mNotification_Builder = new NotificationCompat.Builder(downloadImageJobService, CHANNEL_ID);
-
-
+//                        CharSequence name = "Image Downloader";
+//                        String description = downloadImageJobService.getString(R.string.notication_channel_desc);
+//                        int importance = NotificationManager.IMPORTANCE_HIGH;
+//                        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+//                        channel.setDescription(description);
+//                        channel.setSound(null, null);
+//                        assert mNotificationManager != null;
+//                        mNotificationManager.createNotificationChannel(channel);
+                        mNotification_Builder = new NotificationCompat.Builder(downloadImageJobService)
+                                .setChannelId(NotificationConstants.getDownloadNotificationsChannelId())
+                                .setGroup(NotificationConstants.getDownloadNotificationsGroupKey());
                     } else {
                         mNotification_Builder = new NotificationCompat.Builder(downloadImageJobService);
-
-
                     }
-                    mNotification_Builder.setContentTitle("Downloading images...")
+                    mNotification_Builder
+                            .setContentTitle("Downloading images...")
                             .setContentText("Download in progress")
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setLargeIcon(BitmapFactory.decodeResource(downloadImageJobService.getResources(), R.drawable.ic_launcher))
@@ -167,7 +167,8 @@ public class DownloadImageJobService extends JobService {
                                     .setProgress(100, values[0], false);
                             mNotification_Builder.setSound(null);
                             // Removes the progress bar
-                            notification = mNotification_Builder.build();
+                            notification = mNotification_Builder.setGroup(NotificationConstants.getDownloadNotificationsGroupKey())
+                                    .setChannelId(NotificationConstants.getDownloadNotificationsChannelId()).build();
                             mNotificationManager.notify(NOTIFY_ID, notification);
 
                         }
@@ -183,10 +184,14 @@ public class DownloadImageJobService extends JobService {
                         if (is_to_set_wallpaper) {
                             try {
                                 FileUtils.setwallpaper(downloadImageJobService, downloading_File.getPath());
-//                                Intent intent = new Intent(WallpaperManager.getInstance(downloadImageJobService).
-//                                        getCropAndSetWallpaperIntent(FileProvider.getUriForFile(downloadImageJobService, "io.hustler.qtzy.fileprovider", (downloading_File))));
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                downloadImageJobService.startActivity(intent);
+                                Intent intent = null;
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                                    intent = new Intent(WallpaperManager.getInstance(downloadImageJobService).
+                                            getCropAndSetWallpaperIntent(FileProvider.getUriForFile(downloadImageJobService,
+                                                    "io.hustler.wallzy.fileprovider", (downloading_File))));
+                                }
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                downloadImageJobService.startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
 
@@ -203,7 +208,9 @@ public class DownloadImageJobService extends JobService {
                             mNotification_Builder.setSound(null);
                             mNotification_Builder.setOngoing(false);
                             mNotification_Builder.setAutoCancel(true);
-                            notification = mNotification_Builder.build();
+                            notification = mNotification_Builder
+                                    .setGroup(NotificationConstants.getDownloadNotificationsGroupKey())
+                                    .setChannelId(NotificationConstants.getDownloadNotificationsChannelId()).build();
                             mNotificationManager.notify(NOTIFY_ID, notification);
                         }
                         downloadImageJobService.jobFinished(jobParameters, false);

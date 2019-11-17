@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+import io.hustler.wallzy.constants.FcmConstants;
 import io.hustler.wallzy.constants.NotificationConstants;
 import io.hustler.wallzy.constants.WallZyConstants;
 import io.hustler.wallzy.model.base.BaseResponse;
@@ -34,28 +35,57 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.i(TAG, "onMessageReceived: " + remoteMessage.toString());
-        NotificationUtils notificationUtils = new NotificationUtils();
+        NotificationUtils notificationUtils = NotificationUtils.getInstance();
         Map<String, String> data = remoteMessage.getData();
 
-        LocalNotificationData localNotificationData = new Gson().fromJson(new Gson().toJson(data, new TypeToken<HashMap<String, String>>() {
-        }.getType()), LocalNotificationData.class);
+        LocalNotificationData localNotificationData = new Gson().fromJson(new Gson().toJson(data, new TypeToken<HashMap<String, String>>() {}.getType()), LocalNotificationData.class);
         try {
             Bitmap bitmap;
-            bitmap = Glide.with(getApplicationContext()).asBitmap().load(localNotificationData.getImage()).submit().get();
-            if (null == localNotificationData.image || localNotificationData.getImage().length() <= 0) {
+            String groupKey = NotificationConstants.getAdminAnnouncementsNotificationChannelId();
+            String channelid = NotificationConstants.getTestNotificationGroupKey();
+            switch (localNotificationData.getType()) {
+                case FcmConstants.ANNOUNCEMENTS_TOPIC_TYPE: {
+                    groupKey = NotificationConstants.getAdminAnnouncementsNotificationsGroupKey();
+                    channelid = NotificationConstants.getAdminAnnouncementsNotificationChannelId();
+                }
+                break;
+
+                case FcmConstants.UPDATES_TOPIC_TYPE: {
+                    groupKey = NotificationConstants.getAdminUpdatesNotificationsGroupKey();
+                    channelid = NotificationConstants.getAdminUpdatesNotificationChannelId();
+
+                }
+                break;
+
+                case FcmConstants.DAILY_NOTIFICATIONS_TOPIC_TYPE: {
+                    groupKey = NotificationConstants.getAdminDailyNotificationsGroupKey();
+                    channelid = NotificationConstants.getAdminDailyNotificationsChannelId();
+
+                }
+                break;
+
+                case FcmConstants.TEST_TOPIC_TYPE: {
+                    groupKey = NotificationConstants.getTestNotificationGroupKey();
+                    channelid = NotificationConstants.getTestNotificationChannelId();
+
+                }
+                break;
+            }
+            if (null == localNotificationData.Image || localNotificationData.getImage().length() <= 0) {
                 notificationUtils.createSimpleNotification(getApplicationContext(),
                         localNotificationData.getTitle(),
                         localNotificationData.getMessage(),
-                        NotificationConstants.getCloudNotificationAnnouncementChannelId(),
-                        NotificationConstants.getCloudNotificationKey()
-                        , new Random(5400).nextInt());
+                        channelid,
+                        groupKey,
+                        new Random(5400).nextInt());
             } else {
+                bitmap = Glide.with(getApplicationContext()).asBitmap().load(localNotificationData.getImage()).submit().get();
                 notificationUtils.createSingleImageNotification(getApplicationContext(),
                         localNotificationData.getTitle(),
                         localNotificationData.getMessage(),
-                        NotificationConstants.getCloudNotificationAnnouncementChannelId(),
-                        NotificationConstants.getCloudNotificationKey()
-                        , new Random(5400).nextInt(), bitmap);
+                        channelid,
+                        groupKey,
+                        new Random(5400).nextInt(), bitmap);
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -98,22 +128,30 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
 
     public static class LocalNotificationData {
 
-        String title, message, launchActivity, image;
+        String Title, Message, launchActivity, Image, Type;
+
+        public String getType() {
+            return Type;
+        }
+
+        public void setType(String type) {
+            Type = type;
+        }
 
         public String getTitle() {
-            return title;
+            return Title;
         }
 
         public void setTitle(String title) {
-            this.title = title;
+            this.Title = title;
         }
 
         public String getMessage() {
-            return message;
+            return Message;
         }
 
         public void setMessage(String message) {
-            this.message = message;
+            this.Message = message;
         }
 
         public String getLaunchActivity() {
@@ -125,11 +163,11 @@ public class FCMService extends com.google.firebase.messaging.FirebaseMessagingS
         }
 
         public String getImage() {
-            return image;
+            return Image;
         }
 
         public void setImage(String image) {
-            this.image = image;
+            this.Image = image;
         }
     }
 }

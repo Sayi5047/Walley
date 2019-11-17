@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.AdminNotificationFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/manula_notifications"
+            android:textAlignment="center"
+            android:padding="@dimen/padding_16"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_24"
+            android:textColor="@color/text_color" />
+
+        <RelativeLayout
+            android:id="@+id/daily_notifs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_4"
+            android:layout_margin="@dimen/margin_4">
+
+            <TextView
+                android:id="@+id/daily_notif_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Daily_notifications"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_4"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/daily_notifs_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Title"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/daily_notif_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <EditText
+                android:id="@+id/daily_notifs_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Message"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/daily_notifs_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <Button
+                android:id="@+id/send_daily_notifs"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:layout_height="@dimen/margin_32"
+                android:layout_below="@id/daily_notifs_message"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rounded_rect_poitive"
+                android:layout_alignParentRight="true"
+                android:text="@string/send" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/Announcement_notifs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_4"
+            android:layout_margin="@dimen/margin_4">
+
+            <TextView
+                android:id="@+id/Announcement_notif_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Announcement_notifications"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_4"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/Announcement_notifs_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Title"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Announcement_notif_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <EditText
+                android:id="@+id/Announcement_notifs_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Message"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Announcement_notifs_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <Button
+                android:id="@+id/send_Announcement_notifs"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:layout_height="@dimen/margin_32"
+                android:layout_below="@id/Announcement_notifs_message"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rounded_rect_poitive"
+                android:layout_alignParentRight="true"
+                android:text="@string/send" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/Update_notifs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_4"
+            android:layout_margin="@dimen/margin_4">
+
+            <TextView
+                android:id="@+id/Update_notif_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Update_notifications"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_4"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/Update_notifs_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Title"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Update_notif_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <EditText
+                android:id="@+id/Update_notifs_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Message"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Update_notifs_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <Button
+                android:id="@+id/send_Update_notifs"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:layout_height="@dimen/margin_32"
+                android:layout_below="@id/Update_notifs_message"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rounded_rect_poitive"
+                android:layout_alignParentRight="true"
+                android:text="@string/send" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/Wishes_notifs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/padding_4"
+            android:layout_margin="@dimen/margin_4">
+
+            <TextView
+                android:id="@+id/Wishes_notif_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/Wishes_notifications"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_4"
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/Wishes_notifs_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Title"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Wishes_notif_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <EditText
+                android:id="@+id/Wishes_notifs_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Message"
+                android:padding="@dimen/padding_8"
+                android:textColor="@android:color/black"
+                android:layout_margin="@dimen/margin_4"
+                android:layout_below="@id/Wishes_notifs_head"
+                android:background="@drawable/rounded_rect_white" />
+
+            <Button
+                android:id="@+id/send_Wishes_notifs"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:layout_height="@dimen/margin_32"
+                android:layout_below="@id/Wishes_notifs_message"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rounded_rect_poitive"
+                android:layout_alignParentRight="true"
+                android:text="@string/send" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</ScrollView>
