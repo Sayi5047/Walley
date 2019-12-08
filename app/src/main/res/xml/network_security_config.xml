@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <!--&lt;!&ndash;STARPAY QA&ndash;&gt;-->
-        <!--<domain includeSubdomains="true">13.228.88.56</domain>-->
-        <!--&lt;!&ndash;STARPAY GREEN CHANNEL&ndash;&gt;-->
-        <!--<domain includeSubdomains="true">3.1.104.251</domain>-->
-        <!--&lt;!&ndash;STARPAY UAT&ndash;&gt;-->
+
         <domain includeSubdomains="true">172.105.56.124</domain>
+        <domain includeSubdomains="true">192.168.0.177</domain>
 
     </domain-config>
 
     <!--<base-config cleartextTrafficPermitted="false">-->
         <!--<trust-anchors>-->
             <!--<certificates src="system" />-->
-            <!--<certificates src="@raw/starpay" />-->
-            <!--<domain includeSubdomains="true">sdc.starpay.com.ph</domain>-->
+            <!--<certificates src="@raw/dummy" />-->
+            <!--<domain includeSubdomains="true"></domain>-->
         <!--</trust-anchors>-->
     <!--</base-config>-->
 </network-security-config>

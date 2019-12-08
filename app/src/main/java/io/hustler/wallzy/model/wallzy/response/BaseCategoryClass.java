@@ -4,6 +4,15 @@ public class BaseCategoryClass {
     private long id;
     private String name;
     private String cover;
+    private long topicId;
+
+    public long getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(long topicId) {
+        this.topicId = topicId;
+    }
 
     public long getId() {
         return id;

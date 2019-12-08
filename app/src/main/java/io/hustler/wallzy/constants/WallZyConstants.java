@@ -32,6 +32,9 @@ public class WallZyConstants {
     public static final String INTENT_SEARCH_IMAGE_ID = "INTENT_SEARCH_IMAGE_ID";
     public static final String INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER = "INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER";
     public static final String DEFAULT_TOPIC_FOR_ALL_USERS = "DEFAULT_ALL_NOTIFICATION_TOPIC";
+    public static final String INTENT_USER_ID = "INTENT_USER_ID";
+    public static final String INTENT_TOPIC_ID = "INTENT_TOPIC_ID";
+    public static final String INTENT_TOPIC_NAME = "INTENT_TOPIC_NAME";
 
     /*PROVIDER AUTORITY*/
     public static String FILEPROVIDER_AUTHORITY = "io.hustler.wallzy.fileprovider";
@@ -61,5 +64,8 @@ public class WallZyConstants {
     private static class CREDITS {
         private static final String BURGER_BTN = "https://lottiefiles.com/bjorn";
         private static final String SEARCH_BTN = "https://lottiefiles.com/user/2932";
+        private static final String BG_NIGHT_SKY = "https://lottiefiles.com/1315484284";
+        private static final String COLOR_WAVES = "https://lottiefiles.com/user/1884";
+        private static final String NIGHT_MODE = "https://lottiefiles.com/bengerousboom";
     }
 }

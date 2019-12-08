@@ -1,14 +1,23 @@
 package io.hustler.wallzy.model.wallzy.response;
 
+import java.util.ArrayList;
+
 import io.hustler.wallzy.model.base.BaseResponse;
 import io.hustler.wallzy.model.base.ResponseImageClass;
-
-
-import java.util.ArrayList;
 
 public class ResGetCollectionIMages extends BaseResponse {
     private int totalNumber = -1;
     private int totalPages = -1;
+    private boolean subscribed;
+
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
+    }
+
     private ArrayList<ResponseImageClass> images = new ArrayList<>();
 
     public ArrayList<ResponseImageClass> getImages() {

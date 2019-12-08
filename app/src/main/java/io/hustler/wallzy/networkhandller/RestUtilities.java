@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.error.AuthFailureError;
 import com.android.volley.error.NetworkError;
 import com.android.volley.error.NoConnectionError;
@@ -37,81 +36,85 @@ import io.hustler.wallzy.model.wallzy.request.ReqAddCategory;
 import io.hustler.wallzy.model.wallzy.request.ReqAddCollection;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailLogin;
 import io.hustler.wallzy.model.wallzy.request.ReqEmailSignup;
-import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionorCategoryImages;
 import io.hustler.wallzy.model.wallzy.request.ReqGoogleSignup;
 import io.hustler.wallzy.model.wallzy.request.ReqSendAdminNotifications;
+import io.hustler.wallzy.model.wallzy.request.ReqSubscribeTopic;
 import io.hustler.wallzy.model.wallzy.request.ReqUpdateFcmToken;
 import io.hustler.wallzy.model.wallzy.request.ReqUploadImages;
 import io.hustler.wallzy.model.wallzy.request.ReqUserImage;
+import io.hustler.wallzy.model.wallzy.request.ReqGetCollectionOrCategoryImages;
 
 public class RestUtilities {
-    private String TAG = this.getClass().getSimpleName();
-    private final String ROOT_IP = "http://172.105.56.124:8080/private";
+    private String tag = this.getClass().getSimpleName();
+        private static final String ROOT_IP = "http://172.105.56.124:8080/private";
+//    private static final String ROOT_IP = "http://192.168.0.177:8080/private";
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     /**
      * AUTH API PATHS
      */
-    private final String AUTH = ROOT_IP + "/onBoard/v0/";
-    private final String EMAIL_LOGIN = AUTH + "signUpUser";
-    private final String GMAIL_LOGIN = AUTH + "googleAuth";
-    private final String EMAIL_SIGNUP = AUTH + "signUpUser";
-    private final String GUEST_LOGIN = AUTH + "guestLoginUser";
+    private static final String AUTH = ROOT_IP + "/onBoard/v0/";
+    private static final String EMAIL_LOGIN = AUTH + "signUpUser";
+    private static final String GMAIL_LOGIN = AUTH + "googleAuth";
+    private static final String EMAIL_SIGNUP = AUTH + "signUpUser";
+    private static final String GUEST_LOGIN = AUTH + "guestLoginUser";
 
     /**
      * CATEGORY API PATHS
      */
-    private final String CATGORY = ROOT_IP + "/category";
-    private final String ADD_CATEGORY = CATGORY + "/addCategory";
-    private final String GET_CATEGORY = CATGORY + "/getCategories";
-    private final String GET_CATEGORY_IMAGES = CATGORY + "/getCategoryImages";
-    private final String GET_CAT_COUNT = CATGORY + "/getCatCount";
-    private final String GET_LATEST_CATS = CATGORY + "/getLatestCats";
+    private static final String CATGORY = ROOT_IP + "/category";
+    private static final String ADD_CATEGORY = CATGORY + "/addCategory";
+    private static final String GET_CATEGORY = CATGORY + "/getCategories";
+    private static final String GET_CATEGORY_IMAGES = CATGORY + "/getCategoryImages";
+    private static final String GET_CAT_COUNT = CATGORY + "/getCatCount";
+    private static final String GET_LATEST_CATS = CATGORY + "/getLatestCats";
 
 
     /**
      * COLLECTION API PATHS
      */
-    private final String COLLECTION = ROOT_IP + "/Collections";
-    private final String ADD_COLLECTION = COLLECTION + "/addCollection";
-    private final String GET_COLLECTION = COLLECTION + "/getCollections";
-    private final String GET_COLLECTION_IMAGES = COLLECTION + "/getCollectionImages";
+    private static final String COLLECTION = ROOT_IP + "/Collections";
+    private static final String ADD_COLLECTION = COLLECTION + "/addCollection";
+    private static final String GET_COLLECTION = COLLECTION + "/getCollections";
+    private static final String GET_COLLECTION_IMAGES = COLLECTION + "/getCollectionImages";
 
     /**
      * IMAGE APIS
      */
-    private final String IMAGEPATH = ROOT_IP + "/image";
-    private final String SEARCHPATH = IMAGEPATH + "/search";
-    private final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
-    private final String GET_IMAGES = IMAGEPATH + "/getAllImages";
-    private final String SEARCH_BY_TAG = SEARCHPATH + "/searchImagesByTag/tagId/pageId";
+    private static final String IMAGEPATH = ROOT_IP + "/image";
+    private static final String SEARCHPATH = IMAGEPATH + "/search";
+    private static final String UPLOAD_IMAGE = IMAGEPATH + "/uploadImages";
+    private static final String GET_IMAGES = IMAGEPATH + "/getAllImages";
+    private static final String SEARCH_BY_TAG = SEARCHPATH + "/searchImagesByTag/tagId/pageId";
 
     /**
      * USER APIS
      */
-    private final String USERPATH = ROOT_IP + "/User/v0";
-    private final String LIKE_IMAGES = USERPATH + "/likeImage";
-    private final String DOWNLOAD_IMAGES = USERPATH + "/downloadImage";
-    private final String WALL_IMAGES = USERPATH + "/setWall";
-    private final String REPORT_IMAGES = USERPATH + "/reportImage";
-    private final String GET_USER_FAVS = USERPATH + "/getUserFavs";
-    private final String IS_LIKED = USERPATH + "/isLiked";
-    private final String ADD_TAG = USERPATH + "/addTag";
-    private final String GET_IMAGE_BY_ID = USERPATH + "/getImageById";
-    private final String UPDATE_FCM_TOKEN = USERPATH + "/updateFcmToken";
+    private static final String USERPATH = ROOT_IP + "/User/v0";
+    private static final String LIKE_IMAGES = USERPATH + "/likeImage";
+    private static final String DOWNLOAD_IMAGES = USERPATH + "/downloadImage";
+    private static final String WALL_IMAGES = USERPATH + "/setWall";
+    private static final String REPORT_IMAGES = USERPATH + "/reportImage";
+    private static final String GET_USER_FAVS = USERPATH + "/getUserFavs";
+    private static final String IS_LIKED = USERPATH + "/isLiked";
+    private static final String ADD_TAG = USERPATH + "/addTag";
+    private static final String GET_IMAGE_BY_ID = USERPATH + "/getImageById";
+    private static final String UPDATE_FCM_TOKEN = USERPATH + "/updateFcmToken";
+    private static final String SUBSCRIBE_TO_TOPIC = USERPATH + "/userSubscription";
 
 
     /**
      * IMAGE KIT APIS
      */
-    private final String PRIVATE_API_KEY = "nUACXVe0hJCl6ozDToEOur6lxPw=";
-    private final String PUBLIC_API_KEY = "C7OjVdkwf9vZKg4FktMTWuF+WRo=";
-    private final String IMAGEKIT_UPLOAD_IMAGE = "https://api.imagekit.io/v1/files/upload";
+    private static final String PRIVATE_API_KEY = "nUACXVe0hJCl6ozDToEOur6lxPw=";
+    private static final String PUBLIC_API_KEY = "C7OjVdkwf9vZKg4FktMTWuF+WRo=";
+    private static final String IMAGEKIT_UPLOAD_IMAGE = "https://api.imagekit.io/v1/files/upload";
 
     /**
      * NOTIFICATION APIS
      */
-    private  final String API_PATH = new StringBuilder().append(ROOT_IP).append("/fcm/v0").toString();
-    private final String SEND_ADMIN_NOTIFICATIONS = API_PATH + "/sendAdminNotifications";
+    private static final String API_PATH = new StringBuilder().append(ROOT_IP).append("/fcm/v0").toString();
+    private static final String SEND_ADMIN_NOTIFICATIONS = API_PATH + "/sendAdminNotifications";
 
     /**
      * CALLBACK INTERFACE
@@ -134,37 +137,31 @@ public class RestUtilities {
             timesecs = instant.getEpochSecond() + 60 * 60;
         }
 
-        SimpleMultiPartRequest simpleMultiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, IMAGEKIT_UPLOAD_IMAGE, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (onSuccessListener != null) {
-                    onSuccessListener.onSuccess(response);
-                    Log.i(TAG, "Error" + response);
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onSuccessListener.onError(error.getMessage());
-                Log.i(TAG, "Error" + error.getMessage());
+        SimpleMultiPartRequest simpleMultiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, IMAGEKIT_UPLOAD_IMAGE, response -> {
+            if (onSuccessListener != null) {
+                onSuccessListener.onSuccess(response);
+                Log.i(tag, "Error" + response);
 
             }
+        }, error -> {
+            onSuccessListener.onError(error.getMessage());
+            Log.i(tag, "Error" + error.getMessage());
+
         });
         simpleMultiPartRequest.addFile("file", filepath);
-        Log.i(TAG, "uploadImageToIK: path " + filepath);
+        Log.i(tag, "uploadImageToIK: path " + filepath);
         simpleMultiPartRequest.addStringParam("publicKey", PUBLIC_API_KEY);
-        Log.i(TAG, "uploadImageToIK: PK " + PUBLIC_API_KEY);
+        Log.i(tag, "uploadImageToIK: PK " + PUBLIC_API_KEY);
         simpleMultiPartRequest.addStringParam("expire", String.valueOf(timesecs));
-        Log.i(TAG, "uploadImageToIK: expire " + timesecs);
+        Log.i(tag, "uploadImageToIK: expire " + timesecs);
         simpleMultiPartRequest.addStringParam("token", token);
-        Log.i(TAG, "uploadImageToIK: TOKEN " + token);
+        Log.i(tag, "uploadImageToIK: TOKEN " + token);
         simpleMultiPartRequest.addStringParam("fileName", fileName);
-        Log.i(TAG, "uploadImageToIK: filenName " + fileName);
+        Log.i(tag, "uploadImageToIK: filenName " + fileName);
         try {
             String signature = encode(PRIVATE_API_KEY, token + timesecs);
             simpleMultiPartRequest.addStringParam("signature", signature);
-            Log.i(TAG, "uploadImageToIK: SIGNATURE " + signature);
+            Log.i(tag, "uploadImageToIK: SIGNATURE " + signature);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -210,7 +207,7 @@ public class RestUtilities {
         getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_COLLECTION);
     }
 
-    public void getCollectionImsges(Context context, ReqGetCollectionorCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
+    public void getCollectionImsges(Context context, ReqGetCollectionOrCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqGetCategoryImages), GET_COLLECTION_IMAGES);
     }
 
@@ -227,7 +224,7 @@ public class RestUtilities {
         getJsonObjectApi(context, onSuccessListener, GET_CATEGORY);
     }
 
-    public void getCategoryImages(Context context, ReqGetCollectionorCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
+    public void getCategoryImages(Context context, ReqGetCollectionOrCategoryImages reqGetCategoryImages, OnSuccessListener onSuccessListener) {
         postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqGetCategoryImages), GET_CATEGORY_IMAGES);
     }
 
@@ -295,6 +292,9 @@ public class RestUtilities {
         getJsonObjectWithAuthHeaderApi(context, onSuccessListener, GET_IMAGE_BY_ID + "/" + id);
     }
 
+    public void subscribeToTopic(Context context, ReqSubscribeTopic reqSubscribeTopic, OnSuccessListener onSuccessListener) {
+        postJsonObjectWithAuthHeaderApi(context, onSuccessListener, getJSONObject(reqSubscribeTopic), SUBSCRIBE_TO_TOPIC);
+    }
     /* NOTIFICATION APIS*/
 
     public void sendAdminNotifications(Context context, ReqSendAdminNotifications reqSendAdminNotifications, OnSuccessListener onSuccessListener) {
@@ -362,7 +362,7 @@ public class RestUtilities {
                                                 OnSuccessListener onSuccessListener,
                                                 String url) {
 
-        Log.e(TAG, "getJsonObjectWithAuthHeaderApi: " + url);
+        Log.e(tag, "getJsonObjectWithAuthHeaderApi: " + url);
         JsonObjectRequest jsonObjectRequest
                 =
                 new JsonObjectRequestwithAuthHeader(Request.Method.GET,
@@ -427,7 +427,6 @@ public class RestUtilities {
         }
     }
 
-    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     public static String encode(String key, String data) throws Exception {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), HMAC_SHA1_ALGORITHM);

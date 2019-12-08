@@ -68,7 +68,7 @@
                 android:layout_height="@dimen/margin_32"
                 android:layout_below="@id/daily_notifs_message"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/rounded_rect_poitive"
+                android:background="@drawable/rounded_rect_positive"
                 android:layout_alignParentRight="true"
                 android:text="@string/send" />
         </RelativeLayout>
@@ -119,7 +119,7 @@
                 android:layout_height="@dimen/margin_32"
                 android:layout_below="@id/Announcement_notifs_message"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/rounded_rect_poitive"
+                android:background="@drawable/rounded_rect_positive"
                 android:layout_alignParentRight="true"
                 android:text="@string/send" />
         </RelativeLayout>
@@ -170,7 +170,7 @@
                 android:layout_height="@dimen/margin_32"
                 android:layout_below="@id/Update_notifs_message"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/rounded_rect_poitive"
+                android:background="@drawable/rounded_rect_positive"
                 android:layout_alignParentRight="true"
                 android:text="@string/send" />
         </RelativeLayout>
@@ -221,7 +221,7 @@
                 android:layout_height="@dimen/margin_32"
                 android:layout_below="@id/Wishes_notifs_message"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/rounded_rect_poitive"
+                android:background="@drawable/rounded_rect_positive"
                 android:layout_alignParentRight="true"
                 android:text="@string/send" />
         </RelativeLayout>

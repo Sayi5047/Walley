@@ -10,7 +10,15 @@ public class ResGetCategoryImages extends BaseResponse {
     private int totalNumber = -1;
     private int totalPages = -1;
     private ArrayList<ResponseImageClass> images = new ArrayList<>();
+    private boolean subscribed;
 
+    public boolean isSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        this.subscribed = subscribed;
+    }
     public int getTotalNumber() {
         return totalNumber;
     }

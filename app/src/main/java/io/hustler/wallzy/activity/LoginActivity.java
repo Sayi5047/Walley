@@ -84,44 +84,41 @@ public class LoginActivity extends AppCompatActivity {
         TextUtils.findText_and_applyTypeface(mRootContainer, LoginActivity.this);
         bgRv.setLayoutManager(new LinearLayoutManager(LoginActivity.this, RecyclerView.HORIZONTAL, false));
         bgRv.setAdapter(new OnBoardAdapter(getApplicationContext(), null));
-        guest_account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-                progressDialog.setMessage("Logging in as guest");
-                progressDialog.setTitle("Guest Login");
-                progressDialog.setCancelable(false);
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
+        guest_account.setOnClickListener(view -> {
+            ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage("Logging in as guest");
+            progressDialog.setTitle("Guest Login");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
 
-                ReqEmailLogin reqEmailLogin = new ReqEmailLogin();
-                reqEmailLogin.setEmail("guestUser" + System.currentTimeMillis() + "@wallzyguest.com");
-                reqEmailLogin.setPassword(UUID.randomUUID().toString());
-                new RestUtilities().guestLogin(getApplicationContext(), reqEmailLogin, new RestUtilities.OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object onSuccessResponse) {
-                        progressDialog.cancel();
-                        ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
-                        if (resLoginUser.isApiSuccess()) {
-                            new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
-                            new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
-                            new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, true);
-                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            ReqEmailLogin reqEmailLogin = new ReqEmailLogin();
+            reqEmailLogin.setEmail("guestUser" + System.currentTimeMillis() + "@wallzyguest.com");
+            reqEmailLogin.setPassword(UUID.randomUUID().toString());
+            new RestUtilities().guestLogin(getApplicationContext(), reqEmailLogin, new RestUtilities.OnSuccessListener() {
+                @Override
+                public void onSuccess(Object onSuccessResponse) {
+                    progressDialog.cancel();
+                    ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
+                    if (resLoginUser.isApiSuccess()) {
+                        new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
+                        new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
+                        new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, true);
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
 
-                        } else {
-                            MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, resLoginUser.getMessage());
-                        }
+                    } else {
+                        MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, resLoginUser.getMessage());
                     }
+                }
 
-                    @Override
-                    public void onError(String error) {
-                        progressDialog.cancel();
-                        MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, error);
+                @Override
+                public void onError(String error) {
+                    progressDialog.cancel();
+                    MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, error);
 
-                    }
-                });
-            }
+                }
+            });
         });
 
     }

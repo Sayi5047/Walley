@@ -81,7 +81,7 @@
                     android:id="@+id/subscribeButton"
                     android:layout_width="128dp"
                     android:layout_height="@dimen/margin_48"
-                    android:background="@drawable/rounded_rect_poitive"
+                    android:background="@drawable/rounded_rect_positive"
                     android:text="@string/subscribe"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_72"

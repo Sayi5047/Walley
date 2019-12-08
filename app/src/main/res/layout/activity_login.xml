@@ -4,65 +4,105 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="#212121"
+    android:layoutAnimation="@anim/layout_anim_climb_up"
     android:clipChildren="true">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/onBoardRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg" />
+        android:background="@color/bg"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        app:lottie_autoPlay="true"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_starry_night" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/bottom_animation_view"
+        android:layout_width="1080dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:lottie_rawRes="@raw/lottie_color_waves"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="64dp"
-        android:enabled="true"
-
         android:text="@string/Welcome_to_wallzy"
-        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_32"
         android:textStyle="bold"
+        android:layout_marginBottom="@dimen/margin_8"
         android:layoutAnimation="@anim/layout_anim_climb_up"
+        android:layout_above="@id/mid_header"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginLeft="@dimen/margin_32" />
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/mid_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:text="@string/Welcome_message"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_24"
+        android:alpha="0.8"
+        android:layout_marginBottom="@dimen/margin_8"
+        android:layoutAnimation="@anim/layout_anim_climb_up"
+        android:layout_above="@id/low_header"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginLeft="@dimen/margin_32" />
+
+    <TextView
+        android:id="@+id/low_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:text="@string/lets_start"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18"
+        android:layout_marginBottom="@dimen/margin_16"
+        android:layoutAnimation="@anim/layout_anim_climb_up"
+        android:layout_above="@id/signinLayout"
+        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginLeft="@dimen/margin_32" />
+
+    <LinearLayout
+        android:id="@+id/signinLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/margin_8"
+        android:padding="@dimen/padding_8">
 
         <Button
             android:id="@+id/guest_login"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_gravity="start"
-
-            android:background="@color/bt_color"
+            android:background="@drawable/rounded_rect_negative"
             android:enabled="true"
             android:text="@string/guest_login"
+            android:layout_margin="@dimen/margin_8"
             android:textColor="@color/white" />
 
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_signin"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_gravity="start"
-
             android:enabled="true"
+            android:layout_margin="@dimen/margin_8"
             android:text="@string/login"
-            android:background="@color/colorAccent"
             android:textColor="@color/white" />
     </LinearLayout>
 

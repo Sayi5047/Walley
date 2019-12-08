@@ -6,7 +6,7 @@ public class ResCategoryClass {
     private long id;
     private String name;
     private String cover;
-
+    private long topicId;
     public long getId() {
         return id;
     }

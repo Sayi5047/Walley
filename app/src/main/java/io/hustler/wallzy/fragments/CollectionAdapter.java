@@ -24,7 +24,8 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     ArrayList<ResCollectionClass> collectionsList;
     OnItemClickListener onItemClickListener;
 
-    public CollectionAdapter(Context mContext, ArrayList<ResCollectionClass> collectionsList, OnItemClickListener onItemClickListener) {
+
+    CollectionAdapter(Context mContext, ArrayList<ResCollectionClass> collectionsList, OnItemClickListener onItemClickListener) {
         this.mContext = mContext;
         this.collectionsList = collectionsList;
         this.onItemClickListener = onItemClickListener;

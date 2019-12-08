@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,28 +69,22 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-        if (account == null) {
-            /*USER NOT SIGNED IN*/
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (new SharedPrefsUtils(SplashActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
-                        Toast.makeText(getApplicationContext(), "Logged in as Guest", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-                    }else {
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-
-                    }
+        new Handler().postDelayed(() -> {
+            if (account == null) {
+                /*USER NOT SIGNED IN*/
+                if (new SharedPrefsUtils(SplashActivity.this).getBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT)) {
+                    Toast.makeText(getApplicationContext(), "Logged in as Guest", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                } else {
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 }
-            },4000);
+            } else {
+                /*USER SIGNED IN*/
+                Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Logged In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
-
-        } else {
-            /*USER SIGNED IN*/
-            Toast.makeText(getApplicationContext(), MessageFormat.format("{0} Logged In", Objects.requireNonNull(account).getDisplayName()), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-
-        }
+            }
+        },1000);
     }
 
     private void firebaseLoginCheck(Handler handler) {

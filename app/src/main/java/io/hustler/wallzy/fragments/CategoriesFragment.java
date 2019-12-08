@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +29,7 @@ import io.hustler.wallzy.model.wallzy.response.BaseCategoryClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetAllCategories;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.utils.SharedPrefsUtils;
 
 public class CategoriesFragment extends Fragment {
     private static final String TAG = "CategoriesFragment";
@@ -61,7 +60,7 @@ public class CategoriesFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-
+                MessageUtils.showDismissableSnackBar(getActivity(), verticalRv, error);
             }
         });
         return view;
@@ -97,13 +96,11 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void setDatToRv(ArrayList<BaseCategoryClass> baseCategoryClasses) {
-        ArrayList<ResponseImageClass> responseImageClasses = new ArrayList<>();
         for (BaseCategoryClass b : baseCategoryClasses) {
             ResponseImageClass responseImageClass = new ResponseImageClass();
             responseImageClass.setUrl(b.getCover());
             responseImageClass.setName(b.getName());
             responseImageClass.setId(b.getId());
-            responseImageClasses.add(responseImageClass);
         }
 
 //        ImagesAdapter imagesAdapter = new ImagesAdapter(getActivity(), new ImagesAdapter.OnItemClcikListener() {
@@ -120,18 +117,19 @@ public class CategoriesFragment extends Fragment {
 //            }
 //        }, responseImageClasses);
 
-        categoriesAdapter = new CategoriesAdapter(baseCategoryClasses, getActivity(), new CategoriesAdapter.OnChildClickListener() {
-            @Override
-            public void onCLick(BaseCategoryClass category, ImageView imageView) {
-                Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
-                intent.putExtra(WallZyConstants.INTENT_CAT_NAME, category.getName());
-                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, category.getCover());
-                intent.putExtra(WallZyConstants.INTENT_CAT_ID, category.getId());
-                intent.putExtra(WallZyConstants.INTENT_IS_CAT, true);
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()), imageView, getActivity().getString(R.string.transistion_blur_image));
-                getActivity().startActivity(intent);
-                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), getView(), category.getName());
-            }
+        categoriesAdapter = new CategoriesAdapter(baseCategoryClasses, getActivity(), (category, imageView) -> {
+            Intent intent = new Intent(CategoriesFragment.this.getActivity(), ImagesActivity.class);
+            intent.putExtra(WallZyConstants.INTENT_CAT_NAME, category.getName());
+            intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, category.getCover());
+            intent.putExtra(WallZyConstants.INTENT_CAT_ID, category.getId());
+            intent.putExtra(WallZyConstants.INTENT_USER_ID, new SharedPrefsUtils(Objects.requireNonNull(getContext())).getUserData().getId());
+            intent.putExtra(WallZyConstants.INTENT_TOPIC_ID, category.getTopicId());
+            intent.putExtra(WallZyConstants.INTENT_TOPIC_NAME, category.getName());
+            intent.putExtra(WallZyConstants.INTENT_IS_CAT, true);
+//            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity()),
+//                    imageView, getActivity().getString(R.string.transistion_blur_image));
+            Objects.requireNonNull(getActivity()).startActivity(intent);
+            MessageUtils.showDismissableSnackBar(Objects.requireNonNull(CategoriesFragment.this.getActivity()), getView(), category.getName());
         });
         verticalRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         verticalRv.setAdapter(categoriesAdapter);
@@ -144,7 +142,7 @@ public class CategoriesFragment extends Fragment {
                 AnimationUtils.loadLayoutAnimation(context, R.anim.layout_anim_climb_up);
 
         recyclerView.setLayoutAnimation(controller);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        Objects.requireNonNull(recyclerView.getAdapter()).notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
 }

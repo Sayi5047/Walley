@@ -163,7 +163,7 @@ public class AdminImageUploadFragment extends Fragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.upload_imagescatcollbtn:
-                if (categoryId == 0 & collectionId == 0) {
+                if (categoryId == 0 && collectionId == 0) {
                     MessageUtils.showShortToast(getActivity(), "Please select a category or collection");
                 } else if (null == selectedImagesArrayList) {
                     MessageUtils.showShortToast(getActivity(), "Please select at least an image to upload");
@@ -229,13 +229,10 @@ public class AdminImageUploadFragment extends Fragment {
                             @Override
                             public void onComplete() {
                                 uploadImagestoDatabase(restUtilities);
-                                appExecutor.getMainThreadExecutor().execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressDialog.cancel();
-                                        MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
+                                appExecutor.getMainThreadExecutor().execute(() -> {
+                                    progressDialog.cancel();
+                                    MessageUtils.showShortToast(getActivity(), "Number of Images are successfully  uploaded to CDN are " + uploadedImagesUrl.size());
 
-                                    }
                                 });
                             }
                         }).sendToTaskManager().execute();

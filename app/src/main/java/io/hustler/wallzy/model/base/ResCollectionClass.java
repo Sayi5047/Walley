@@ -10,6 +10,15 @@ public class ResCollectionClass {
     private String artistLink;
     private boolean curated;
     private int imageCount;
+    private long topicId;
+
+    public long getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(long topicId) {
+        this.topicId = topicId;
+    }
 
     public int getImageCount() {
         return imageCount;

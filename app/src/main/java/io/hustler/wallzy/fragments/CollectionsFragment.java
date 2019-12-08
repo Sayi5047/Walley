@@ -34,6 +34,7 @@ import io.hustler.wallzy.model.base.ResCollectionClass;
 import io.hustler.wallzy.model.wallzy.response.ResGetAllCollections;
 import io.hustler.wallzy.networkhandller.RestUtilities;
 import io.hustler.wallzy.utils.MessageUtils;
+import io.hustler.wallzy.utils.SharedPrefsUtils;
 import io.hustler.wallzy.utils.TextUtils;
 
 public class CollectionsFragment extends Fragment {
@@ -72,6 +73,7 @@ public class CollectionsFragment extends Fragment {
                         collectionadapterClass.setCurated(true);
                         collectionadapterClass.setId(collectionClassFromApi.getId());
                         collectionadapterClass.setName(collectionClassFromApi.getName());
+                        collectionadapterClass.setTopicId(collectionClassFromApi.getTopicId());
                         HashMap<Integer, String> coversMap = new HashMap<>();
                         for (int i = 0; i < 3; i++) {
                             coversMap.put(i, collectionClassFromApi.getCovers().get(i));
@@ -95,24 +97,25 @@ public class CollectionsFragment extends Fragment {
     }
 
     private void setDatToRv(ArrayList<ResCollectionClass> collectionClassArrayList) {
-        CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collectionClassArrayList, new CollectionAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(ResCollectionClass resCollectionClass, ImageView imageView) {
-                Intent intent = new Intent(getActivity(), ImagesActivity.class);
-                intent.putExtra(WallZyConstants.INTENT_CAT_NAME, resCollectionClass.getName());
-                intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, resCollectionClass.getCovers().get(0));
-                intent.putExtra(WallZyConstants.INTENT_CAT_ID, resCollectionClass.getId());
-                intent.putExtra(WallZyConstants.INTENT_IS_CAT, false);
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity())
-                        , imageView, getActivity().getString(R.string.transistion_blur_image));
-                getActivity().startActivity(intent, optionsCompat.toBundle());
-                MessageUtils.showDismissableSnackBar(Objects.requireNonNull(getActivity()), getView(), resCollectionClass.getName());
+        CollectionAdapter collectionAdapter = new CollectionAdapter(getContext(), collectionClassArrayList,
+                (resCollectionClass, imageView) -> {
+            Intent intent = new Intent(getActivity(), ImagesActivity.class);
+            intent.putExtra(WallZyConstants.INTENT_CAT_NAME, resCollectionClass.getName());
+            intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, resCollectionClass.getCovers().get(0));
+            intent.putExtra(WallZyConstants.INTENT_CAT_ID, resCollectionClass.getId());
+            intent.putExtra(WallZyConstants.INTENT_TOPIC_ID, resCollectionClass.getTopicId());
+                    intent.putExtra(WallZyConstants.INTENT_TOPIC_NAME, resCollectionClass.getName());
 
-            }
+                    intent.putExtra(WallZyConstants.INTENT_USER_ID, new SharedPrefsUtils(Objects.requireNonNull(getContext())).getUserData().getId());
+            intent.putExtra(WallZyConstants.INTENT_IS_CAT, false);
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(Objects.requireNonNull(getActivity())
+                    , imageView, getActivity().getString(R.string.transistion_blur_image));
+            getActivity().startActivity(intent, optionsCompat.toBundle());
+            MessageUtils.showDismissableSnackBar(Objects.requireNonNull(getActivity()), getView(), resCollectionClass.getName());
+
         });
         verticalRv.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         verticalRv.setAdapter(collectionAdapter);
-//        runLayoutAnimation(verticalRv);
     }
 
     private void runLayoutAnimation(final RecyclerView recyclerView) {

@@ -56,6 +56,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.aboutlibraries.util.Colors;
 
 import java.util.Arrays;
 import java.util.List;
@@ -340,7 +343,28 @@ public class HomeActivity extends AppCompatActivity {
                 break;
 
                 case "About": {
-                    MessageUtils.showShortToast(HomeActivity.this, getString(R.string.coming_soon));
+                    new LibsBuilder()
+                            //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                            .withActivityColor(
+                                    new Colors(ContextCompat.getColor(getApplicationContext(), R.color.bg),
+                                            ContextCompat.getColor(getApplicationContext(), R.color.bg)))
+                            .withAboutSpecial1(getString(R.string.disclaimer))
+                            .withAboutSpecial1Description(getString(R.string.disclaimer_message))
+                            .withAboutSpecial2(getString(R.string.copyright))
+                            .withAboutSpecial2Description(getString(R.string.copyright_message))
+                            .withAboutSpecial3(getString(R.string.info_collection))
+                            .withAboutSpecial3Description(getString(R.string.info_collection_message))
+                            .withAboutIconShown(true)
+                            .withAboutVersionShown(true)
+                            .withSortEnabled(true)
+                            .withLicenseShown(true)
+                            .withLicenseDialog(true)
+                            .withActivityTitle(getString(R.string.about))
+                            .withAboutDescription(getString(R.string.self_desc))
+                            .withActivityStyle(isNight ? Libs.ActivityStyle.DARK : Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                            .start(HomeActivity.this);
+
                 }
                 break;
 
@@ -580,14 +604,17 @@ public class HomeActivity extends AppCompatActivity {
                 & Configuration.UI_MODE_NIGHT_MASK;
     }
 
+    boolean isNight;
 
     private void changeBetweenDayandNightMode(int currentNightMode) {
         int newNightMode;
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             newNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+            isNight = false;
 
         } else {
             newNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+            isNight = true;
 
         }
         saveNightModeToPreferences(newNightMode);

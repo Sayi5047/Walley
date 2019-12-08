@@ -3,10 +3,18 @@ package io.hustler.wallzy.model.wallzy.request;
 
 import io.hustler.wallzy.model.base.BaseRequest;
 
-public class ReqGetCollectionorCategoryImages extends BaseRequest {
+public class ReqGetCollectionOrCategoryImages extends BaseRequest {
     private long id;
     private int pageNumber;
+    private long userId;
 
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public long getId() {
         return id;
