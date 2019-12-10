@@ -173,6 +173,7 @@ public class HomeActivity extends AppCompatActivity {
             getWindow().setNavigationBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         }
         ButterKnife.bind(this);
+
         mSharedPrefs = new SharedPrefsUtils(HomeActivity.this);
         setStatusBar();
         enableDailyNotifications();
@@ -646,6 +647,9 @@ public class HomeActivity extends AppCompatActivity {
                     //Log.i(TAG, "setStatusBar: NightMode Found");
 
 
+                } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    this.getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.bg_b));
+                    this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
                 // We don't know what mode we're in, assume notnight

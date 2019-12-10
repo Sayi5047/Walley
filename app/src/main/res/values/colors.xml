@@ -7,6 +7,7 @@
     <color name="bg">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="bt_color">@color/colorAccent</color>
+    <color name="bg_b">#212121</color>
 
 
     <color name="tab_selected_color">#FFFFFf</color>

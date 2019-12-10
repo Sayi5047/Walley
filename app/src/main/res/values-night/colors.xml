@@ -6,6 +6,7 @@
     <color name="colorAccent">#c51f5d</color>
     <color name="text_color">#ffffff</color>
     <color name="bg">#212121</color>
+    <color name="bg_b">#212121</color>
     <color name="white">#ffffff</color>
     <color name="bt_color">#24292E</color>
 
