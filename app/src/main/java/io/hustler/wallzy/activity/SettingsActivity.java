@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,18 +114,17 @@ public class SettingsActivity extends AppCompatActivity {
     private void setLightStatusbar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
         }
     }
 
     private void setStatusBar() {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_YES:
                 // Night mode is not active, we're in day time
                 setLightStatusbar();
-                //Log.i(TAG, "setStatusBar: Daymode foun");
-            case Configuration.UI_MODE_NIGHT_YES:
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
                 // Night mode is active, we're at night!
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     int flags = getWindow().getDecorView().getSystemUiVisibility(); // get current flag
@@ -134,12 +134,19 @@ public class SettingsActivity extends AppCompatActivity {
                     //Log.i(TAG, "setStatusBar: NightMode Found");
 
 
+                } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    this.getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.bg_b));
+                    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.bg_b));
+                    toolbar.setTitleTextColor(Color.WHITE);
                 }
+                break;
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
                 // We don't know what mode we're in, assume notnight
                 setLightStatusbar();
+                break;
         }
     }
+
 
     private void changeAutoWallpaperViewStates(boolean isClickable, float v) {
         layout2.setClickable(isClickable);

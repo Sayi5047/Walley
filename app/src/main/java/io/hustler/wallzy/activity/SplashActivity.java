@@ -3,7 +3,7 @@ package io.hustler.wallzy.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -49,6 +49,11 @@ public class SplashActivity extends AppCompatActivity {
         initNightMode();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
+    }
 
     private void initNightMode() {
         int nightMode = retrieveNightModeFromPreferences();
@@ -84,7 +89,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
             }
-        },1000);
+        }, 1000);
     }
 
     private void firebaseLoginCheck(Handler handler) {

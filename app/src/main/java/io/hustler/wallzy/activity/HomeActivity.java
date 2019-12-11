@@ -323,69 +323,51 @@ public class HomeActivity extends AppCompatActivity {
         imagesArray = (getResources().obtainTypedArray(R.array.footer_features_images));
         bottomFeaturesRv.setAdapter(new BottomFeaturesAdapter(HomeActivity.this, namesArray,
                 imagesArray, featureName -> {
-            switch (featureName) {
+            if ("Toggle Theme".equals(featureName)) {
+                int currentNightMode = getCurrentNightMode();
+                changeBetweenDayandNightMode(currentNightMode);
+            } else if ("Profile".equals(featureName)) {
+                Intent intent = new Intent(HomeActivity.this, FragmentActivity.class);
+                intent.putExtra(WallZyConstants.INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER, 0);
+                startActivity(intent);
+            } else if ("Settings".equals(featureName)) {
+                startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+            } else if ("About".equals(featureName)) {
+                new LibsBuilder()
+                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withActivityColor(
+                                new Colors(ContextCompat.getColor(getApplicationContext(), R.color.bg_b),
+                                        ContextCompat.getColor(getApplicationContext(), R.color.bg_b)))
+                        .withAboutSpecial1(getString(R.string.disclaimer))
+                        .withAboutSpecial1Description(getString(R.string.disclaimer_message))
+                        .withAboutSpecial2(getString(R.string.copyright))
+                        .withAboutSpecial2Description(getString(R.string.copyright_message))
+                        .withAboutSpecial3(getString(R.string.info_collection))
+                        .withAboutSpecial3Description(getString(R.string.info_collection_message))
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .withSortEnabled(true)
+                        .withLicenseShown(true)
+                        .withLicenseDialog(true)
+                        .withActivityTitle(getString(R.string.about))
+                        .withAboutDescription(getString(R.string.self_desc))
+                        .start(HomeActivity.this);
+            } else if ("SignOut".equals(featureName)) {
+                GoogleSignInClient mGoogleSigninClient;
+                GoogleSignInOptions gso;
+                gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
 
-                case "Toggle Theme": {
-                    int currentNightMode = getCurrentNightMode();
-                    changeBetweenDayandNightMode(currentNightMode);
-                }
-                break;
-                case "Profile": {
-                    Intent intent = new Intent(HomeActivity.this, FragmentActivity.class);
-                    intent.putExtra(WallZyConstants.INTENT_FRAGMENT_ACTIVITY_FRAGMENT_NUMBER, 0);
-                    startActivity(intent);
-                }
-                break;
-
-                case "Settings": {
-                    startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
-
-                }
-                break;
-
-                case "About": {
-                    new LibsBuilder()
-                            //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
-                            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                            .withActivityColor(
-                                    new Colors(ContextCompat.getColor(getApplicationContext(), R.color.bg),
-                                            ContextCompat.getColor(getApplicationContext(), R.color.bg)))
-                            .withAboutSpecial1(getString(R.string.disclaimer))
-                            .withAboutSpecial1Description(getString(R.string.disclaimer_message))
-                            .withAboutSpecial2(getString(R.string.copyright))
-                            .withAboutSpecial2Description(getString(R.string.copyright_message))
-                            .withAboutSpecial3(getString(R.string.info_collection))
-                            .withAboutSpecial3Description(getString(R.string.info_collection_message))
-                            .withAboutIconShown(true)
-                            .withAboutVersionShown(true)
-                            .withSortEnabled(true)
-                            .withLicenseShown(true)
-                            .withLicenseDialog(true)
-                            .withActivityTitle(getString(R.string.about))
-                            .withAboutDescription(getString(R.string.self_desc))
-                            .withActivityStyle(isNight ? Libs.ActivityStyle.DARK : Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                            .start(HomeActivity.this);
-
-                }
-                break;
-
-                case "SignOut": {
-                    GoogleSignInClient mGoogleSigninClient;
-                    GoogleSignInOptions gso;
-                    gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-
-                    mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
-                    mGoogleSigninClient.signOut()
-                            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
-                                    saveNightModeToPreferences(getCurrentNightMode());
-                                    startActivity(new Intent(HomeActivity.this, SplashActivity.class));
-                                }
-                            });
-                }
-                break;
+                mGoogleSigninClient = GoogleSignIn.getClient(this, gso);
+                mGoogleSigninClient.signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                new SharedPrefsUtils(getApplicationContext()).clearAllUserData();
+                                saveNightModeToPreferences(getCurrentNightMode());
+                                startActivity(new Intent(HomeActivity.this, SplashActivity.class));
+                            }
+                        });
             }
         }));
         TextUtils.findText_and_applyTypeface(root, HomeActivity.this);
@@ -468,42 +450,38 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick({R.id.menu_icon, R.id.search_icon, R.id.app_name})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.menu_icon:
-                if (bottomLayout.getHeight() == bottomViewHeight) {
-                    menuIcon.setMinAndMaxFrame(99, 124);
-                    menuIcon.playAnimation();
-                    hideBottom(bottomViewHeight, bottomLayout);
-                    Log.i(TAG, "onViewClicked: HIDE BOTTOM");
-                } else {
-                    menuIcon.setMinAndMaxFrame(31, 99);
-                    menuIcon.playAnimation();
-                    showBottom(bottomViewHeight, bottomLayout);
-                    Log.i(TAG, "onViewClicked: SHOW BOTTOM");
-                }
-                break;
-            case R.id.search_icon:
-                if (isSearchShowing) {
-                    searchIcon.setFrame(48);
-                    hideBottom(searchViewHeight, searchLayout);
-                } else if (searchLayout.getHeight() == searchViewHeight) {
-                    searchIcon.setFrame(48);
-                    hideBottom(searchViewHeight, searchLayout);
-
-                } else {
-                    searchIcon.setFrame(48);
-                    searchIcon.setMinAndMaxFrame(48, 68);
-                    searchIcon.playAnimation();
-                    showBottom(searchViewHeight, searchLayout);
-                    handleSearch();
-
-                }
-                break;
-            case R.id.app_name: {
-                BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
-                dailyNotifications.startMorningAlarm(this.getApplicationContext());
+        int id = view.getId();
+        if (id == R.id.menu_icon) {
+            if (bottomLayout.getHeight() == bottomViewHeight) {
+                menuIcon.setMinAndMaxFrame(99, 124);
+                menuIcon.playAnimation();
+                hideBottom(bottomViewHeight, bottomLayout);
+                Log.i(TAG, "onViewClicked: HIDE BOTTOM");
+            } else {
+                menuIcon.setMinAndMaxFrame(31, 99);
+                menuIcon.playAnimation();
+                showBottom(bottomViewHeight, bottomLayout);
+                Log.i(TAG, "onViewClicked: SHOW BOTTOM");
             }
-            break;
+        } else if (id == R.id.search_icon) {
+            if (isSearchShowing) {
+                searchIcon.setFrame(48);
+                hideBottom(searchViewHeight, searchLayout);
+            } else if (searchLayout.getHeight() == searchViewHeight) {
+                searchIcon.setFrame(48);
+                hideBottom(searchViewHeight, searchLayout);
+
+            } else {
+                searchIcon.setFrame(48);
+                searchIcon.setMinAndMaxFrame(48, 68);
+                searchIcon.playAnimation();
+                showBottom(searchViewHeight, searchLayout);
+                handleSearch();
+
+            }
+        } else if (id == R.id.app_name) {
+            BackGroundServiceUtils.DailyNotifications dailyNotifications = new BackGroundServiceUtils.DailyNotifications();
+            dailyNotifications.startMorningAlarm(this.getApplicationContext());
         }
     }
 
@@ -553,10 +531,8 @@ public class HomeActivity extends AppCompatActivity {
                 ResImageSearch resImageSearch = new Gson().fromJson(onSuccessResponse.toString(), ResImageSearch.class);
 
                 if (resImageSearch.getStatuscode() == ServerConstants.API_SUCCESS) {
-                    if (resImageSearch.getTagImages().size() <= 0) {
+                    if (resImageSearch.getTagImages().isEmpty()) {
                         hideViewAndShowErrorMessage(R.string.error_msg_no_data_found);
-
-
                     } else {
                         searchMessageLayout.setVisibility(View.GONE);
                         searchImagesRv.setVisibility(View.VISIBLE);
@@ -633,27 +609,23 @@ public class HomeActivity extends AppCompatActivity {
     private void setStatusBar() {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                // Night mode is not active, we're in day time
-                setLightStatusbar();
-                //Log.i(TAG, "setStatusBar: Daymode foun");
             case Configuration.UI_MODE_NIGHT_YES:
-                // Night mode is active, we're at night!
+                setLightStatusbar();
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    int flags = getWindow().getDecorView().getSystemUiVisibility(); // get current flag
-                    flags = flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // use XOR here for remove LIGHT_STATUS_BAR from flags
+                    int flags = getWindow().getDecorView().getSystemUiVisibility();
+                    flags = flags ^ View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     this.getWindow().getDecorView().setSystemUiVisibility(flags);
                     this.getWindow().setStatusBarColor(Color.TRANSPARENT);
-                    //Log.i(TAG, "setStatusBar: NightMode Found");
-
-
                 } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
                     this.getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.bg_b));
                     this.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
+                break;
             case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                // We don't know what mode we're in, assume notnight
                 setLightStatusbar();
+                break;
         }
     }
 

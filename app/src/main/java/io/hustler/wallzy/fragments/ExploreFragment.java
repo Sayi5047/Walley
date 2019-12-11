@@ -134,15 +134,17 @@ public class ExploreFragment extends Fragment {
                                 intent.putExtra(WallZyConstants.INTENT_CAT_IMAGE, responseImageClass.getUrl());
                                 intent.putExtra(WallZyConstants.INTENT_SERIALIZED_IMAGE_CLASS, new Gson().toJson(responseImageClass));
                                 intent.putExtra(WallZyConstants.INTENT_IS_FROM_SEARCH, false);
-
                                 startActivity(intent);
                             }, resGetCategoryImages.getImages());
                             latestImagesAdapter.setHasStableIds(true);
                             imagesrv.setItemAnimator(null);
                             imagesrv.setAdapter(latestImagesAdapter);
-                            int resId = R.anim.layout_anim_climb_up;
-                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), resId);
-                            imagesrv.setLayoutAnimation(animation);
+                            if(null!=getActivity()){
+                                int resId = R.anim.layout_anim_climb_up;
+                                LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), resId);
+                                imagesrv.setLayoutAnimation(animation);
+                            }
+
                             if (currentPage >= TOTAL_PAGES) {
                                 isLastPage = true;
                                 MessageUtils.showShortToast(getActivity(), "REACHED END");

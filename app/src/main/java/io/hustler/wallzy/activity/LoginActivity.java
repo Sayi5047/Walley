@@ -2,15 +2,16 @@ package io.hustler.wallzy.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,8 +24,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
@@ -66,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout mRootContainer;
     @BindView(R.id.onBoardRv)
     RecyclerView bgRv;
-    private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSigninClient;
     private GoogleSignInOptions gso;
 
@@ -75,7 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        mAuth = FirebaseAuth.getInstance();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.getWindow().setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.bg_b));
+        }
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
@@ -85,42 +85,46 @@ public class LoginActivity extends AppCompatActivity {
         bgRv.setLayoutManager(new LinearLayoutManager(LoginActivity.this, RecyclerView.HORIZONTAL, false));
         bgRv.setAdapter(new OnBoardAdapter(getApplicationContext(), null));
         guest_account.setOnClickListener(view -> {
-            ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage("Logging in as guest");
-            progressDialog.setTitle("Guest Login");
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
-
-            ReqEmailLogin reqEmailLogin = new ReqEmailLogin();
-            reqEmailLogin.setEmail("guestUser" + System.currentTimeMillis() + "@wallzyguest.com");
-            reqEmailLogin.setPassword(UUID.randomUUID().toString());
-            new RestUtilities().guestLogin(getApplicationContext(), reqEmailLogin, new RestUtilities.OnSuccessListener() {
-                @Override
-                public void onSuccess(Object onSuccessResponse) {
-                    progressDialog.cancel();
-                    ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
-                    if (resLoginUser.isApiSuccess()) {
-                        new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
-                        new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
-                        new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, true);
-                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
-
-                    } else {
-                        MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, resLoginUser.getMessage());
-                    }
-                }
-
-                @Override
-                public void onError(String error) {
-                    progressDialog.cancel();
-                    MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, error);
-
-                }
-            });
+            loginAsGuest();
         });
 
+    }
+
+    private void loginAsGuest() {
+        ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("Logging in as guest");
+        progressDialog.setTitle("Guest Login");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        ReqEmailLogin reqEmailLogin = new ReqEmailLogin();
+        reqEmailLogin.setEmail("guestUser" + System.currentTimeMillis() + "@wallzyguest.com");
+        reqEmailLogin.setPassword(UUID.randomUUID().toString());
+        new RestUtilities().guestLogin(getApplicationContext(), reqEmailLogin, new RestUtilities.OnSuccessListener() {
+            @Override
+            public void onSuccess(Object onSuccessResponse) {
+                progressDialog.cancel();
+                ResLoginUser resLoginUser = new Gson().fromJson(onSuccessResponse.toString(), ResLoginUser.class);
+                if (resLoginUser.isApiSuccess()) {
+                    new SharedPrefsUtils(getApplicationContext()).storeUserData(resLoginUser);
+                    new SharedPrefsUtils(getApplicationContext()).putString(WallZyConstants.SHARED_PREFS_SYSTEM_AUTH_KEY, resLoginUser.getSysAuthToken());
+                    new SharedPrefsUtils(getApplicationContext()).putBoolean(WallZyConstants.SHARED_PREFS_GUEST_ACCOUNT, true);
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+
+                } else {
+                    MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, resLoginUser.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                progressDialog.cancel();
+                MessageUtils.showDismissableSnackBar(LoginActivity.this, guest_account, error);
+
+            }
+        });
     }
 
     @OnClick(R.id.google_signin)
@@ -135,14 +139,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
+
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
 
 
             if (resultCode == RESULT_OK) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 SharedPrefsUtils sharedPreferencesUtils = new SharedPrefsUtils(getApplication());
                 sharedPreferencesUtils.getString(WallZyConstants.SP_USERDATA_KEY);
 
